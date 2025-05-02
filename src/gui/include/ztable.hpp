@@ -5,6 +5,14 @@
 #include <QTableWidget>
 #include <QObject>
 #include <QClipboard>
+#include <QDialog>
+#include <QIcon>
+#include <QPlainTextEdit>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QSet>
+#include <QString>
+#define CONTENT_COLUMN 1
 
 namespace zclipboard::zgui {
     class ZTable : public QObject {
@@ -16,7 +24,14 @@ namespace zclipboard::zgui {
 
         private:
             QClipboard *zClipboard;
+            QSet<QString> zExistingContents;
+            
             void addClipboardHistory();
+            void showZContentDialog(const QString &text);
+        
+        public slots:
+        void onContentClicked(QTableWidgetItem *ztableWidgetItem);
+        void onCopyButtonClicked();
 
     };
 } // namespace zclipboard::gui
