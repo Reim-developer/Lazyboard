@@ -8,7 +8,7 @@
 #include <QClipboard>
 #include <QTimer>
 
-using namespace zclipboard::zgui;
+using zclipboard::zGui::ZDialog;
 
 void ZDialog::showZContentDialog(const QString &text, QTableWidget *ztableWidget) {
     QDialog *zContentDialog = new QDialog(ztableWidget);
