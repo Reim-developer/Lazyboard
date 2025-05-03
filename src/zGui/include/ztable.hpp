@@ -13,19 +13,25 @@
 #include <QSet>
 #include <QString>
 #include "zdialog.hpp"
+#include "../../zSQL/include/zSQL.hpp"
 #define CONTENT_COLUMN 1
+
+using namespace zcipboard::zSQL;
 
 namespace zclipboard::zgui {
     class ZTable : public QObject {
         Q_OBJECT
 
         public:
+            ZTable();
+            
             QTableWidget *ztableWidget;
             void addZtable(QWidget *zWindow, QGridLayout *zLayout);
 
         private:
             QClipboard *zClipboard;
             QSet<QString> zExistingContents;
+            zSQL zSQLManager;
             ZDialog *zDialog;
             
             void addClipboardHistory();
