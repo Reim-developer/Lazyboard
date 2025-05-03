@@ -18,7 +18,7 @@
 
 using namespace zclipboard::zSQL;
 
-namespace zclipboard::zgui {
+namespace zclipboard::zGui {
     class ZTable : public QObject {
         Q_OBJECT
 
