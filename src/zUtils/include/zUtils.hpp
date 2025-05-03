@@ -5,7 +5,7 @@
 namespace zclipboard::zUtils {
     class zUtils {
         public:
-            QString getCachePath();
+            static QString getCachePath();
     };
 }
 
