@@ -5,22 +5,22 @@
 #include <QtSql/QSqlQuery>
 #include <QDir>
 
-using namespace zcipboard::zSQL;
-using namespace zclipboard::zUtils;
+using namespace zclipboard::zSQL;
+using namespace zclipboard;
 
-zSQL::zSQL() {
+zManagerSQL::zManagerSQL() {
     zInitCache();
 }
 
 
-void zSQL::zInitCache() {
+void zManagerSQL::zInitCache() {
     QDir qDir;
     QString cachePath = zUtils::getCachePath();
 
     if(!qDir.exists(cachePath)) qDir.mkdir(cachePath);
 }
 
-void zSQL::connectToDB() {
+void zManagerSQL::connectToDB() {
     QString dbPath = zUtils::getCachePath() + "/zclipboard.db";
 
     zDB = QSqlDatabase::addDatabase("QSQLITE", "ZClipboardDB");
@@ -31,13 +31,15 @@ void zSQL::connectToDB() {
     sqlQuery.exec(R"(
         --sql
         CREATE TABLE IF NOT EXISTS clipboard (
-            time TEXT, content TEXT PRIMARY KEY,
-            length INTEGER
+            time TEXT, content TEXT,
+            content_hash TEXT PRIMARY KEY,
+            length INTEGER,
+            image_data BLOB
         )    
     )");
 }
 
-void zSQL::executeQuery(const QString &sql, const QVariantMap &params) {
+void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) {
     QSqlQuery sqlQuery(zDB);
     sqlQuery.prepare(sql);
 
@@ -47,7 +49,7 @@ void zSQL::executeQuery(const QString &sql, const QVariantMap &params) {
     sqlQuery.exec();
 }
 
-QSqlQuery zSQL::executeQueryResult(const QString &sql, const QVariantMap &params) {
+QSqlQuery zManagerSQL::executeQueryResult(const QString &sql, const QVariantMap &params) {
     QSqlQuery sqlQuery(zDB);
     sqlQuery.prepare(sql);
 
