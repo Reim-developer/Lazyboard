@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QSet>
 #include <QString>
+#include "zdialog.hpp"
 #define CONTENT_COLUMN 1
 
 namespace zclipboard::zgui {
@@ -25,14 +26,12 @@ namespace zclipboard::zgui {
         private:
             QClipboard *zClipboard;
             QSet<QString> zExistingContents;
+            ZDialog *zDialog;
             
             void addClipboardHistory();
-            void showZContentDialog(const QString &text);
-        
+            
         public slots:
         void onContentClicked(QTableWidgetItem *ztableWidgetItem);
-        void onCopyButtonClicked();
-
     };
 } // namespace zclipboard::gui
 
