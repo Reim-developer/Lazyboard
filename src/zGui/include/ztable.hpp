@@ -16,7 +16,7 @@
 #include "../../zSQL/include/zSQL.hpp"
 #define CONTENT_COLUMN 1
 
-using namespace zcipboard::zSQL;
+using namespace zclipboard::zSQL;
 
 namespace zclipboard::zgui {
     class ZTable : public QObject {
@@ -31,10 +31,10 @@ namespace zclipboard::zgui {
         private:
             QClipboard *zClipboard;
             QSet<QString> zExistingContents;
-            zSQL zSQLManager;
-            ZDialog *zDialog;
+            QSet<QString> zExistingImages;
             
-            void addClipboardHistory();
+            zManagerSQL zSQLManager;
+            ZDialog *zDialog;
             
         public slots:
         void onContentClicked(QTableWidgetItem *ztableWidgetItem);
