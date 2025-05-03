@@ -2,7 +2,7 @@
 #define Z_UTILS_HPP
 #include <QString>
 
-namespace zclipboard::zUtils {
+namespace zclipboard {
     class zUtils {
         public:
             static QString getCachePath();
