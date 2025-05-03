@@ -19,8 +19,10 @@
 #include <QBuffer>
 #include <QPixmap>
 
-using namespace zclipboard::zgui;
-using namespace zclipboard::clipboard;
+using zclipboard::zGui::ZTable;
+using zclipboard::clipboard::zCacheManager;
+using zclipboard::clipboard::zImage;
+using zclipboard::clipboard::zText;
 
 ZTable::ZTable() {
     zSQLManager.connectToDB();
@@ -39,7 +41,7 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     ztableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 
     ztableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    zLayout->addWidget(ztableWidget, 0, 0);
+    zLayout->addWidget(ztableWidget, 1, 0);
 
     zCacheManager zCache;
     zCache.addClipboardHistoryFromDB(ztableWidget, zSQLManager);
