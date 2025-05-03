@@ -1,6 +1,9 @@
 #include "include/zwindow.hpp"
 #include "include/ztable.hpp"
-using namespace zclipboard::zgui;
+#include "include/zSearchPanel.hpp"
+using zclipboard::zGui::ZTable;
+using zclipboard::zGui::ZWindow;
+using zclipboard::zGui::SearchArea;
 
 ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     zIcon = QIcon(":/assets/assets/icon.png");
@@ -19,5 +22,8 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
 void ZWindow::setupGui() {
     ztable = new ZTable();
+    zSearchArea = new SearchArea();
+
+    zSearchArea->addSearchPanel(this, zLayout);
     ztable->addZtable(this, zLayout);
 }
