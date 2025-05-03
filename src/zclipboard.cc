@@ -1,7 +1,7 @@
 #include "zGui/include/zwindow.hpp"
 #include <QApplication>
 
-using namespace zclipboard::zgui;
+using zclipboard::zGui::ZWindow;
 
 int main(int argc, char *argv[]) {
     QApplication application(argc, argv);
