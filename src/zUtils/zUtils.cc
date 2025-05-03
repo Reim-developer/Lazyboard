@@ -2,7 +2,7 @@
 #include <QtSystemDetection>
 #include <QStandardPaths>
 
-using namespace zclipboard::zUtils;
+using namespace zclipboard;
 
 QString zUtils::getCachePath() {
     #ifdef Q_OS_WINDOWS
