@@ -1,5 +1,7 @@
 #include "include/ztable.hpp"
-#include "include/zdialog.hpp"
+#include "../clipboard/include/image.hpp"
+#include "../clipboard/include/text.hpp"
+#include "../clipboard/include/cache.hpp"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QDateTime>
@@ -9,12 +11,20 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QTimer>
+#include <QMimeData>
 #include <QPointer>
+#include <QImage>
+#include <QByteArray>
+#include <QCryptographicHash>
+#include <QBuffer>
+#include <QPixmap>
 
 using namespace zclipboard::zgui;
+using namespace zclipboard::clipboard;
 
 ZTable::ZTable() {
     zSQLManager.connectToDB();
+    
 }
 
 void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
@@ -22,7 +32,7 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     zClipboard = QApplication::clipboard();
 
     ztableWidget->setColumnCount(3);
-    ztableWidget->setHorizontalHeaderLabels({"Time", "Content", "Content Length"});
+    ztableWidget->setHorizontalHeaderLabels({"Time", "Content | Click to view", "Content Length"});
 
     ztableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ztableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
@@ -31,60 +41,21 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     ztableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     zLayout->addWidget(ztableWidget, 0, 0);
 
-
-    QSqlQuery sqlQuery = zSQLManager.executeQueryResult(R"(
-        --sql
-        SELECT time, content, length FROM clipboard
-        ORDER BY time DESC
-    )");
-
-    while (sqlQuery.next()) {
-        QString time = sqlQuery.value(0).toString();
-        QString content = sqlQuery.value(1).toString();
-        int contentLength = sqlQuery.value(2).toInt();
-        
-        int row = ztableWidget->rowCount();
-        ztableWidget->insertRow(row);
-        ztableWidget->setItem(row, 0, new QTableWidgetItem(time));
-       
-        ztableWidget->setItem(row, 1, new QTableWidgetItem(content));   
-        ztableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(contentLength)));
-    }
+    zCacheManager zCache;
+    zCache.addClipboardHistoryFromDB(ztableWidget, zSQLManager);
 
     connect(ztableWidget, &QTableWidget::itemClicked, this, &ZTable::onContentClicked);
-    connect(zClipboard, &QClipboard::dataChanged, this, &ZTable::addClipboardHistory);
-}
+    connect(zClipboard, &QClipboard::dataChanged, this, [this]() {
+        const QMimeData *mimeData = zClipboard->mimeData();
 
-void ZTable::addClipboardHistory() {
-        QString text = zClipboard->text();
-        if(text.isEmpty()) return;
-
-        if(zExistingContents.contains(text)) return;
-
-        QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
-        int textLength = text.length();
-
-        int row = ztableWidget->rowCount();
-        ztableWidget->insertRow(row);
-        ztableWidget->setItem(row, 0, new QTableWidgetItem(time));
-       
-        ztableWidget->setItem(row, 1, new QTableWidgetItem(text));   
-        ztableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(textLength)));
-
-        zExistingContents.insert(text);
-
-        QString insertSQL = R"(
-            --sql
-            INSERT INTO clipboard (time, content, length)
-            VALUES(:time, :content, :length)
-        )";
-
-        QVariantMap params;
-        params["time"] = time;
-        params["content"] = text;
-        params["length"] = textLength;
-
-        zSQLManager.executeQuery(insertSQL, params);
+        if(mimeData->hasImage()) {
+            zImage zClipboardImage;
+            zClipboardImage.addClipboardImage(ztableWidget, zClipboard, zSQLManager, zExistingImages);
+        } else {
+            zText zClipboardText;
+            zClipboardText.addTextClipboard(ztableWidget, zClipboard, zSQLManager, zExistingContents);
+        }
+    });
 }
 
 void ZTable::onContentClicked(QTableWidgetItem *ztableWidgetItem) {
