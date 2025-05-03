@@ -5,8 +5,11 @@
 #include <QGridLayout>
 #include <QWidget>
 #include "ztable.hpp"
+#include "zSearchPanel.hpp"
 
-namespace zclipboard::zgui {
+using zclipboard::zGui::SearchArea;
+
+namespace zclipboard::zGui {
     class ZWindow : public QMainWindow {
         Q_OBJECT
 
@@ -21,6 +24,7 @@ namespace zclipboard::zgui {
             QWidget *zCentralWidget;
             QGridLayout *zLayout;
             ZTable *ztable;
+            SearchArea *zSearchArea;
     };
 } // namespace zlipboard::zgui
 
