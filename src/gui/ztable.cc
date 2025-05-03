@@ -1,4 +1,5 @@
 #include "include/ztable.hpp"
+#include "include/zdialog.hpp"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QDateTime>
@@ -47,54 +48,11 @@ void ZTable::addClipboardHistory() {
         zExistingContents.insert(text);
 }
 
-void ZTable::showZContentDialog(const QString &text) {
-    QDialog *zContentDialog = new QDialog(ztableWidget);
-    QIcon zIcon = QIcon(":/assets/assets/icon.png");
-    QGridLayout *zDialogLayout = new QGridLayout(zContentDialog);
-
-    QPlainTextEdit *zContentArea = new QPlainTextEdit();
-    QPushButton *zCopyButton = new QPushButton();
-
-    zContentDialog->setWindowTitle("zContent Clipboard");
-    zContentDialog->resize(600, 600);
-    zContentDialog->setWindowIcon(zIcon);
-
-    zContentArea->setReadOnly(true);
-    zContentArea->setPlainText(text);
-    zContentArea->setLineWrapMode(QPlainTextEdit::NoWrap);
-
-    zCopyButton->setText("Copy Content");
-    zCopyButton->setIcon(QIcon::fromTheme("edit-copy"));
-
-    QPointer<QPushButton> zSafeCopyButton = zCopyButton;
-    
-    connect(zCopyButton, &QPushButton::clicked, [zSafeCopyButton, text] {
-        QApplication::clipboard()->setText(text);
-        if(zSafeCopyButton) {
-            zSafeCopyButton->setText("Copied!");
-
-            QTimer::singleShot(1500, [zSafeCopyButton]() {
-                if (zSafeCopyButton) zSafeCopyButton->setText("Copy Content");
-            });
-        }
-    });
-
-    zDialogLayout->addWidget(zCopyButton, 1, 0);
-    zDialogLayout->addWidget(zContentArea, 0, 0);
-
-    zContentDialog->setAttribute(Qt::WA_DeleteOnClose);
-    zContentDialog->exec();
-}
-
 void ZTable::onContentClicked(QTableWidgetItem *ztableWidgetItem) {
     if(ztableWidgetItem->column() != CONTENT_COLUMN) return;
 
     QString content = ztableWidgetItem->text();
-
-    showZContentDialog(content);
-}
-
-void ZTable::onCopyButtonClicked() {
-    
+    zDialog = new ZDialog();
+    zDialog->showZContentDialog(content, ztableWidget);
 }
 
