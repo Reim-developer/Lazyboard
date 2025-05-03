@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QTableWidget>
 
-namespace zclipboard::zgui {
+namespace zclipboard::zGui {
     class ZDialog : public QObject {
         Q_OBJECT
 
