@@ -1,4 +1,4 @@
-#include "gui/include/zwindow.hpp"
+#include "zGui/include/zwindow.hpp"
 #include <QApplication>
 
 using namespace zclipboard::zgui;
