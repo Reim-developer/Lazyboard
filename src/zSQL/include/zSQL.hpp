@@ -4,10 +4,10 @@
 #include <QVariantMap>
 #include <QtSql/QSqlDatabase>
 
-namespace zcipboard::zSQL {
-    class zSQL {
+namespace zclipboard::zSQL {
+    class zManagerSQL {
         public:
-            zSQL();
+            zManagerSQL();
 
         public:
             void connectToDB();
