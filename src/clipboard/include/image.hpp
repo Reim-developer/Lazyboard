@@ -6,13 +6,15 @@
 #include <QClipboard>
 #include <QTableWidget>
 #include "../../zSQL/include/zSQL.hpp"
+#include "../../zGui/include/zClipboardModel.hpp"
 
-using namespace zclipboard::zSQL;
+using zclipboard::zSQL::zManagerSQL;
+using zclipboard::zGui::zTableModel;
 
 namespace zclipboard::clipboard {
     class zImage {
         public:
-            static void addClipboardImage(QTableWidget *ztableWidget, QClipboard *zClipboard, 
+            static void addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard, 
                                           zManagerSQL zSQL, QSet<QString> &zExistingImages);
 
     };
