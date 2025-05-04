@@ -4,13 +4,14 @@
 #include <QString>
 #include <QObject>
 #include <QTableWidget>
+#include <QTableView>
 
 namespace zclipboard::zGui {
     class ZDialog : public QObject {
         Q_OBJECT
 
         public:
-            void showZContentDialog(const QString &text, QTableWidget *ztableWidget);
+            void showZContentDialog(const QString &text, QTableView *zTableView);
     };
 }
 
