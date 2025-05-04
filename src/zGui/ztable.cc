@@ -58,8 +58,8 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
         const QMimeData *mimeData = zClipboard->mimeData();
 
         if(mimeData->hasImage()) {
-            // zImage zClipboardImage;
-            // zClipboardImage.addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingImages);
+            zImage zClipboardImage;
+            zClipboardImage.addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingImages);
         } else {
             zText zClipboardText;
             zClipboardText.addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
@@ -74,14 +74,35 @@ void ZTable::onContentClicked(const QModelIndex &index) {
     QString content = index.data(Qt::DisplayRole).toString();
     QString contentHash = index.data(Qt::UserRole).toString();
 
+    if(content.isNull() || content.isEmpty()) {
+        QSqlQuery query = zSQLManager.executeQueryResult(
+            R"(
+                SELECT image_data FROM clipboard WHERE content_hash = :hash
+            )", {{"hash", contentHash}});
+
+        if(query.next()) {
+            QByteArray imageData = query.value(0).toByteArray();
+            QImage image;
+            image.loadFromData(imageData, "PNG");
+
+            if(!image.isNull()) {
+                zDialog = new ZDialog();
+                zDialog->showZImageDialog(image, zTableView);
+
+                return;
+            }
+        }
+    }
+
     if(content == "[Too many content, click to view]") {
         QSqlQuery query = zSQLManager.executeQueryResult(R"(
             SELECT content FROM clipboard WHERE content_hash = :hash
         )", {{"hash", contentHash}});
         
         query.exec();
-        query.next();
-        content = query.value(0).toString();
+        if(query.next()) {
+            content = query.value(0).toString();
+        }
     }
 
     zDialog = new ZDialog();
