@@ -28,6 +28,7 @@ QVariant zTableModel::data(const QModelIndex &index, int role) const {
         switch (index.column()) {
             case Time: return item.time;
             case Content:
+                if(!item.imageData.isEmpty()) return QVariant();
                 if(item.content.length() > 100) return "[Too many content, click to view]";
             
             return item.content;
@@ -74,4 +75,21 @@ void zTableModel::addTextItem(const QString &time, const QString& text, const QS
     m_existingHashes.insert(hash);
     
     endInsertRows();    
+}
+
+void zTableModel::addImageItem(const QString &time, const QString &hash, const QByteArray &imageData) {
+    if(m_existingHashes.contains(hash)) return;
+
+    beginInsertColumns(QModelIndex(), rowCount(), rowCount());
+
+    zClipboardItem clipboardItem;
+    clipboardItem.time = time;
+    clipboardItem.content = "";
+    clipboardItem.contentLength = imageData.size();
+    clipboardItem.imageData = imageData;
+    clipboardItem.hash = hash;
+
+    m_items.append(clipboardItem);
+    m_existingHashes.insert(hash);
+    endInsertRows();
 }
