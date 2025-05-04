@@ -7,6 +7,8 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QTimer>
+#include <QScrollArea>
+#include <QLabel>
 
 using zclipboard::zGui::ZDialog;
 
@@ -48,4 +50,26 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
 
     zContentDialog->setAttribute(Qt::WA_DeleteOnClose);
     zContentDialog->exec();
+}
+
+void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
+    QDialog *zDialog = new QDialog(parent);
+    QScrollArea *scrollArea = new QScrollArea();
+    QGridLayout *zLayout = new QGridLayout();
+    QLabel *imageLabel = new QLabel();
+
+    zDialog->setWindowTitle("zClipboard Image Viewer");
+    zDialog->resize(600, 600);
+    
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+    imageLabel->setAlignment(Qt::AlignCenter);
+    imageLabel->setScaledContents(true);
+
+    scrollArea->setWidget(imageLabel);
+    scrollArea->setWidgetResizable(true);
+
+    zLayout->addWidget(scrollArea, 0, 0);
+    
+    zDialog->setLayout(zLayout);
+    zDialog->exec();
 }
