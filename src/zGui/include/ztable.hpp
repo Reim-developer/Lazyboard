@@ -2,7 +2,7 @@
 #define ZTABLE_HPP
 #include <QWidget>
 #include <QGridLayout>
-#include <QTableWidget>
+#include <QTableView>
 #include <QObject>
 #include <QClipboard>
 #include <QDialog>
@@ -14,9 +14,12 @@
 #include <QString>
 #include "zdialog.hpp"
 #include "../../zSQL/include/zSQL.hpp"
+#include "zClipboardModel.hpp"
+
 #define CONTENT_COLUMN 1
 
-using namespace zclipboard::zSQL;
+using zclipboard::zSQL::zManagerSQL;
+using zclipboard::zGui::zTableModel;
 
 namespace zclipboard::zGui {
     class ZTable : public QObject {
@@ -24,12 +27,13 @@ namespace zclipboard::zGui {
 
         public:
             ZTable();
-            
-            QTableWidget *ztableWidget;
             void addZtable(QWidget *zWindow, QGridLayout *zLayout);
 
         private:
             QClipboard *zClipboard;
+            QTableView *zTableView;
+            zTableModel *zModelTable;
+
             QSet<QString> zExistingContents;
             QSet<QString> zExistingImages;
             
@@ -37,7 +41,7 @@ namespace zclipboard::zGui {
             ZDialog *zDialog;
             
         public slots:
-        void onContentClicked(QTableWidgetItem *ztableWidgetItem);
+        void onContentClicked(const QModelIndex &current);
     };
 } // namespace zclipboard::gui
 
