@@ -20,7 +20,7 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel *zModelTable, zManager
         QString content = sqlQuery.value(1).toString();
         int contentLength = sqlQuery.value(2).toInt();
         QByteArray imageData = sqlQuery.value(3).toByteArray();
-        QString contentHash = sqlQuery.value(4).toString();
+        QString imageHash = sqlQuery.value(4).toString();
 
         QImage image;
         if(!imageData.isEmpty()) image.loadFromData(imageData, "PNG");
@@ -28,9 +28,10 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel *zModelTable, zManager
         if(!image.isNull()) {
             QPixmap pixmap = QPixmap::fromImage(image).scaled(128, 64, Qt::KeepAspectRatio);
             QTableWidgetItem* item = new QTableWidgetItem();
+            zModelTable->addImageItem(time, imageHash, imageData);
 
         } else {
-           zModelTable->addTextItem(time, content, contentHash, contentLength);
+           zModelTable->addTextItem(time, content, imageHash, contentLength);
         }
     }
 }
