@@ -1,36 +1,38 @@
 #include "include/text.hpp"
 #include <QDateTime>
+#include <QCryptographicHash>
 
-using namespace zclipboard::clipboard;
+using zclipboard::clipboard::zText;
 
-void zText::addTextClipboard(QTableWidget *ztableWidget, QClipboard *zClipboard, 
-                             zManagerSQL zSQL, QSet<QString> &zExistingContents) {
-    QString text = zClipboard->text();
-    if(text.isEmpty()) return;
-
-    if(zExistingContents.contains(text)) return;
+void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, 
+                             zManagerSQL zSQL, QSet<QString> &zExistingTextHashes) {
+    QString content = zClipboard->text();
+    if(content.isEmpty()) return;
+    
+    QString contentHash =  QString::fromUtf8(
+        QCryptographicHash::hash(content.toUtf8(),
+        QCryptographicHash::Sha1).toHex());
+        
+    if(zExistingTextHashes.contains(contentHash)) return;
 
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
-    int textLength = text.length();
-    int row = ztableWidget->rowCount();
-
-    ztableWidget->insertRow(row);
-    ztableWidget->setItem(row, 0, new QTableWidgetItem(time));
-    ztableWidget->setItem(row, 1, new QTableWidgetItem(text));
-    ztableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(textLength)));
-
-    zExistingContents.insert(text);
+    int textLength = content.length();
+    int row = zModelTable->rowCount();
 
     QString insertSQL = R"(
         --sql
-        INSERT INTO clipboard (time, content, length)
-        VALUES(:time, :content, :length)
+        INSERT INTO clipboard (time, content, content_hash, length)
+        VALUES(:time, :content, :content_hash, :length)
     )";
 
     QVariantMap params;
     params["time"] = time;
-    params["content"] = text;
+    params["content"] = content;
+    params["content_hash"] = contentHash;
     params["length"] = textLength;
 
     zSQL.executeQuery(insertSQL, params);
+
+    zModelTable->addTextItem(time, content, contentHash, textLength);
+    zExistingTextHashes.insert(contentHash);
 }
