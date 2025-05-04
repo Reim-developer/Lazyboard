@@ -2,6 +2,7 @@
 #include "../clipboard/include/image.hpp"
 #include "../clipboard/include/text.hpp"
 #include "../clipboard/include/cache.hpp"
+#include "include/zClipboardModel.hpp"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QDateTime>
@@ -21,6 +22,7 @@
 
 using zclipboard::zGui::ZTable;
 using zclipboard::clipboard::zCacheManager;
+using zclipboard::zGui::zTableModel;
 using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
 
@@ -30,41 +32,59 @@ ZTable::ZTable() {
 }
 
 void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
-    ztableWidget = new QTableWidget(zWindow);
+    zModelTable = new zTableModel(this);
+    zTableView = new QTableView(zWindow);
     zClipboard = QApplication::clipboard();
+    zTableView->setModel(zModelTable);
 
-    ztableWidget->setColumnCount(3);
-    ztableWidget->setHorizontalHeaderLabels({"Time", "Content | Click to view", "Content Length"});
+    zTableView->horizontalHeader()->setSectionResizeMode(
+        zTableModel::Time, QHeaderView::ResizeToContents
+    );
+    zTableView->horizontalHeader()->setSectionResizeMode(
+        zTableModel::Content, QHeaderView::Stretch
+    );
+    zTableView->horizontalHeader()->setSectionResizeMode(
+        zTableModel::ContentLength, QHeaderView::ResizeToContents
+    );
 
-    ztableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ztableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ztableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-
-    ztableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    zLayout->addWidget(ztableWidget, 1, 0);
+    zTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    zLayout->addWidget(zTableView, 1, 0);
 
     zCacheManager zCache;
-    zCache.addClipboardHistoryFromDB(ztableWidget, zSQLManager);
+    zCache.addClipboardHistoryFromDB(zModelTable, zSQLManager);
 
-    connect(ztableWidget, &QTableWidget::itemClicked, this, &ZTable::onContentClicked);
+    connect(zTableView, &QTableView::clicked, this, &ZTable::onContentClicked);
     connect(zClipboard, &QClipboard::dataChanged, this, [this]() {
         const QMimeData *mimeData = zClipboard->mimeData();
 
         if(mimeData->hasImage()) {
-            zImage zClipboardImage;
-            zClipboardImage.addClipboardImage(ztableWidget, zClipboard, zSQLManager, zExistingImages);
+            // zImage zClipboardImage;
+            // zClipboardImage.addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingImages);
         } else {
             zText zClipboardText;
-            zClipboardText.addTextClipboard(ztableWidget, zClipboard, zSQLManager, zExistingContents);
+            zClipboardText.addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
         }
     });
 }
 
-void ZTable::onContentClicked(QTableWidgetItem *ztableWidgetItem) {
-    if(ztableWidgetItem->column() != CONTENT_COLUMN) return;
+void ZTable::onContentClicked(const QModelIndex &index) {
+  
+    if(!index.isValid() || index.column() != zTableModel::Content) return;
+    
+    QString content = index.data(Qt::DisplayRole).toString();
+    QString contentHash = index.data(Qt::UserRole).toString();
 
-    QString content = ztableWidgetItem->text();
+    if(content == "[Too many content, click to view]") {
+        QSqlQuery query = zSQLManager.executeQueryResult(R"(
+            SELECT content FROM clipboard WHERE content_hash = :hash
+        )", {{"hash", contentHash}});
+        
+        query.exec();
+        query.next();
+        content = query.value(0).toString();
+    }
+
     zDialog = new ZDialog();
-    zDialog->showZContentDialog(content, ztableWidget);
+    zDialog->showZContentDialog(content, zTableView);
 }
 
