@@ -10,8 +10,8 @@
 
 using zclipboard::zGui::ZDialog;
 
-void ZDialog::showZContentDialog(const QString &text, QTableWidget *ztableWidget) {
-    QDialog *zContentDialog = new QDialog(ztableWidget);
+void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
+    QDialog *zContentDialog = new QDialog(zTableView);
     QIcon zIcon = QIcon(":/assets/assets/icon.png");
     QGridLayout *zDialogLayout = new QGridLayout(zContentDialog);
 
