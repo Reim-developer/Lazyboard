@@ -12,6 +12,7 @@ namespace zclipboard::zGui {
 
         public:
             void showZContentDialog(const QString &text, QTableView *zTableView);
+            void showZImageDialog(const QImage &image, QWidget *parent);
     };
 }
 
