@@ -26,7 +26,7 @@ void zImage::addClipboardImage(QTableWidget *ztableWidget, QClipboard *zClipboar
     if(zExistingImages.contains(imageHash)) return;
 
     QPixmap pixMap = QPixmap::fromImage(clipboardImage).scaled(
-        64, 64, Qt::KeepAspectRatio
+        16, 16, Qt::KeepAspectRatio
     );
     QTableWidgetItem *imageWidgetItem = new QTableWidgetItem();
     imageWidgetItem->setData(Qt::UserRole, imageHash);
