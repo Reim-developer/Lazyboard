@@ -2,13 +2,15 @@
 #define CACHE_HPP
 #include <QTableWidget>
 #include "../../zSQL/include/zSQL.hpp"
+#include "../../zGui/include/zClipboardModel.hpp"
 
-using namespace zclipboard::zSQL;
+using zclipboard::zSQL::zManagerSQL;
+using zclipboard::zGui::zTableModel;
 
 namespace zclipboard::clipboard {
     class zCacheManager {
         public:
-            void addClipboardHistoryFromDB(QTableWidget *ztableWidget, zManagerSQL zSQL);
+            void addClipboardHistoryFromDB(zTableModel *zModelTable, zManagerSQL zSQL);
     };
 } // namespace zclipboard::clipboard
 
