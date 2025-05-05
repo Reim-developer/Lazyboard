@@ -2,7 +2,6 @@
 build_dir="../build"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
-clang="-DCMAKE_CXX_FLAGS=clang++"
 
 create_build_dir() {
     mkdir $build_dir
@@ -21,7 +20,7 @@ build_zclipboard() {
     cd "$build_dir" || exit
     
     cmake -G "Ninja" \
-    $clang \
+    -DCMAKE_C_COMPILER=clang \
     -DCMAKE_CXX_FLAGS="$opt_flags" \
     $release_flags \
     ..
