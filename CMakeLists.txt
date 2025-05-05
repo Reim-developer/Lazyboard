@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core)
 
 set(CXX_SOURCE)
 set(CXX_HEADER)
@@ -30,6 +30,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::Sql
+    PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
 )
 
