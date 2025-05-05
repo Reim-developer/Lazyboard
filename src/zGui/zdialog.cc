@@ -32,11 +32,11 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     zCopyButton->setIcon(QIcon::fromTheme("edit-copy"));
 
     QPointer<QPushButton> zSafeCopyButton = zCopyButton;
-    
+
     connect(zCopyButton, &QPushButton::clicked, [zSafeCopyButton, text] {
         QApplication::clipboard()->setText(text);
-        
-        if(zSafeCopyButton) {
+
+        if (zSafeCopyButton) {
             zSafeCopyButton->setText("Copied!");
 
             QTimer::singleShot(1500, [zSafeCopyButton]() {
@@ -60,7 +60,7 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
 
     zDialog->setWindowTitle("zClipboard Image Viewer");
     zDialog->resize(600, 600);
-    
+
     imageLabel->setPixmap(QPixmap::fromImage(image));
     imageLabel->setAlignment(Qt::AlignCenter);
     imageLabel->setScaledContents(true);
@@ -69,7 +69,8 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     scrollArea->setWidgetResizable(true);
 
     zLayout->addWidget(scrollArea, 0, 0);
-    
+
+    zDialog->setAttribute(Qt::WA_DeleteOnClose);
     zDialog->setLayout(zLayout);
     zDialog->exec();
 }
