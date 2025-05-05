@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Qml)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui)
 
 set(CXX_SOURCE)
 set(CXX_HEADER)
@@ -31,7 +31,6 @@ target_link_libraries(
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::Sql
     PRIVATE Qt6::Gui
-    PRIVATE yaml-cpp 
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
