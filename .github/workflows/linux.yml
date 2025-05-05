@@ -18,7 +18,7 @@ jobs:
         - name: Install dependencies
           shell: Bash
           run: |
-            chmod +x ${{ env.CI_SCRIPT }}
+            chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
             ./${{ env.CI_SCRIPT }} install-base
         
         - name: Create build directory
