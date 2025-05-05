@@ -29,7 +29,6 @@ jobs:
         - name: Build zClipboard
           shell: bash
           run: |
-            cd scripts
             ./ci_linux.sh release-build
 
         - name: Upload Release
