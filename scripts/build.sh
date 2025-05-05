@@ -2,7 +2,8 @@
 os_type=$(uname -s)
 program_name="zclipboard"
 build_dir="../build"
-exit_code=$?
+debug_flag="-DCMAKE_BUILD_TYPE=Debug"
+wall_flag="-Wall"
 
 clang_detect() {
     if command -v clang >/dev/null 2>&1; then
@@ -22,21 +23,47 @@ cmake_detect() {
     fi
 }
 
+debug_build() {
+    clang_detect
+    cmake_detect
+    
+    cd "$build_dir" || exit 1
+    cmake -G "Ninja" \
+        "$debug_flag" ..
+
+    ninja
+    ./"$program_name"
+}
+
+normal_build() {
+     clang_detect
+     cmake_detect
+
+    cd "$build_dir" || exit 1
+    cmake -G "Ninja" "$wall_flag" ..
+
+    ninja
+    ./"$program_name"
+}
+
+invalid_args() {
+    echo "Invalid argument build: $1"
+    exit 1
+}
+
+match_build() {
+    case "$1" in "debug") debug_build ;;
+    "") normal_build ;;
+    *) invalid_args "$1" ;;
+    esac
+}
+
 os_detect() {
-    case $os_type in "Linux")
-        clang_detect
-        cmake_detect
-
-        cd "$build_dir" || exit 1
-        cmake -G "Ninja" .. -Wall
-
-        ninja
-        ./"$program_name"
-
-        echo "Build SUCCESS | With exit status code: $exit_code"
+    case $os_type in "Linux" | "Darwin")
+        match_build "$1"
     ;;
         
     esac
 }
 
-os_detect
+os_detect "$1"
