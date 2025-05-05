@@ -8,30 +8,30 @@
 
 using zclipboard::clipboard::zCacheManager;
 
-void zCacheManager::addClipboardHistoryFromDB(zTableModel *zModelTable, zManagerSQL zSQL) {
-    QSqlQuery sqlQuery = zSQL.executeQueryResult(R"(
+void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManagerSQL zSQL) {
+    auto sqlQuery = zSQL.executeQueryResult(R"(
         --sql
         SELECT time, content, length, image_data, content_hash FROM clipboard
         ORDER BY time DESC
     )");
 
-    while (sqlQuery.next()) {
-        QString time = sqlQuery.value(0).toString();
-        QString content = sqlQuery.value(1).toString();
-        int contentLength = sqlQuery.value(2).toInt();
-        QByteArray imageData = sqlQuery.value(3).toByteArray();
-        QString imageHash = sqlQuery.value(4).toString();
+    while (sqlQuery->next()) {
+        QString time = sqlQuery->value(0).toString();
+        QString content = sqlQuery->value(1).toString();
+        int contentLength = sqlQuery->value(2).toInt();
+        QByteArray imageData = sqlQuery->value(3).toByteArray();
+        QString imageHash = sqlQuery->value(4).toString();
 
         QImage image;
-        if(!imageData.isEmpty()) image.loadFromData(imageData, "PNG");
+        if (!imageData.isEmpty()) image.loadFromData(imageData, "PNG");
 
-        if(!image.isNull()) {
+        if (!image.isNull()) {
             QPixmap pixmap = QPixmap::fromImage(image).scaled(128, 64, Qt::KeepAspectRatio);
             QTableWidgetItem* item = new QTableWidgetItem();
             zModelTable->addImageItem(time, imageHash, imageData);
 
         } else {
-           zModelTable->addTextItem(time, content, imageHash, contentLength);
+            zModelTable->addTextItem(time, content, imageHash, contentLength);
         }
     }
 }
