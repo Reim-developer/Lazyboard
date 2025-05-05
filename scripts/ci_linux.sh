@@ -11,6 +11,7 @@ install_base() {
     sudo apt  install -y \
                 clang \
                 qt6-base-dev \
+                qt6-base-private-dev \
                 ninja-build \
                 cmake \
                 build-essential
@@ -24,7 +25,7 @@ build_zclipboard() {
     -DCMAKE_CXX_FLAGS="$opt_flags" \
     $release_flags \
     ..
-    
+
     ninja
 }
 
