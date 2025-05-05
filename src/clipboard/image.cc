@@ -25,7 +25,7 @@ void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
 
     if(zExistingImages.contains(imageHash)) return;
 
-    QPixmap pixMap = QPixmap::fromImage(clipboardImage).scaled(64, 64, Qt::KeepAspectRatio);
+    QPixmap pixMap = QPixmap::fromImage(clipboardImage).scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     int imageSize = imageData.size();
 
