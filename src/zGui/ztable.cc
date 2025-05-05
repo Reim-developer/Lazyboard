@@ -27,8 +27,12 @@ using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
 
 ZTable::ZTable() {
-    zSQLManager.connectToDB();
-    
+    zSQLManager.setupinitDB();
+}
+
+ZTable::~ZTable() {
+    delete zModelTable;
+    delete zTableView;
 }
 
 void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
@@ -48,6 +52,8 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     );
 
     zTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    zTableView->setWordWrap(false);
+    zTableView->setTextElideMode(Qt::ElideRight);
     zLayout->addWidget(zTableView, 1, 0);
 
     zCacheManager zCache;
@@ -58,11 +64,23 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
         const QMimeData *mimeData = zClipboard->mimeData();
 
         if(mimeData->hasImage()) {
-            zImage zClipboardImage;
-            zClipboardImage.addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingImages);
+            if(!imageClipboard) {
+                imageClipboard = new zImage();
+            }
+
+            imageClipboard->addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingContents);
+
+            delete imageClipboard;
+            imageClipboard = nullptr;
         } else {
-            zText zClipboardText;
-            zClipboardText.addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
+            if(!textClipboard) {
+                textClipboard = new zText();
+            }
+
+            textClipboard->addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
+
+            delete textClipboard;
+            textClipboard = nullptr;
         }
     });
 }
@@ -75,37 +93,48 @@ void ZTable::onContentClicked(const QModelIndex &index) {
     QString contentHash = index.data(Qt::UserRole).toString();
 
     if(content.isNull() || content.isEmpty()) {
-        QSqlQuery query = zSQLManager.executeQueryResult(
+        auto query = zSQLManager.executeQueryResult(
             R"(
                 SELECT image_data FROM clipboard WHERE content_hash = :hash
             )", {{"hash", contentHash}});
 
-        if(query.next()) {
-            QByteArray imageData = query.value(0).toByteArray();
+        if(query->next()) {
+            QByteArray imageData = query->value(0).toByteArray();
             QImage image;
             image.loadFromData(imageData, "PNG");
 
             if(!image.isNull()) {
-                zDialog = new ZDialog();
+                if(!zDialog) {
+                    zDialog = new ZDialog();
+                }
                 zDialog->showZImageDialog(image, zTableView);
+
+                delete zDialog;
+                zDialog = nullptr;
 
                 return;
             }
         }
     }
 
-    if(content == "[Too many content, click to view]") {
-        QSqlQuery query = zSQLManager.executeQueryResult(R"(
+    if(content.contains("more...")) {
+        auto query = zSQLManager.executeQueryResult(R"(
             SELECT content FROM clipboard WHERE content_hash = :hash
         )", {{"hash", contentHash}});
         
-        query.exec();
-        if(query.next()) {
-            content = query.value(0).toString();
+        query->exec();
+        if(query->next()) {
+            content = query->value(0).toString();
         }
+
+        if(!zDialog) {
+            zDialog = new ZDialog();
+        }
+        zDialog->showZContentDialog(content, zTableView);
+    
+        delete zDialog;
+        zDialog = nullptr;
     }
 
-    zDialog = new ZDialog();
-    zDialog->showZContentDialog(content, zTableView);
 }
 
