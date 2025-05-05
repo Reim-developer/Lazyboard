@@ -1,4 +1,4 @@
-#ifndef ZTABLE_HPP 
+#ifndef ZTABLE_HPP
 #define ZTABLE_HPP
 #include <QWidget>
 #include <QGridLayout>
@@ -14,35 +14,43 @@
 #include <QString>
 #include "zdialog.hpp"
 #include "../../zSQL/include/zSQL.hpp"
+#include "../../clipboard/include/image.hpp"
+#include "../../clipboard/include/text.hpp"
 #include "zClipboardModel.hpp"
 
 #define CONTENT_COLUMN 1
 
-using zclipboard::zSQL::zManagerSQL;
+using zclipboard::clipboard::zImage;
+using zclipboard::clipboard::zText;
 using zclipboard::zGui::zTableModel;
+using zclipboard::zSQL::zManagerSQL;
 
 namespace zclipboard::zGui {
-    class ZTable : public QObject {
-        Q_OBJECT
+class ZTable : public QObject {
+    Q_OBJECT
 
-        public:
-            ZTable();
-            void addZtable(QWidget *zWindow, QGridLayout *zLayout);
+   public:
+    ZTable();
+    ~ZTable();
 
-        private:
-            QClipboard *zClipboard;
-            QTableView *zTableView;
-            zTableModel *zModelTable;
+    void addZtable(QWidget *zWindow, QGridLayout *zLayout);
 
-            QSet<QString> zExistingContents;
-            QSet<QString> zExistingImages;
-            
-            zManagerSQL zSQLManager;
-            ZDialog *zDialog;
-            
-        public slots:
-        void onContentClicked(const QModelIndex &current);
-    };
-} // namespace zclipboard::gui
+   private:
+    QClipboard *zClipboard;
+    QTableView *zTableView;
+    zTableModel *zModelTable;
+    zImage *imageClipboard;
+    zText *textClipboard;
 
-#endif 
+    QSet<QString> zExistingContents;
+    QSet<QString> zExistingImages;
+
+    zManagerSQL zSQLManager;
+    ZDialog *zDialog;
+
+   public slots:
+    void onContentClicked(const QModelIndex &current);
+};
+}  // namespace zclipboard::zGui
+
+#endif
