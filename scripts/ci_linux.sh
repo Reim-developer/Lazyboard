@@ -1,5 +1,5 @@
 #!/bin/bash
-build_dir="../build"
+build_dir="build"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
 
