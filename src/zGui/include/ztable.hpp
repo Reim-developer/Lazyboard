@@ -34,6 +34,7 @@ class ZTable : public QObject {
     ~ZTable();
 
     void addZtable(QWidget *zWindow, QGridLayout *zLayout);
+    zTableModel *getZModel();
 
    private:
     QClipboard *zClipboard;
