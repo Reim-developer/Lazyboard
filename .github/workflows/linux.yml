@@ -24,7 +24,7 @@ jobs:
         - name: Create build directory
           shell: bash
           run: |
-            ./scripts/ci_linux mkdir-build
+            ./scripts/ci_linux.sh mkdir-build
 
         - name: Build zClipboard
           shell: bash
