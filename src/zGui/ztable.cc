@@ -20,11 +20,11 @@
 #include <QBuffer>
 #include <QPixmap>
 
-using zclipboard::zGui::ZTable;
 using zclipboard::clipboard::zCacheManager;
-using zclipboard::zGui::zTableModel;
 using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
+using zclipboard::zGui::ZTable;
+using zclipboard::zGui::zTableModel;
 
 ZTable::ZTable() {
     zSQLManager.setupinitDB();
@@ -41,15 +41,9 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     zClipboard = QApplication::clipboard();
     zTableView->setModel(zModelTable);
 
-    zTableView->horizontalHeader()->setSectionResizeMode(
-        zTableModel::Time, QHeaderView::ResizeToContents
-    );
-    zTableView->horizontalHeader()->setSectionResizeMode(
-        zTableModel::Content, QHeaderView::Stretch
-    );
-    zTableView->horizontalHeader()->setSectionResizeMode(
-        zTableModel::ContentLength, QHeaderView::ResizeToContents
-    );
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Time, QHeaderView::ResizeToContents);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Content, QHeaderView::Stretch);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::ContentLength, QHeaderView::ResizeToContents);
 
     zTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     zTableView->setWordWrap(false);
@@ -63,8 +57,8 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     connect(zClipboard, &QClipboard::dataChanged, this, [this]() {
         const QMimeData *mimeData = zClipboard->mimeData();
 
-        if(mimeData->hasImage()) {
-            if(!imageClipboard) {
+        if (mimeData->hasImage()) {
+            if (!imageClipboard) {
                 imageClipboard = new zImage();
             }
 
@@ -73,7 +67,7 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
             delete imageClipboard;
             imageClipboard = nullptr;
         } else {
-            if(!textClipboard) {
+            if (!textClipboard) {
                 textClipboard = new zText();
             }
 
@@ -86,25 +80,25 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
 }
 
 void ZTable::onContentClicked(const QModelIndex &index) {
-  
-    if(!index.isValid() || index.column() != zTableModel::Content) return;
-    
+    if (!index.isValid() || index.column() != zTableModel::Content) return;
+
     QString content = index.data(Qt::DisplayRole).toString();
     QString contentHash = index.data(Qt::UserRole).toString();
 
-    if(content.isNull() || content.isEmpty()) {
+    if (content.isNull() || content.isEmpty()) {
         auto query = zSQLManager.executeQueryResult(
             R"(
                 SELECT image_data FROM clipboard WHERE content_hash = :hash
-            )", {{"hash", contentHash}});
+            )",
+            {{"hash", contentHash}});
 
-        if(query->next()) {
+        if (query->next()) {
             QByteArray imageData = query->value(0).toByteArray();
             QImage image;
             image.loadFromData(imageData, "PNG");
 
-            if(!image.isNull()) {
-                if(!zDialog) {
+            if (!image.isNull()) {
+                if (!zDialog) {
                     zDialog = new ZDialog();
                 }
                 zDialog->showZImageDialog(image, zTableView);
@@ -117,24 +111,29 @@ void ZTable::onContentClicked(const QModelIndex &index) {
         }
     }
 
-    if(content.contains("more...")) {
+    if (content.contains("more...")) {
         auto query = zSQLManager.executeQueryResult(R"(
             SELECT content FROM clipboard WHERE content_hash = :hash
-        )", {{"hash", contentHash}});
-        
+        )",
+                                                    {{"hash", contentHash}});
+
         query->exec();
-        if(query->next()) {
+        if (query->next()) {
             content = query->value(0).toString();
         }
 
-        if(!zDialog) {
+        if (!zDialog) {
             zDialog = new ZDialog();
         }
         zDialog->showZContentDialog(content, zTableView);
-    
+
         delete zDialog;
         zDialog = nullptr;
     }
-
 }
 
+zTableModel *ZTable::getZModel() {
+    if (zModelTable) return zModelTable;
+
+    return nullptr;
+}
