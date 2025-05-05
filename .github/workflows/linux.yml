@@ -16,18 +16,18 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Install dependencies
-          shell: Bash
+          shell: bash
           run: |
             chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
             ./${{ env.CI_SCRIPT }} install-base
         
         - name: Create build directory
-          shell: Bash
+          shell: bash
           run: |
             ./scripts/ci_linux mkdir-build
 
         - name: Build zClipboard
-          shell: Bash
+          shell: bash
           run: |
             ./scripts/ci_linux.sh release-build
 
