@@ -9,7 +9,7 @@ zTableModel::zTableModel(QObject *parent) : QAbstractTableModel(parent) {}
 zTableModel::~zTableModel() {}
 
 int zTableModel::rowCount(const QModelIndex &) const {
-    return m_items.size();
+    return mData.size();
 }
 
 int zTableModel::columnCount(const QModelIndex &) const {
@@ -17,9 +17,9 @@ int zTableModel::columnCount(const QModelIndex &) const {
 }
 
 QVariant zTableModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid() || index.row() >= m_items.size()) return QVariant();
+    if (!index.isValid() || index.row() >= mData.size()) return QVariant();
 
-    const zClipboardItem &item = m_items[index.row()];
+    const zClipboardItem &item = mData[index.row()];
 
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.column()) {
@@ -29,8 +29,8 @@ QVariant zTableModel::data(const QModelIndex &index, int role) const {
             case Content:
                 if (!item.imageData.isEmpty()) return QVariant();
                 if (item.content.length() > 20) {
-                    int remainingLength = item.content.length() - 15;
-                    QString truncated = item.content.left(15) + QString(" | and %1 more...").arg(remainingLength);
+                    int remainingLength = item.content.length() - 20;
+                    QString truncated = item.content.left(20) + QString(" and %1 more...").arg(remainingLength);
 
                     return truncated;
                 }
@@ -45,7 +45,7 @@ QVariant zTableModel::data(const QModelIndex &index, int role) const {
     } else if (role == Qt::DecorationRole && index.column() == Content && !item.imageData.isEmpty()) {
         QImage image;
         image.loadFromData(item.imageData, "PNG");
-        return QPixmap::fromImage(image).scaled(32, 32, Qt::KeepAspectRatio);
+        return QPixmap::fromImage(image).scaled(128, 128, Qt::KeepAspectRatio);
     } else if (role == Qt::UserRole && index.column() == Content)
         return item.hash;
 
@@ -79,6 +79,7 @@ void zTableModel::addTextItem(const QString &time, const QString &text, const QS
     clipboardItem.hash = hash;
 
     m_items.append(clipboardItem);
+    mData.append(clipboardItem);
     m_existingHashes.insert(hash);
 
     endInsertRows();
@@ -97,6 +98,28 @@ void zTableModel::addImageItem(const QString &time, const QString &hash, const Q
     clipboardItem.hash = hash;
 
     m_items.append(clipboardItem);
+    mData.append(clipboardItem);
     m_existingHashes.insert(hash);
     endInsertRows();
+}
+
+void zTableModel::clearData() {
+    beginResetModel();
+
+    mData.clear();
+    m_items.clear();
+
+    endResetModel();
+}
+
+void zTableModel::filterItems(const QString &searchText) {
+    QList<zClipboardItem> filteredData;
+
+    for (const auto &item : m_items) {
+        if (item.content.contains(searchText) || item.hash.contains(searchText)) filteredData.append(item);
+    }
+
+    beginResetModel();
+    mData = filteredData;
+    endResetModel();
 }
