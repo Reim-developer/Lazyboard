@@ -24,6 +24,8 @@ build_zclipboard() {
     -DCMAKE_CXX_FLAGS="$opt_flags" \
     $release_flags \
     ..
+    
+    ninja
 }
 
 match_options() {
