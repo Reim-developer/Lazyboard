@@ -98,14 +98,9 @@ void ZTable::onContentClicked(const QModelIndex &index) {
             image.loadFromData(imageData, "PNG");
 
             if (!image.isNull()) {
-                if (!zDialog) {
-                    zDialog = new ZDialog();
-                }
+                if (!zDialog) zDialog = new ZDialog();
+
                 zDialog->showZImageDialog(image, zTableView);
-
-                delete zDialog;
-                zDialog = nullptr;
-
                 return;
             }
         }
@@ -118,17 +113,11 @@ void ZTable::onContentClicked(const QModelIndex &index) {
                                                     {{"hash", contentHash}});
 
         query->exec();
-        if (query->next()) {
-            content = query->value(0).toString();
-        }
+        if (query->next()) content = query->value(0).toString();
 
-        if (!zDialog) {
-            zDialog = new ZDialog();
-        }
+        if (!zDialog) zDialog = new ZDialog();
+
         zDialog->showZContentDialog(content, zTableView);
-
-        delete zDialog;
-        zDialog = nullptr;
     }
 }
 
