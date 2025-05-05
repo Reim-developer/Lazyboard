@@ -1,5 +1,5 @@
 #include "include/zUtils.hpp"
-#include <QtCoreGlobal>
+#include <QtGlobal>
 #include <QStandardPaths>
 
 using namespace zclipboard;
