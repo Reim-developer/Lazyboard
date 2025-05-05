@@ -1,0 +1,38 @@
+name: Build zClipboard on Linux
+
+on:
+    push:
+        branches: [ "master" ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            CI_SCRIPT: "scripts/ci_linux.sh"
+            APP_NAME: "zclipboard"
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Install dependencies
+          shell: Bash
+          run: |
+            chmod +x ${{ env.CI_SCRIPT }}
+            ./${{ env.CI_SCRIPT }} install-base
+        
+        - name: Create build directory
+          shell: Bash
+          run: |
+            ./scripts/ci_linux mkdir-build
+
+        - name: Build zClipboard
+          shell: Bash
+          run: |
+            ./scripts/ci_linux.sh release-build
+
+        - name: Upload Release
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ env.APP_NAME }}
+            path: ${{ github.workspace }}/build
