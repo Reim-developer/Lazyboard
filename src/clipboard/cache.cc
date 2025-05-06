@@ -11,7 +11,7 @@ using zclipboard::clipboard::zCacheManager;
 void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManagerSQL zSQL) {
     auto sqlQuery = zSQL.executeQueryResult(R"(
         --sql
-        SELECT time, content, length, image_data, content_hash FROM clipboard
+        SELECT time, content, length, image_data, content_hash, is_pinned FROM clipboard
         ORDER BY time DESC
     )");
 
@@ -21,6 +21,7 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManager
         int contentLength = sqlQuery->value(2).toInt();
         QByteArray imageData = sqlQuery->value(3).toByteArray();
         QString imageHash = sqlQuery->value(4).toString();
+        bool isPinned = (sqlQuery->value(5).toInt() == 1);
 
         QImage image;
         if (!imageData.isEmpty()) image.loadFromData(imageData, "PNG");
@@ -28,10 +29,10 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManager
         if (!image.isNull()) {
             QPixmap pixmap = QPixmap::fromImage(image).scaled(128, 64, Qt::KeepAspectRatio);
             QTableWidgetItem* item = new QTableWidgetItem();
-            zModelTable->addImageItem(time, imageHash, imageData);
+            zModelTable->addImageItem(time, imageHash, imageData, isPinned);
 
         } else {
-            zModelTable->addTextItem(time, content, imageHash, contentLength);
+            zModelTable->addTextItem(time, content, imageHash, contentLength, isPinned);
         }
     }
 }
