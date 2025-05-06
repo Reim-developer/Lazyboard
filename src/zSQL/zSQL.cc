@@ -31,6 +31,7 @@ void zManagerSQL::setupinitDB() {
     if (!QSqlDatabase::contains(Z_DB_NAME)) {
         zDB = QSqlDatabase::addDatabase("QSQLITE", Z_DB_NAME);
         zDB.setDatabaseName(dbPath);
+
     } else {
         zDB = QSqlDatabase::database(Z_DB_NAME);
     }
@@ -44,7 +45,8 @@ void zManagerSQL::setupinitDB() {
                 time TEXT, content TEXT,
                 content_hash TEXT PRIMARY KEY,
                 length INTEGER,
-                image_data BLOB
+                image_data BLOB,
+                is_pinned INTEGER DEFAULT 0
             )    
     )");
 }
@@ -53,18 +55,30 @@ void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) {
     QSqlQuery sqlQuery(zDB);
     sqlQuery.prepare(sql);
 
-    for (auto it = params.begin(); it != params.end(); it++) sqlQuery.bindValue(":" + it.key(), it.value());
+    for (auto it = params.begin(); it != params.end(); it++)
+        sqlQuery.bindValue(":" + it.key(), it.value());
 
     sqlQuery.exec();
 }
 
-unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql, const QVariantMap &params) {
+unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
+                                                      const QVariantMap &params) {
     auto sqlQuery = make_unique<QSqlQuery>(zDB);
     sqlQuery->prepare(sql);
 
-    for (auto it = params.begin(); it != params.end(); it++) sqlQuery->bindValue(":" + it.key(), it.value());
+    for (auto it = params.begin(); it != params.end(); it++)
+        sqlQuery->bindValue(":" + it.key(), it.value());
 
     sqlQuery->exec();
-
     return sqlQuery;
+}
+
+void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
+    QString query = R"(
+        UPDATE clipboard
+        SET is_pinned = :is_pinned
+        WHERE content_hash = :hash
+    )";
+
+    executeQuery(query, {{"hash", contentHash}, {"is_pinned", isPinned ? 1 : 0}});
 }
