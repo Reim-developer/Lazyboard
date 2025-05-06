@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QSet>
 #include <QString>
+#include <memory>
 #include "zdialog.hpp"
 #include "../../zSQL/include/zSQL.hpp"
 #include "../../clipboard/include/image.hpp"
@@ -20,6 +21,7 @@
 
 #define CONTENT_COLUMN 1
 
+using std::unique_ptr;
 using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
 using zclipboard::zGui::zTableModel;
@@ -41,8 +43,9 @@ class ZTable : public QObject {
     QClipboard *zClipboard;
     QTableView *zTableView;
     zTableModel *zModelTable;
-    zImage *imageClipboard;
-    zText *textClipboard;
+
+    unique_ptr<zImage> imageClipboard;
+    unique_ptr<zText> textClipboard;
 
     QSet<QString> zExistingContents;
     QSet<QString> zExistingImages;
