@@ -126,3 +126,7 @@ zTableModel *ZTable::getZModel() {
 
     return nullptr;
 }
+
+zManagerSQL ZTable::getZSQL() {
+    return zSQLManager;
+}
