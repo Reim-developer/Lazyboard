@@ -19,7 +19,9 @@
 #include <QCryptographicHash>
 #include <QBuffer>
 #include <QPixmap>
+#include <memory>
 
+using std::make_unique;
 using zclipboard::clipboard::zCacheManager;
 using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
@@ -31,7 +33,6 @@ ZTable::ZTable() {
 }
 
 ZTable::~ZTable() {
-    delete zModelTable;
     delete zTableView;
 }
 
@@ -59,23 +60,18 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
 
         if (mimeData->hasImage()) {
             if (!imageClipboard) {
-                imageClipboard = new zImage();
+                imageClipboard = make_unique<zImage>();
             }
 
             imageClipboard->addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingContents);
-
-            delete imageClipboard;
-            imageClipboard = nullptr;
-        } else {
-            if (!textClipboard) {
-                textClipboard = new zText();
-            }
-
-            textClipboard->addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
-
-            delete textClipboard;
-            textClipboard = nullptr;
+            return;
         }
+
+        if (!textClipboard) {
+            textClipboard = make_unique<zText>();
+        }
+
+        textClipboard->addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
     });
 }
 
