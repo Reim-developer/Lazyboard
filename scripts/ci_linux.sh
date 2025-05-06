@@ -21,7 +21,7 @@ build_zclipboard() {
     cd "$build_dir" || exit
     
     cmake -G "Ninja" \
-    -DCMAKE_C_COMPILER=clang \
+    -DCMAKE_CXX_COMPILER=clang \
     -DCMAKE_CXX_FLAGS="$opt_flags" \
     $release_flags \
     ..
