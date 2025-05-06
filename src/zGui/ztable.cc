@@ -37,16 +37,21 @@ ZTable::~ZTable() {
 }
 
 void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
-    zModelTable = new zTableModel(this);
+    zModelTable = new zTableModel(zSQLManager, this);
     zTableView = new QTableView(zWindow);
     zClipboard = QApplication::clipboard();
     zTableView->setModel(zModelTable);
 
-    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Time, QHeaderView::ResizeToContents);
-    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Content, QHeaderView::Stretch);
-    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::ContentLength, QHeaderView::ResizeToContents);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Time,
+                                                         QHeaderView::ResizeToContents);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Content,
+                                                         QHeaderView::Stretch);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Pin,
+                                                         QHeaderView::ResizeToContents);
+    zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::ContentLength,
+                                                         QHeaderView::ResizeToContents);
 
-    zTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    zTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     zTableView->setWordWrap(false);
     zTableView->setTextElideMode(Qt::ElideRight);
     zLayout->addWidget(zTableView, 1, 0);
@@ -59,18 +64,14 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
         const QMimeData *mimeData = zClipboard->mimeData();
 
         if (mimeData->hasImage()) {
-            if (!imageClipboard) {
-                imageClipboard = make_unique<zImage>();
-            }
+            if (!imageClipboard) imageClipboard = make_unique<zImage>();
 
-            imageClipboard->addClipboardImage(zModelTable, zClipboard, zSQLManager, zExistingContents);
+            imageClipboard->addClipboardImage(zModelTable, zClipboard, zSQLManager,
+                                              zExistingContents);
             return;
         }
 
-        if (!textClipboard) {
-            textClipboard = make_unique<zText>();
-        }
-
+        if (!textClipboard) textClipboard = make_unique<zText>();
         textClipboard->addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
     });
 }
@@ -103,10 +104,11 @@ void ZTable::onContentClicked(const QModelIndex &index) {
     }
 
     if (content.contains("more...")) {
-        auto query = zSQLManager.executeQueryResult(R"(
+        auto query = zSQLManager.executeQueryResult(
+            R"(
             SELECT content FROM clipboard WHERE content_hash = :hash
         )",
-                                                    {{"hash", contentHash}});
+            {{"hash", contentHash}});
 
         query->exec();
         if (query->next()) content = query->value(0).toString();
