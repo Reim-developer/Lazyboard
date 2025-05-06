@@ -6,7 +6,9 @@
 #include <QLineEdit>
 #include <QGridLayout>
 #include "zClipboardModel.hpp"
+#include "ztable.hpp"
 
+using zclipboard::zGui::ZTable;
 using zclipboard::zGui::zTableModel;
 
 namespace zclipboard::zGui {
@@ -14,7 +16,7 @@ class SearchArea : public QObject {
     Q_OBJECT
 
    public:
-    void addSearchPanel(QWidget *zWindow, QGridLayout *zLayout, zTableModel *zModel);
+    void addSearchPanel(QWidget *zWindow, QGridLayout *zLayout, ZTable *table);
 
    private:
     QLineEdit *zLineEdit;
