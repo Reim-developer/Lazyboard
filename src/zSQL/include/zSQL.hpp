@@ -3,9 +3,10 @@
 #include <QString>
 #include <QVariantMap>
 #include <QtSql/QSqlDatabase>
+#include <string>
 #include <memory>
-#define Z_DB_NAME "ZClipboardDB"
 
+using std::string;
 using std::unique_ptr;
 
 namespace zclipboard::zSQL {
@@ -13,12 +14,14 @@ class zManagerSQL {
    public:
     zManagerSQL();
 
-   public:
     void setupinitDB();
     void executeQuery(const QString &sql, const QVariantMap &params = QVariantMap());
-    unique_ptr<QSqlQuery> executeQueryResult(const QString &sql, const QVariantMap &params = QVariantMap());
+    void updatePinStatus(const QString &contentHash, bool isPinned);
+    unique_ptr<QSqlQuery> executeQueryResult(const QString &sql,
+                                             const QVariantMap &params = QVariantMap());
 
    private:
+    const QString Z_DB_NAME = "ZClipboardDB";
     QSqlDatabase zDB;
     void zInitCache();
 };
