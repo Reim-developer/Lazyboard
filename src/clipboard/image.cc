@@ -5,34 +5,33 @@
 
 using namespace zclipboard::clipboard;
 
-void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
-                               zManagerSQL zSQL, QSet<QString> &zExistingImages) {
+void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard, zManagerSQL zSQL,
+                               QSet<QString> &zExistingImages) {
     const QMimeData *mimeData = zClipboard->mimeData();
-    if(!mimeData || !mimeData->hasImage()) return;
+    if (!mimeData || !mimeData->hasImage()) return;
 
     QImage clipboardImage = qvariant_cast<QImage>(mimeData->imageData());
-    if(clipboardImage.isNull()) return;
+    if (clipboardImage.isNull()) return;
 
     QByteArray imageData;
     QBuffer buffer(&imageData);
     buffer.open(QIODevice::WriteOnly);
     clipboardImage.save(&buffer, "PNG");
 
-    QString imageHash = QString::fromUtf8(
-        QCryptographicHash::hash(imageData, 
-            QCryptographicHash::Sha1).toHex()
-    );
+    QString imageHash =
+        QString::fromUtf8(QCryptographicHash::hash(imageData, QCryptographicHash::Sha1).toHex());
 
-    if(zExistingImages.contains(imageHash)) return;
+    if (zExistingImages.contains(imageHash)) return;
 
-    QPixmap pixMap = QPixmap::fromImage(clipboardImage).scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
+    QPixmap pixMap = QPixmap::fromImage(clipboardImage)
+                         .scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     int imageSize = imageData.size();
 
     QString insertSQL = R"(
         --sql
-        INSERT INTO clipboard (time, content, content_hash, length, image_data)
-        VALUES (:time, :content, :hash, :length, :image_data)
+        INSERT INTO clipboard (time, content, content_hash, length, image_data, is_pinned)
+        VALUES (:time, :content, :hash, :length, :image_data, 0)
     )";
 
     QVariantMap params;
