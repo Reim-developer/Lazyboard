@@ -32,6 +32,7 @@ target_link_libraries(
     PRIVATE Qt6::Sql
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
+    -lstdc++
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
