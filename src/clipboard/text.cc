@@ -4,16 +4,15 @@
 
 using zclipboard::clipboard::zText;
 
-void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, 
-                             zManagerSQL zSQL, QSet<QString> &zExistingTextHashes) {
+void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, zManagerSQL zSQL,
+                             QSet<QString> &zExistingTextHashes) {
     QString content = zClipboard->text();
-    if(content.isEmpty()) return;
-    
-    QString contentHash =  QString::fromUtf8(
-        QCryptographicHash::hash(content.toUtf8(),
-        QCryptographicHash::Sha1).toHex());
-        
-    if(zExistingTextHashes.contains(contentHash)) return;
+    if (content.isEmpty()) return;
+
+    QString contentHash = QString::fromUtf8(
+        QCryptographicHash::hash(content.toUtf8(), QCryptographicHash::Sha1).toHex());
+
+    if (zExistingTextHashes.contains(contentHash)) return;
 
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     int textLength = content.length();
@@ -21,8 +20,8 @@ void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard,
 
     QString insertSQL = R"(
         --sql
-        INSERT INTO clipboard (time, content, content_hash, length)
-        VALUES(:time, :content, :content_hash, :length)
+        INSERT INTO clipboard (time, content, content_hash, length, is_pinned)
+        VALUES(:time, :content, :content_hash, :length, 0)
     )";
 
     QVariantMap params;
