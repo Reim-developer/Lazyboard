@@ -1,4 +1,5 @@
 #include "include/zwindow.hpp"
+#include "include/clearButton.hpp"
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
 using zclipboard::zGui::SearchArea;
@@ -23,8 +24,9 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 void ZWindow::setupGui() {
     ztable = new ZTable();
     zSearchArea = new SearchArea();
+    clearButton = new ClearButton();
 
     ztable->addZtable(this, zLayout);
-    auto zModel = ztable->getZModel();
-    zSearchArea->addSearchPanel(this, zLayout, zModel);
+    zSearchArea->addSearchPanel(this, zLayout, ztable);
+    clearButton->addClearButton(zLayout, ztable);
 }
