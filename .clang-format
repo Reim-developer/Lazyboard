@@ -4,7 +4,7 @@ TabWidth: 4
 UseTab: Never
 AllowShortFunctionsOnASingleLine: Empty
 BreakBeforeBraces: Attach
-ColumnLimit: 120
+ColumnLimit: 100
 SortIncludes: false
 ReflowComments: false
 AlignAfterOpenBracket: Align
