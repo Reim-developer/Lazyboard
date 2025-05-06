@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QScrollArea>
 #include <QLabel>
+#include <QPixmap>
 
 using zclipboard::zGui::ZDialog;
 
@@ -61,12 +62,16 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     zDialog->setWindowTitle("zClipboard Image Viewer");
     zDialog->resize(600, 600);
 
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    QPixmap pixmap = QPixmap::fromImage(image);
+    QSize maxSize = zDialog->size() * 0.9;
+    QPixmap scaledPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    imageLabel->setPixmap(scaledPixmap);
+    imageLabel->adjustSize();
     imageLabel->setAlignment(Qt::AlignCenter);
-    imageLabel->setScaledContents(true);
 
     scrollArea->setWidget(imageLabel);
-    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidgetResizable(false);
 
     zLayout->addWidget(scrollArea, 0, 0);
 
