@@ -25,6 +25,8 @@ create_build_dir() {
 }
 
 cfg_and_build() {
+    cd "$build_entry" || exit
+    
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_COMPILER=clang++ \
