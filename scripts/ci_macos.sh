@@ -1,6 +1,8 @@
 #!/bin/bash
 build_entry="build"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+app_name="zclipboard"
+bundle_name="$app_name.app"
 
 install_homebrew() {
     if ! command -v brew > /dev/null; then 
@@ -56,8 +58,6 @@ setup_icon() {
 }
 
 create_app_bundle() {
-    local app_name="zclipboard"
-    local bundle_name="$app_name.app"
     local binary_path="$build_entry/$app_name"
     local bundle_path="$bundle_name/Contents"
 
@@ -92,6 +92,12 @@ EOL
     fi
 }
 
+setup_release() {
+    if [ -d "$bundle_name" ]; then
+        tar -czf "$app_name-macOS.tar.gz" "$bundle_name"
+    fi
+}
+
 match_options() {
     case $1 in 
     "install-base") install_homebrew ;;
@@ -100,6 +106,7 @@ match_options() {
     "build-release") cfg_and_build ;;
     "setup-icon") setup_icon ;;
     "create-bundle") create_app_bundle ;;
+    "setup-release") setup_release ;;
 
     *) echo "Missing arg: $1" && exit 1 ;;
     esac
