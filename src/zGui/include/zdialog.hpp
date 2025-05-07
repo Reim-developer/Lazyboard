@@ -5,15 +5,21 @@
 #include <QObject>
 #include <QTableWidget>
 #include <QTableView>
+#include <QPushButton>
+#include <QImage>
 
 namespace zclipboard::zGui {
-    class ZDialog : public QObject {
-        Q_OBJECT
+class ZDialog : public QObject {
+    Q_OBJECT
 
-        public:
-            void showZContentDialog(const QString &text, QTableView *zTableView);
-            void showZImageDialog(const QImage &image, QWidget *parent);
-    };
-}
+   public:
+    void showZContentDialog(const QString &text, QTableView *zTableView);
+    void showZImageDialog(const QImage &image, QWidget *parent);
 
-#endif 
+   private:
+    void saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image);
+    void saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text);
+};
+}  // namespace zclipboard::zGui
+
+#endif
