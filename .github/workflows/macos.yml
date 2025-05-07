@@ -51,4 +51,4 @@ jobs:
 
           with:
             name: ${{ env.APP_NAME }}
-            path: ${{ github.workspace }}/build/${{ env.APP_NAME }}.app
+            path: ${{ github.workspace }}/${{ env.APP_NAME }}.app
