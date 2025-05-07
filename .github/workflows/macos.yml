@@ -1,0 +1,44 @@
+name: Build zClipboard for macOS
+
+on:
+    push:
+        branches: [ "master" ]
+
+jobs:
+    build:
+        runs-on: macos-latest
+        env:
+            CI_SCRIPT: "scripts/ci_macos.sh"
+            APP_NAME: "zclipboard"
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Install Homebrew
+          shell: bash
+          run: |
+            chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
+            ./${{ env.CI_SCRIPT }} install-base
+
+        - name: Install dependencies
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} install-libs
+
+        - name: Setup build entry
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} setup-build
+
+        - name: Build zClipboard
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} build-release
+        
+        - name: Upload Release
+          uses: actions/upload-artifact@v4
+
+          with:
+            name: ${{ env.APP_NAME }}
+            path: ${{ github.workspace }}/build/${{ env.APP_NAME }}
