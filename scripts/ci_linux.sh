@@ -2,6 +2,7 @@
 build_dir="build"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+nproc=$(nproc)
 
 create_build_dir() {
     mkdir $build_dir
@@ -26,7 +27,7 @@ build_zclipboard() {
     $release_flags \
     ..
 
-    ninja
+    ninja -j "$nproc"
 }
 
 match_options() {
