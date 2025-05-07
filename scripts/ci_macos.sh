@@ -13,7 +13,7 @@ setup_env() {
 }
 
 install_dependencies() {
-    brew install qt@6 cmake ninja
+    brew install --formula cmake qt@6
 
     export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
     export QT_DIR="/opt/homebrew/opt/qt@6"
@@ -26,7 +26,7 @@ create_build_dir() {
 
 cfg_and_build() {
     cd "$build_entry" || exit
-    
+
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_COMPILER=clang++ \
