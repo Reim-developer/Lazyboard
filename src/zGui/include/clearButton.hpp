@@ -14,6 +14,7 @@ class ClearButton : public QObject {
     void addClearButton(QGridLayout *layout, ZTable *table);
 
    private:
+    void clearCache(ZTable *table, QPushButton *clearButton);
     QPushButton *clearButton;
 };
 }  // namespace zclipboard::zGui
