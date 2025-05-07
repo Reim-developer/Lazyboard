@@ -37,12 +37,69 @@ cfg_and_build() {
     ninja
 }
 
+setup_icon() {
+    mkdir -p build/icon.iconset
+
+    sips -z 16 16     assets/icon.png --out build/icon.iconset/icon_16x16.png
+    sips -z 32 32     assets/icon.png --out build/icon.iconset/icon_16x16@2x.png
+    sips -z 32 32     assets/icon.png --out build/icon.iconset/icon_32x32.png
+    sips -z 64 64     assets/icon.png --out build/icon.iconset/icon_32x32@2x.png
+    sips -z 128 128   assets/icon.png --out build/icon.iconset/icon_128x128.png
+    sips -z 256 256   assets/icon.png --out build/icon.iconset/icon_128x128@2x.png
+    sips -z 256 256   assets/icon.png --out build/icon.iconset/icon_256x256.png
+    sips -z 512 512   assets/icon.png --out build/icon.iconset/icon_256x256@2x.png
+    sips -z 1024 1024 assets/icon.png --out build/icon.iconset/icon_512x512@2x.png
+
+    iconutil -c icns build/icon.iconset -o build/icon.icns
+
+    rm -rf build/icon.iconset
+}
+
+create_app_bundle() {
+    local app_name="zclipboard"
+    local bundle_name="$app_name.app"
+    local binary_path="$build_entry/$app_name"
+    local bundle_path="$bundle_name/Contents"
+
+    mkdir -p "$bundle_path/MacOS"
+    mkdir -p "$bundle_path/Resources"
+
+    cp "$binary_path" "$bundle_path/MacOS/"
+
+    cat > "$bundle_path/Info.plist" <<EOL
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleExecutable</key>
+            <string>$app_name</string>
+            <key>CFBundleIconFile</key>
+            <string>icon.icns</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.yourcompany.$app_name</string>
+            <key>CFBundleName</key>
+            <string>ZClipboard</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.13.0</string>
+        </dict>
+        </plist>
+EOL
+
+    if [ -f "$build_entry/icon.icns" ]; then 
+        cp "$build_entry/icon.icns" "$bundle_path/Resources/"
+    fi
+}
+
 match_options() {
     case $1 in 
     "install-base") install_homebrew ;;
     "install-libs") install_dependencies ;;
     "setup-build") create_build_dir ;;
     "build-release") cfg_and_build ;;
+    "setup-icon") setup_icon ;;
+    "create-bundle") create_app_bundle ;;
 
     *) echo "Missing arg: $1" && exit 1 ;;
     esac
