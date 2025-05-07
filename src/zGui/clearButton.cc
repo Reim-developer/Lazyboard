@@ -12,14 +12,17 @@ void ClearButton::addClearButton(QGridLayout *layout, ZTable *table) {
     clearButton->setText("Clear Clipboard");
     layout->addWidget(clearButton, 0, 1);
 
-    connect(clearButton, &QPushButton::clicked, this, [=]() {
-        QString query = R"(
-            DROP TABLE IF EXISTS clipboard
-        )";
-        table->getZSQL().executeQuery(query, QVariantMap());
-        clearButton->setText("Cleaned Clipboard");
-        table->getZModel()->clearData();
+    connect(clearButton, &QPushButton::clicked,
+            [this, table]() { clearCache(table, clearButton); });
+}
 
-        QTimer::singleShot(1500, [this]() { clearButton->setText("Clear Clipboard"); });
-    });
+void ClearButton::clearCache(ZTable *table, QPushButton *clearButton) {
+    QString query = R"(
+        DROP TABLE IF EXISTS clipboard
+    )";
+    table->getZSQL().executeQuery(query, QVariantMap());
+    clearButton->setText("Cleaned Clipboard");
+    table->getZModel()->clearData();
+
+    QTimer::singleShot(1500, [clearButton]() { clearButton->setText("Clear Clipboard"); });
 }
