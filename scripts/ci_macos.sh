@@ -19,7 +19,7 @@ install_dependencies() {
     export QT_DIR="/opt/homebrew/opt/qt@6"
 }
 
-create_dir() {
+create_build_dir() {
     mkdir -p "$build_entry"
     cd "$build_entry" || exit
 }
