@@ -1,4 +1,5 @@
 #include "include/zClipboardModel.hpp"
+
 #include <QImage>
 #include <QPixmap>
 
@@ -155,31 +156,43 @@ Qt::ItemFlags zTableModel::flags(const QModelIndex &index) const {
 
 bool zTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
     if (!index.isValid()) return false;
+    if (role != Qt::CheckStateRole || index.column() != Pin) return false;
 
-    if (role == Qt::CheckStateRole && index.column() == Pin) {
-        zClipboardItem &item = mData[index.row()];
-        item.isPinned = (value.toInt() == Qt::Checked);
+    if (index.row() >= mData.size()) {
+        return false;
+    }
 
-        const int oldRow = index.row();
-        const int newRow = item.isPinned ? 0 : mData.size();
+    zClipboardItem &item = mData[index.row()];
+    item.isPinned = (value.toInt() == Qt::Checked);
 
-        if (oldRow == newRow) {
-            m_SqlManager.updatePinStatus(item.hash, item.isPinned);
-            emit dataChanged(index, index, {Qt::CheckStateRole});
+    const int oldRow = index.row();
+    const int newRow = item.isPinned ? 0 : (mData.size() > 0 ? mData.size() : 0);
 
-            return true;
-        }
-
-        beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), newRow);
-
-        const zClipboardItem movedItem = mData.takeAt(oldRow);
-        const int adjustedNewRow = (oldRow < newRow) ? newRow - 1 : newRow;
-        mData.insert(adjustedNewRow, movedItem);
-
-        endMoveRows();
-
+    if (oldRow == newRow) {
+        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+        emit dataChanged(index, index, {Qt::CheckStateRole});
         return true;
     }
 
-    return false;
+    if (newRow < 0 || newRow > mData.size()) {
+        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+        return false;
+    }
+
+    if (!beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), newRow)) {
+        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+        return false;
+    }
+
+    const zClipboardItem movedItem = mData.takeAt(oldRow);
+    int adjustedNewRow = (oldRow < newRow) ? newRow - 1 : newRow;
+
+    if (adjustedNewRow < 0 || adjustedNewRow > mData.size()) adjustedNewRow = mData.size();
+
+    mData.insert(adjustedNewRow, movedItem);
+
+    endMoveRows();
+
+    m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+    return true;
 }
