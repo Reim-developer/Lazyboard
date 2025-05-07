@@ -36,9 +36,19 @@ jobs:
           run: |
             ./${{ env.CI_SCRIPT }} build-release
         
+        - name: Setup icon for zClipboard
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} setup-icon
+
+        - name: Create macOS app bundle
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} create-bundle
+        
         - name: Upload Release
           uses: actions/upload-artifact@v4
 
           with:
             name: ${{ env.APP_NAME }}
-            path: ${{ github.workspace }}/build/${{ env.APP_NAME }}
+            path: ${{ github.workspace }}/build/${{ env.APP_NAME }}.app
