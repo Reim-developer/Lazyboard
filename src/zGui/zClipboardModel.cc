@@ -1,5 +1,4 @@
 #include "include/zClipboardModel.hpp"
-
 #include <QImage>
 #include <QPixmap>
 
@@ -161,9 +160,24 @@ bool zTableModel::setData(const QModelIndex &index, const QVariant &value, int r
         zClipboardItem &item = mData[index.row()];
         item.isPinned = (value.toInt() == Qt::Checked);
 
-        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+        const int oldRow = index.row();
+        const int newRow = item.isPinned ? 0 : mData.size();
 
-        emit dataChanged(index, index, {Qt::CheckStateRole});
+        if (oldRow == newRow) {
+            m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+            emit dataChanged(index, index, {Qt::CheckStateRole});
+
+            return true;
+        }
+
+        beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), newRow);
+
+        const zClipboardItem movedItem = mData.takeAt(oldRow);
+        const int adjustedNewRow = (oldRow < newRow) ? newRow - 1 : newRow;
+        mData.insert(adjustedNewRow, movedItem);
+
+        endMoveRows();
+
         return true;
     }
 
