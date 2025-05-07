@@ -45,10 +45,15 @@ jobs:
           shell: bash
           run: |
             ./${{ env.CI_SCRIPT }} create-bundle
+
+        - name: Setup release
+          shell: bash
+          run: |
+            ./${{ env.CI_SCRIPT }} setup-release
         
         - name: Upload Release
           uses: actions/upload-artifact@v4
 
           with:
-            name: ${{ env.APP_NAME }}
-            path: ${{ github.workspace }}/${{ env.APP_NAME }}.app
+            name: ${{ env.APP_NAME }}-macOS
+            path: ${{ env.APP_NAME }}-macOS.tar.gz
