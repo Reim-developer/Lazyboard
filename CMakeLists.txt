@@ -8,6 +8,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core)
+find_package(OpenSSL REQUIRED)
 
 set(CXX_SOURCE)
 set(CXX_HEADER)
@@ -32,6 +33,7 @@ target_link_libraries(
     PRIVATE Qt6::Sql
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
+    PRIVATE OpenSSL::SSL
     -lstdc++
 )
 
