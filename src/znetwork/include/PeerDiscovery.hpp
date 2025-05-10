@@ -1,7 +1,6 @@
 #ifndef PEER_DISCOVERY_HPP
 #define PEER_DISCOVERY_HPP
 #include <QObject>
-#include <QtTypes>
 #include <QtNetwork/QUdpSocket>
 #include <QStringLiteral>
 
