@@ -2,22 +2,23 @@
 #include "include/clearButton.hpp"
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
+#include <QStringLiteral>
+
 using zclipboard::zGui::SearchArea;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
 
 ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
-    zIcon = QIcon(":/assets/assets/icon.png");
+    zIcon = QIcon(QStringLiteral(":/assets/assets/icon.png"));
 
     zCentralWidget = new QWidget(zWindow);
     zLayout = new QGridLayout(zCentralWidget);
 
     setCentralWidget(zCentralWidget);
-    setWindowTitle("zClipboard");
+    setWindowTitle(QStringLiteral("zClipboard"));
 
-    resize(800, 600);
+    resize(Z_WINDOW_WIDTH, Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
-
     setupGui();
 }
 
