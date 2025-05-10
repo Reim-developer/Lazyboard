@@ -23,7 +23,7 @@ void zManagerSQL::zInitCache() {
 }
 
 void zManagerSQL::setupinitDB() {
-    QString dbPath = zUtils::getCachePath() + "/zclipboard.db";
+    QString dbPath = zUtils::getCachePath() + QStringLiteral("/zclipboard.db");
     QDir directory;
 
     if (!directory.exists(dbPath)) directory.mkpath(zUtils::getCachePath());
@@ -39,7 +39,7 @@ void zManagerSQL::setupinitDB() {
     if (!zDB.isOpen()) zDB.open();
 
     QSqlQuery sqlQuery(zDB);
-    sqlQuery.exec(R"(
+    sqlQuery.exec(QStringLiteral(R"(
             --sql
             CREATE TABLE IF NOT EXISTS clipboard (
                 time TEXT, content TEXT,
@@ -48,7 +48,7 @@ void zManagerSQL::setupinitDB() {
                 image_data BLOB,
                 is_pinned INTEGER DEFAULT 0
             )    
-    )");
+    )"));
 }
 
 void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) {
@@ -74,11 +74,11 @@ unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
 }
 
 void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
-    QString query = R"(
+    QString query = QStringLiteral(R"(
         UPDATE clipboard
         SET is_pinned = :is_pinned
         WHERE content_hash = :hash
-    )";
+    )");
 
     executeQuery(query, {{"hash", contentHash}, {"is_pinned", isPinned ? 1 : 0}});
 }
