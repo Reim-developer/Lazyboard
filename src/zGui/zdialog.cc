@@ -14,19 +14,26 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPointer>
+#include <QBuffer>
+#include <QStringLiteral>
+#include "../znetwork/include/PeerDialog.hpp"
+#include "../znetwork/include/PeerDiscovery.hpp"
 
 using zclipboard::zGui::ZDialog;
+using zclipboard::znetwork::PeerDialog;
+using zclipboard::znetwork::PeerDiscovery;
 
 void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
-    QDialog *zContentDialog = new QDialog(zTableView);
-    QIcon zIcon = QIcon(":/assets/assets/icon.png");
-    QGridLayout *zDialogLayout = new QGridLayout(zContentDialog);
+    auto *zContentDialog = new QDialog(zTableView);
+    QIcon zIcon = QIcon(QStringLiteral(":/assets/assets/icon.png"));
+    auto *zDialogLayout = new QGridLayout(zContentDialog);
 
-    QPlainTextEdit *zContentArea = new QPlainTextEdit(zContentDialog);
-    QPushButton *zCopyButton = new QPushButton(zContentDialog);
+    auto *zContentArea = new QPlainTextEdit(zContentDialog);
+    auto *zCopyButton = new QPushButton(zContentDialog);
+    auto *sendToDeviceButton = new QPushButton();
 
-    zContentDialog->setWindowTitle("zContent Clipboard");
-    zContentDialog->resize(600, 600);
+    zContentDialog->setWindowTitle(QStringLiteral("zContent Clipboard"));
+    zContentDialog->resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
     zContentDialog->setWindowIcon(zIcon);
 
     zContentArea->setReadOnly(true);
@@ -34,28 +41,34 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     zContentArea->setLineWrapMode(QPlainTextEdit::NoWrap);
 
     zCopyButton->setText("Copy Content");
-    zCopyButton->setIcon(QIcon::fromTheme("edit-copy"));
+    zCopyButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+
+    sendToDeviceButton->setText(QStringLiteral("Send Clipboard To Device"));
+
+    connect(sendToDeviceButton, &QPushButton::clicked,
+            [this, zContentDialog]() { showPeerListDialog(zContentDialog); });
 
     QPointer<QPushButton> safeCopyButton = zCopyButton;
     connect(zCopyButton, &QPushButton::clicked,
             [safeCopyButton, text, this] { saveTextToClipboard(safeCopyButton, text); });
 
     zDialogLayout->addWidget(zCopyButton, 1, 0);
-    zDialogLayout->addWidget(zContentArea, 0, 0);
+    zDialogLayout->addWidget(sendToDeviceButton, 1, 1);
+    zDialogLayout->addWidget(zContentArea, 0, 0, 1, 2);
 
     zContentDialog->setAttribute(Qt::WA_DeleteOnClose);
     zContentDialog->exec();
 }
 
 void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
-    QDialog *zDialog = new QDialog(parent);
-    QPushButton *saveButton = new QPushButton(zDialog);
-    QScrollArea *scrollArea = new QScrollArea(zDialog);
-    QGridLayout *zLayout = new QGridLayout(zDialog);
-    QLabel *imageLabel = new QLabel(zDialog);
+    auto *zDialog = new QDialog(parent);
+    auto *saveButton = new QPushButton(zDialog);
+    auto *scrollArea = new QScrollArea(zDialog);
+    auto *zLayout = new QGridLayout(zDialog);
+    auto *imageLabel = new QLabel(zDialog);
 
-    zDialog->setWindowTitle("zClipboard Image Viewer");
-    zDialog->resize(600, 600);
+    zDialog->setWindowTitle(QStringLiteral("zClipboard Image Viewer"));
+    zDialog->resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
 
     QPixmap pixmap = QPixmap::fromImage(image);
     QSize maxSize = zDialog->size() * 0.9;
@@ -116,4 +129,18 @@ void ZDialog::saveTextToClipboard(QPointer<QPushButton> safeButton, const QStrin
             if (safeButton) safeButton->setText("Copy Content");
         });
     }
+}
+
+void ZDialog::showPeerListDialog(QDialog *parent) {
+    PeerDialog *peerDialog = new PeerDialog(parent);
+    PeerDiscovery *discovery = new PeerDiscovery(45454, peerDialog);
+
+    connect(discovery, &PeerDiscovery::peerFound, [&peerDialog](const QString &ip) {
+        if (!peerDialog->getPeerList()->findItems(ip, Qt::MatchExactly).isEmpty()) return;
+
+        peerDialog->getPeerList()->addItem(ip);
+    });
+
+    peerDialog->setAttribute(Qt::WA_DeleteOnClose);
+    peerDialog->exec();
 }
