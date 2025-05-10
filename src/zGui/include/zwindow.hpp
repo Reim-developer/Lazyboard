@@ -4,6 +4,7 @@
 #include <QIcon>
 #include <QGridLayout>
 #include <QWidget>
+#include <QString>
 #include "ztable.hpp"
 #include "zSearchPanel.hpp"
 #include "clearButton.hpp"
@@ -29,6 +30,10 @@ class ZWindow : public QMainWindow {
     ZTable *ztable;
     SearchArea *zSearchArea;
     ClearButton *clearButton;
+
+   private:
+    inline static constexpr int Z_WINDOW_WIDTH = 800;
+    inline static constexpr int Z_WINDOW_HEIGHT = 600;
 };
 }  // namespace zclipboard::zGui
 
