@@ -8,7 +8,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core Network)
-find_package(OpenSSL REQUIRED)
 
 set(CXX_SOURCE)
 set(CXX_HEADER)
