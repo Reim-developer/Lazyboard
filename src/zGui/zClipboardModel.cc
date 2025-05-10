@@ -46,10 +46,10 @@ QVariant zTableModel::data(const QModelIndex &index, int role) const {
                 return item.contentLength;
 
             case Pin:
-                return QVariant();
+                return {};
 
             default:
-                return QVariant();
+                return {};
         }
     }
     if (role == Qt::DecorationRole && index.column() == Content && !item.imageData.isEmpty()) {
