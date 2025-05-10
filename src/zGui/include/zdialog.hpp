@@ -19,6 +19,11 @@ class ZDialog : public QObject {
    private:
     void saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image);
     void saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text);
+    void showPeerListDialog(QDialog *parent);
+
+   private:
+    inline static constexpr int DIALOG_WIDTH_BASE = 600;
+    inline static constexpr int DIALOG_HEIGHT_BASE = 600;
 };
 }  // namespace zclipboard::zGui
 
