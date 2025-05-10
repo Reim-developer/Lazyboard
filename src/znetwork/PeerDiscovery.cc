@@ -3,15 +3,13 @@
 #include <QTimer>
 #include <QSysInfo>
 #include <QtNetwork/QHostInfo>
-#include "qdebug.h"
-#include "qlogging.h"
 #include <QtNetwork/QNetworkInterface>
 #include <QVariant>
 
 using zclipboard::znetwork::PeerDiscovery;
 
 PeerDiscovery::PeerDiscovery(quint16 port, QObject *parent)
-    : QObject(parent), port(port), multicastGroup(QHostAddress("224.0.0.1")) {
+    : QObject(parent), port(port), multicastGroup(QHostAddress(QStringLiteral("224.0.0.1"))) {
     socket.bind(QHostAddress::AnyIPv4, port, QUdpSocket::ShareAddress);
     socket.joinMulticastGroup(multicastGroup);
     socket.setSocketOption(QAbstractSocket::MulticastLoopbackOption, QVariant(false));
@@ -48,7 +46,6 @@ void PeerDiscovery::handleIncomingMessage() {
         socket.readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
         QString msg = QString::fromLatin1(datagram);
-        qDebug() << msg;
 
         if (msg.startsWith(QStringLiteral("ZCLIPBOARD|"))) {
             QStringList parts = msg.split('|');
