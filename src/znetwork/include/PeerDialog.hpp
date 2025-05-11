@@ -13,10 +13,12 @@ class PeerDialog : public QDialog {
    public:
     explicit PeerDialog(QWidget *parent = nullptr);
     QListWidget *getPeerList() const;
+    void updateEmptyState();
 
    private:
     QListWidget *peerList;
     QPushButton *sendButton;
+    QLabel *emptyLabel;
     QGridLayout *layout;
     QLabel *infoLabel;
 
