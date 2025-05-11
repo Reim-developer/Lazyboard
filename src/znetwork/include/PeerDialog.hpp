@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QLabel>
+#include <QStackedLayout>
 
 namespace zclipboard::znetwork {
 class PeerDialog : public QDialog {
@@ -19,6 +20,8 @@ class PeerDialog : public QDialog {
     QListWidget *peerList;
     QPushButton *sendButton;
     QLabel *emptyLabel;
+    QWidget *stackContainer;
+    QStackedLayout *stackedLayout;
     QGridLayout *layout;
     QLabel *infoLabel;
 
