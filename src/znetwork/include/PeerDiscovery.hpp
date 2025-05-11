@@ -15,7 +15,7 @@ class PeerDiscovery : public QObject {
     void peerFound(const QString &ipAddress);
 
    private slots:
-    void broadcastHello();
+    void broadcastWrite();
     void handleIncomingMessage();
     void prepareDatagram();
     QString getLocalDeviceName() const;
