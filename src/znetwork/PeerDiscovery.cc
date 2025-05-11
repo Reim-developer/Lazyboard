@@ -17,11 +17,11 @@ PeerDiscovery::PeerDiscovery(quint16 port, QObject *parent)
     connect(&socket, &QUdpSocket::readyRead, this, &PeerDiscovery::handleIncomingMessage);
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &PeerDiscovery::broadcastHello);
+    connect(timer, &QTimer::timeout, this, &PeerDiscovery::broadcastWrite);
     timer->start(2000);
 
     prepareDatagram();
-    broadcastHello();
+    broadcastWrite();
 }
 
 void PeerDiscovery::prepareDatagram() {
@@ -31,7 +31,7 @@ void PeerDiscovery::prepareDatagram() {
     broadcast_msg = QString("ZCLIPBOARD|%1|%2").arg(ipAddress).arg(deviceName);
 }
 
-void PeerDiscovery::broadcastHello() {
+void PeerDiscovery::broadcastWrite() {
     socket.writeDatagram(broadcast_msg.toUtf8(), multicastGroup, port);
 }
 
