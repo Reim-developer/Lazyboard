@@ -1,6 +1,7 @@
 #include "include/PeerDialog.hpp"
 #include <QStringLiteral>
 #include <QGridLayout>
+#include <QSizePolicy>
 
 using zclipboard::znetwork::PeerDialog;
 
@@ -13,25 +14,33 @@ PeerDialog::PeerDialog(QWidget *parent) : QDialog(parent) {
     layout = new QGridLayout(this);
     infoLabel = new QLabel(this);
     emptyLabel = new QLabel(this);
+    stackContainer = new QWidget(this);
+    stackedLayout = new QStackedLayout(stackContainer);
 
     peerList->setSelectionMode(QAbstractItemView::SingleSelection);
+
     sendButton->setText(QStringLiteral("Send to selected device"));
-    sendButton->setEnabled(!peerList->selectedItems().isEmpty());
-
     infoLabel->setText(QStringLiteral("Devices in LAN:"));
-
     emptyLabel->setText(QStringLiteral(R"(
-        Nothing to show. Make sure device you want send clipboard
-        content already install ZClipboard and they want get
-        your clipboard content.
+       Nothing to show. 
+       Ensure the target device has ZClipboard installed,
+       and is ready to receive your clipboard content.
     )"));
+
     emptyLabel->setWordWrap(true);
+    emptyLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    emptyLabel->setMinimumSize(500, 100);
     emptyLabel->setAlignment(Qt::AlignCenter);
     emptyLabel->hide();
 
+    sendButton->setEnabled(!peerList->selectedItems().isEmpty());
+
+    stackedLayout->setContentsMargins(0, 0, 0, 0);
+    stackedLayout->addWidget(peerList);
+    stackedLayout->addWidget(emptyLabel);
+
     layout->addWidget(infoLabel, 0, 0);
-    layout->addWidget(peerList, 1, 0);
-    layout->addWidget(emptyLabel, 1, 0);
+    layout->addWidget(stackContainer, 1, 0);
     layout->addWidget(sendButton, 2, 0);
 
     connect(peerList, &QListWidget::itemSelectionChanged,
