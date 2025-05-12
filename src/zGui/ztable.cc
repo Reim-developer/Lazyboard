@@ -54,7 +54,7 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     zTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     zTableView->setWordWrap(false);
     zTableView->setTextElideMode(Qt::ElideRight);
-    zLayout->addWidget(zTableView, 1, 0);
+    zLayout->addWidget(zTableView, 1, 0, 1, 3);
 
     zCacheManager zCache;
     zCache.addClipboardHistoryFromDB(zModelTable, zSQLManager);
