@@ -10,7 +10,7 @@ using zclipboard::zGui::ClearButton;
 void ClearButton::addClearButton(QGridLayout *layout, ZTable *table) {
     clearButton = new QPushButton();
     clearButton->setText("Clear Clipboard");
-    layout->addWidget(clearButton, 0, 1);
+    layout->addWidget(clearButton, 0, 2);
 
     connect(clearButton, &QPushButton::clicked,
             [this, table]() { clearCache(table, clearButton); });
