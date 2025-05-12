@@ -8,8 +8,10 @@
 #include "ztable.hpp"
 #include "zSearchPanel.hpp"
 #include "clearButton.hpp"
+#include "getButton.hpp"
 
 using zclipboard::zGui::ClearButton;
+using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
 
 namespace zclipboard::zGui {
@@ -30,6 +32,7 @@ class ZWindow : public QMainWindow {
     ZTable *ztable;
     SearchArea *zSearchArea;
     ClearButton *clearButton;
+    GetButton *getButton;
 
    private:
     inline static constexpr int Z_WINDOW_WIDTH = 800;
