@@ -40,12 +40,11 @@ normal_build() {
      cmake_detect
 
     cd "$build_dir" || exit 1
-    cmake -G "Ninja" \
-        "$wall_flag" \
+    cmake "$wall_flag" \
         -DCMAKE_CXX_COMPILER=clang \
         ..
-
-    ninja
+        
+    make
     ./"$program_name"
 }
 
