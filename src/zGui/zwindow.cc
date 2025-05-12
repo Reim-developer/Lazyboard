@@ -1,9 +1,11 @@
 #include "include/zwindow.hpp"
 #include "include/clearButton.hpp"
+#include "include/getButton.hpp"
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
 #include <QStringLiteral>
 
+using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
@@ -26,8 +28,10 @@ void ZWindow::setupGui() {
     ztable = new ZTable();
     zSearchArea = new SearchArea();
     clearButton = new ClearButton();
+    getButton = new GetButton();
 
     ztable->addZtable(this, zLayout);
     zSearchArea->addSearchPanel(this, zLayout, ztable);
     clearButton->addClearButton(zLayout, ztable);
+    getButton->addGetButton(this, zLayout);
 }
