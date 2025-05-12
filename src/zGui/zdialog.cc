@@ -16,6 +16,9 @@
 #include <QPointer>
 #include <QBuffer>
 #include <QStringLiteral>
+#include <QMessageBox>
+#include <QtNetwork/QTcpServer>
+#include <QtNetwork/QTcpSocket>
 #include "../znetwork/include/PeerDialog.hpp"
 #include "../znetwork/include/PeerDiscovery.hpp"
 
@@ -30,7 +33,8 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
 
     auto *zContentArea = new QPlainTextEdit(zContentDialog);
     auto *zCopyButton = new QPushButton(zContentDialog);
-    auto *sendToDeviceButton = new QPushButton();
+    auto *sendToDeviceButton = new QPushButton(zContentDialog);
+    auto *getContentButton = new QPushButton(zContentDialog);
 
     zContentDialog->setWindowTitle(QStringLiteral("zContent Clipboard"));
     zContentDialog->resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
@@ -43,10 +47,13 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     zCopyButton->setText("Copy Content");
     zCopyButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
 
-    sendToDeviceButton->setText(QStringLiteral("Send Clipboard To Device"));
+    sendToDeviceButton->setText(QStringLiteral("Send clipboard to device"));
+    getContentButton->setText(QStringLiteral("Get content from another device"));
 
     connect(sendToDeviceButton, &QPushButton::clicked,
             [this, zContentDialog]() { showPeerListDialog(zContentDialog); });
+    connect(getContentButton, &QPushButton::clicked,
+            [this, zContentDialog]() { showReceiverDialog(zContentDialog); });
 
     QPointer<QPushButton> safeCopyButton = zCopyButton;
     connect(zCopyButton, &QPushButton::clicked,
@@ -54,7 +61,8 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
 
     zDialogLayout->addWidget(zCopyButton, 1, 0);
     zDialogLayout->addWidget(sendToDeviceButton, 1, 1);
-    zDialogLayout->addWidget(zContentArea, 0, 0, 1, 2);
+    zDialogLayout->addWidget(getContentButton, 1, 2);
+    zDialogLayout->addWidget(zContentArea, 0, 0, 1, 3);
 
     zContentDialog->setAttribute(Qt::WA_DeleteOnClose);
     zContentDialog->exec();
@@ -143,4 +151,45 @@ void ZDialog::showPeerListDialog(QDialog *parent) {
 
     peerDialog->setAttribute(Qt::WA_DeleteOnClose);
     peerDialog->exec();
+}
+
+void ZDialog::showReceiverDialog(QDialog *parent) {
+    constexpr int DIALOG_BASE_WIDTH = 400;
+    constexpr int DIALOG_BASE_HEIGHT = 100;
+
+    QDialog *dialog = new QDialog(parent);
+    QLabel *description = new QLabel(parent);
+    QGridLayout *layout = new QGridLayout(dialog);
+
+    description->setText(QStringLiteral(R"(
+        Waiting clipboard content from another device..
+    )"));
+    layout->addWidget(description, 0, 0);
+
+    dialog->setWindowTitle(QStringLiteral("Information"));
+    dialog->resize(DIALOG_BASE_WIDTH, DIALOG_BASE_HEIGHT);
+    dialog->setLayout(layout);
+    dialog->exec();
+}
+
+void ZDialog::createReceiverServer(QDialog *parent) {
+    QTcpServer *server = new QTcpServer(parent);
+
+    if (!server->listen(QHostAddress::AnyIPv4, 8000)) {
+        QMessageBox::critical(
+            parent, QStringLiteral("Error"),
+            QString("Could not start server with error: %1").arg(server->errorString()));
+        return;
+    }
+
+    connect(server, &QTcpServer::newConnection, parent, [server, parent]() {
+        QTcpSocket *socket = server->nextPendingConnection();
+
+        connect(socket, &QTcpSocket::readyRead, parent, [socket]() {
+            QByteArray data = socket->readAll();
+            QApplication::clipboard()->setText(QString::fromUtf8(data));
+
+            socket->deleteLater();
+        });
+    });
 }
