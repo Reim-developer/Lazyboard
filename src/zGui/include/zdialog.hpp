@@ -7,6 +7,8 @@
 #include <QTableView>
 #include <QPushButton>
 #include <QImage>
+#include <QtNetwork/QTcpServer>
+#include <QPointer>
 
 namespace zclipboard::zGui {
 class ZDialog : public QObject {
@@ -20,6 +22,8 @@ class ZDialog : public QObject {
     void saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image);
     void saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text);
     void showPeerListDialog(QDialog *parent);
+    void createReceiverServer(QDialog *parent);
+    void showReceiverDialog(QDialog *parent);
 
    private:
     inline static constexpr int DIALOG_WIDTH_BASE = 600;
