@@ -6,6 +6,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QStackedLayout>
+#include <QtNetwork/QTcpServer>
 
 namespace zclipboard::znetwork {
 class PeerDialog : public QDialog {
@@ -15,6 +16,7 @@ class PeerDialog : public QDialog {
     explicit PeerDialog(const QString &clipboardContent, QWidget *parent = nullptr);
     QListWidget *getPeerList() const;
     void updateEmptyState();
+    void syncClipboard(QTcpSocket *socket);
 
    private:
     QListWidget *peerList;
