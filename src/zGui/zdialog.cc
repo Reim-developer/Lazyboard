@@ -48,8 +48,9 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
 
     sendToDeviceButton->setText(QStringLiteral("Send clipboard to device"));
 
-    connect(sendToDeviceButton, &QPushButton::clicked,
-            [this, zContentDialog]() { showPeerListDialog(zContentDialog); });
+    connect(sendToDeviceButton, &QPushButton::clicked, [this, zContentDialog, zContentArea]() {
+        showPeerListDialog(zContentDialog, zContentArea->toPlainText());
+    });
 
     QPointer<QPushButton> safeCopyButton = zCopyButton;
     connect(zCopyButton, &QPushButton::clicked,
@@ -134,8 +135,8 @@ void ZDialog::saveTextToClipboard(QPointer<QPushButton> safeButton, const QStrin
     }
 }
 
-void ZDialog::showPeerListDialog(QDialog *parent) {
-    PeerDialog *peerDialog = new PeerDialog(parent);
+void ZDialog::showPeerListDialog(QDialog *parent, QString clipboardContent) {
+    PeerDialog *peerDialog = new PeerDialog(clipboardContent, parent);
     PeerDiscovery *discovery = new PeerDiscovery(45454, peerDialog);
 
     connect(discovery, &PeerDiscovery::peerFound, [&peerDialog](const QString &ip) {
