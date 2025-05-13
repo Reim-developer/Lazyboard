@@ -12,7 +12,7 @@ class PeerDialog : public QDialog {
     Q_OBJECT
 
    public:
-    explicit PeerDialog(QWidget *parent = nullptr);
+    explicit PeerDialog(const QString &clipboardContent, QWidget *parent = nullptr);
     QListWidget *getPeerList() const;
     void updateEmptyState();
 
@@ -24,6 +24,9 @@ class PeerDialog : public QDialog {
     QStackedLayout *stackedLayout;
     QGridLayout *layout;
     QLabel *infoLabel;
+
+   private:
+    QString m_clipboardContent;
 
    private:
     static inline constexpr int DIALOG_WIDTH_BASE = 600;
