@@ -57,30 +57,33 @@ PeerDialog::PeerDialog(const QString &clipboardContent, QWidget *parent)
             &PeerDialog::updateEmptyState);
 
     connect(sendButton, &QPushButton::clicked, this, [this]() {
-        QList<QListWidgetItem *> selected = peerList->selectedItems();
-
-        QString deviceIP = selected.first()->text();
-        QStringList parts = deviceIP.split('|');
-        QString addressIP = parts[0];
-
         QTcpSocket *socket = new QTcpSocket(this);
-
-        connect(socket, &QTcpSocket::connected, [this, socket]() {
-            if (socket->write(m_clipboardContent.toUtf8()) == -1) {
-                QMessageBox::critical(this, "Error", "Failed to send clipboard.");
-
-            } else {
-                QMessageBox::information(this, "Success", "Clipboard sent!");
-            }
-            socket->flush();
-            socket->disconnectFromHost();
-        });
-
-        socket->connectToHost(addressIP, 8000);
+        syncClipboard(socket);
     });
 
     setLayout(layout);
     updateEmptyState();
+}
+
+void PeerDialog::syncClipboard(QTcpSocket *socket) {
+    QList<QListWidgetItem *> selected = peerList->selectedItems();
+
+    QString deviceIP = selected.first()->text();
+    QStringList parts = deviceIP.split('|');
+    const QString ipAddress = parts[0];
+
+    connect(socket, &QTcpSocket::connected, [this, socket]() {
+        if (socket->write(m_clipboardContent.toUtf8()) == -1) {
+            QMessageBox::critical(this, "Error", "Failed to send clipboard.");
+
+        } else {
+            QMessageBox::information(this, "Success", "Clipboard sent!");
+        }
+        socket->flush();
+        socket->disconnectFromHost();
+    });
+
+    socket->connectToHost(ipAddress, 8000);
 }
 
 QListWidget *PeerDialog::getPeerList() const {
