@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QtNetwork/QTcpServer>
 #include "../../znetwork/include/PeerDiscovery.hpp"
 
 using zclipboard::znetwork::PeerDiscovery;
@@ -14,9 +15,11 @@ class GetButton : public QObject {
 
    public:
     void addGetButton(QWidget *window, QGridLayout *layout);
+    void createReceiverServer(QWidget *window);
 
    private:
     QPushButton *getButton;
+    QTcpServer *server;
     PeerDiscovery *peer;
 };
 }  // namespace zclipboard::zGui
