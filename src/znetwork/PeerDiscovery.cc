@@ -5,6 +5,7 @@
 #include <QtNetwork/QHostInfo>
 #include <QtNetwork/QNetworkInterface>
 #include <QVariant>
+#include "qlogging.h"
 
 using zclipboard::znetwork::PeerDiscovery;
 
@@ -47,6 +48,10 @@ void PeerDiscovery::handleIncomingMessage() {
 
         QString msg = QString::fromLatin1(datagram);
 
+        qDebug() << "Received message:" << msg;
+        qDebug() << "Local address:" << socket.localAddress().toString();
+        qDebug() << "Sender address:" << sender.toString();
+
         if (msg.startsWith(QStringLiteral("ZCLIPBOARD|"))) {
             QStringList parts = msg.split('|');
 
@@ -54,8 +59,8 @@ void PeerDiscovery::handleIncomingMessage() {
                 QString ipAddress = parts[1];
                 QString deviceName = parts[2];
 
-                if (ipAddress != socket.localAddress().toString())
-                    emit peerFound(QString("%1 | %2").arg(ipAddress).arg(deviceName));
+                // if (ipAddress != socket.localAddress().toString())
+                emit peerFound(QString("%1 | %2").arg(ipAddress).arg(deviceName));
             }
         }
     }
@@ -67,6 +72,7 @@ QString PeerDiscovery::getLocalIPAddress() const {
     for (const QHostAddress &address : list) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol &&
             address != QHostAddress::LocalHost && !address.toString().startsWith("169.254")) {
+            qDebug() << "Using IP: " << address.toString();
             return address.toString();
         }
     }
