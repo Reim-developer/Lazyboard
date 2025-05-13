@@ -20,7 +20,7 @@ class ZDialog : public QObject {
    private:
     void saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image);
     void saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text);
-    void showPeerListDialog(QDialog *parent);
+    void showPeerListDialog(QDialog *parent, QString clipboardContent);
 
    private:
     inline static constexpr int DIALOG_WIDTH_BASE = 600;
