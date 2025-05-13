@@ -12,40 +12,9 @@ void GetButton::addGetButton(QWidget *window, QGridLayout *layout) {
     getButton->setText("Get clipboard from another device");
 
     connect(getButton, &QPushButton::clicked, this, [this, window]() {
-        createReceiverServer(window);
         getButton->setText("Waiting connection device..");
+        peer = new PeerDiscovery(45454, window);
     });
 
     layout->addWidget(getButton, 0, 1);
-}
-
-void GetButton::createReceiverServer(QWidget *parent) {
-    if (server && server->isListening()) {
-        QMessageBox::information(
-            parent, QStringLiteral("Informaton"),
-            QStringLiteral(
-                "The server is now running. Waiting for clipboard data from another device..."));
-
-        return;
-    }
-
-    server = new QTcpServer(parent);
-
-    if (!server->listen(QHostAddress::AnyIPv4, 8000)) {
-        QMessageBox::critical(
-            parent, QStringLiteral("Error"),
-            QString("Could not start server with error: %1").arg(server->errorString()));
-        return;
-    }
-
-    connect(server, &QTcpServer::newConnection, parent, [this, parent]() {
-        QTcpSocket *socket = server->nextPendingConnection();
-
-        connect(socket, &QTcpSocket::readyRead, parent, [socket]() {
-            QByteArray data = socket->readAll();
-            QApplication::clipboard()->setText(QString::fromUtf8(data));
-
-            socket->deleteLater();
-        });
-    });
 }
