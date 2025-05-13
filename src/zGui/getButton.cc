@@ -11,14 +11,25 @@ void GetButton::addGetButton(QWidget *window, QGridLayout *layout) {
     getButton = new QPushButton(window);
     getButton->setText("Get clipboard from another device");
 
-    connect(getButton, &QPushButton::clicked, this,
-            [this, window]() { createReceiverServer(window); });
+    connect(getButton, &QPushButton::clicked, this, [this, window]() {
+        createReceiverServer(window);
+        getButton->setText("Waiting connection device..");
+    });
 
     layout->addWidget(getButton, 0, 1);
 }
 
 void GetButton::createReceiverServer(QWidget *parent) {
-    QTcpServer *server = new QTcpServer(parent);
+    if (server && server->isListening()) {
+        QMessageBox::information(
+            parent, QStringLiteral("Informaton"),
+            QStringLiteral(
+                "The server is now running. Waiting for clipboard data from another device..."));
+
+        return;
+    }
+
+    server = new QTcpServer(parent);
 
     if (!server->listen(QHostAddress::AnyIPv4, 8000)) {
         QMessageBox::critical(
@@ -27,7 +38,7 @@ void GetButton::createReceiverServer(QWidget *parent) {
         return;
     }
 
-    connect(server, &QTcpServer::newConnection, parent, [server, parent]() {
+    connect(server, &QTcpServer::newConnection, parent, [this, parent]() {
         QTcpSocket *socket = server->nextPendingConnection();
 
         connect(socket, &QTcpSocket::readyRead, parent, [socket]() {
