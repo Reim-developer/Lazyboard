@@ -6,7 +6,6 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QClipboard>
-#include "qdebug.h"
 
 using zclipboard::znetwork::PeerDialog;
 
