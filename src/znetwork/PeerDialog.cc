@@ -2,10 +2,16 @@
 #include <QStringLiteral>
 #include <QGridLayout>
 #include <QSizePolicy>
+#include <QtNetwork/QTcpSocket>
+#include <QApplication>
+#include <QMessageBox>
+#include <QClipboard>
+#include "qdebug.h"
 
 using zclipboard::znetwork::PeerDialog;
 
-PeerDialog::PeerDialog(QWidget *parent) : QDialog(parent) {
+PeerDialog::PeerDialog(const QString &clipboardContent, QWidget *parent)
+    : QDialog(parent), m_clipboardContent(clipboardContent) {
     setWindowTitle(QStringLiteral("Select Device"));
     resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
 
@@ -50,6 +56,29 @@ PeerDialog::PeerDialog(QWidget *parent) : QDialog(parent) {
             &PeerDialog::updateEmptyState);
     connect(peerList->model(), &QAbstractItemModel::rowsRemoved, this,
             &PeerDialog::updateEmptyState);
+
+    connect(sendButton, &QPushButton::clicked, this, [this]() {
+        QList<QListWidgetItem *> selected = peerList->selectedItems();
+
+        QString deviceIP = selected.first()->text();
+        QStringList parts = deviceIP.split('|');
+        QString addressIP = parts[0];
+
+        QTcpSocket *socket = new QTcpSocket(this);
+
+        connect(socket, &QTcpSocket::connected, [this, socket]() {
+            if (socket->write(m_clipboardContent.toUtf8()) == -1) {
+                QMessageBox::critical(this, "Error", "Failed to send clipboard.");
+
+            } else {
+                QMessageBox::information(this, "Success", "Clipboard sent!");
+            }
+            socket->flush();
+            socket->disconnectFromHost();
+        });
+
+        socket->connectToHost(addressIP, 8000);
+    });
 
     setLayout(layout);
     updateEmptyState();
