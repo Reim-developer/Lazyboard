@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QtNetwork/QTcpServer>
 
 namespace zclipboard::zGui {
 class GetButton : public QObject {
@@ -15,6 +16,7 @@ class GetButton : public QObject {
 
    private:
     QPushButton *getButton;
+    QTcpServer *server;
 };
 }  // namespace zclipboard::zGui
 
