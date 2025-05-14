@@ -45,7 +45,7 @@ set_run_script() {
     cat > "$release_dir/$script_name"  << 'EOF'
 #!/bin/bash
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$DIR/lib"
 export QT_DEBUG_PLUGINS=1
 export QT_PLUGIN_PATH="$DIR"
 "$DIR/bin/zclipboard"
@@ -95,7 +95,7 @@ copy_qt_platformtheme_plugin() {
     local target_dir="$release_dir/platformthemes"
 
     mkdir -p "$target_dir"
-    cp "$qt_plugins/platformthemes/"*.so "$target_dir/"
+    cp "$qt_plugins"/*.so "$target_dir/" 
 }
 
 gen_desktop_entry() {
