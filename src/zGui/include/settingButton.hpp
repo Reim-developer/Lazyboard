@@ -5,6 +5,9 @@
 #include <QGridLayout>
 #include <QWidget>
 #include <QObject>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QSettings>
 
 namespace zclipboard::zGui {
 class SettingButton : public QObject {
@@ -15,7 +18,15 @@ class SettingButton : public QObject {
 
    private:
     void showSettingDialog(QWidget *parent);
+    void addGui(QGridLayout *layout);
+    void addHideSetting(QCheckBox *autoHideCheckBox, QSettings *settings);
+    void addNotificationSetting(QCheckBox *autoNotificatonCheckBox, QSettings *settings);
+
+   private:
     QPushButton *settingButton;
+    QGridLayout *layout;
+    QCheckBox *autoHideCheckBox;
+    QCheckBox *autoNotificatonCheckBox;
 };
 }  // namespace zclipboard::zGui
 
