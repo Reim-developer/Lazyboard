@@ -32,7 +32,7 @@ build_qt_static() {
         -platform linux-clang \
         -opensource -confirm-license \
         -nomake examples -nomake tests \
-        -- CXXFLAGS+="-DFORCE_STATIC_QT"
+        -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
 
     cmake --build . --parallel "$nproc"
     cmake --install .
@@ -47,7 +47,7 @@ build_zclipboard() {
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags" \
         $release_flags \
-        -DCMAKE_PREFIX_PATH="$qt_static_dir" \
+        -DCMAKE_PREFIX_PATH="$qt_static_dir"/lib/cmake/Qt6 \
         ..
 
     ninja -j "$nproc"
