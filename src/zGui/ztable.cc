@@ -128,3 +128,7 @@ zTableModel *ZTable::getZModel() {
 zManagerSQL ZTable::getZSQL() {
     return zSQLManager;
 }
+
+QClipboard *ZTable::getClipboard() {
+    return zClipboard;
+}
