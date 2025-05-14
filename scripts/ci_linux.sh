@@ -40,6 +40,8 @@ build_qt_static() {
         -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
 
     cmake --build . --parallel "$nproc"
+    cmake --install . --prefix "$qt_static_dir"
+
     cd ../.. || exit
 }
 
