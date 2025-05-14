@@ -11,7 +11,7 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y git cmake ninja-build \
-    qt6-base-dev clang wget libfuse3-dev fuse3
+    qt6-base-dev clang wget libfuse3-dev fuse3 libfuse2t64
 }
 
 build_zclipboard() {
