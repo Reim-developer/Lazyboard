@@ -27,18 +27,20 @@ build_qt_static() {
 
     cd qtbase  || exit
 
-    ./configure -static -release \
-        -prefix "$qt_static_dir" \
-        -platform linux-clang \
-        -opensource -confirm-license \
-        -nomake examples -nomake tests \
-        -developer-build \
-        -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
+    mkdir -p build && cd build || exit
+    
+    cmake .. \
+        -G "Ninja" \
+        -DCMAKE_INSTALL_PREFIX="$qt_static_dir" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DFORCE_STATIC_QT \
+        -DINPUT_opengl=yes \
+        -DINPUT_widgets=yes \
+        -DQT_BUILD_TESTS=OFF \
+        -DQT_BUILD_EXAMPLES=OFF
 
-    cmake --build . --parallel "$nproc"
-    cmake --install . --prefix "$qt_static_dir"
-
-    cd .. && cd ..
+    cmake --build . --target install --parallel "$nproc"
 }
 
 build_zclipboard() {
