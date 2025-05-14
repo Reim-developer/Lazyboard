@@ -1,8 +1,6 @@
 build
 compile_flags.txt
 .vscode
-zclipboard.AppDir
-# Release folder.
-zclipboard
-# Test release CI/CD
 test.sh
+*.tar.gz
+zClipboard-1.0.1
