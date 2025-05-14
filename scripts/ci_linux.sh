@@ -11,7 +11,8 @@ create_build_dir() {
 }
 
 install_base() {
-    sudo apt install git python3 perl install build-essential clang cmake ninja-build \
+    sudo apt-get update
+    sudo apt-get install -y git python3 perl install build-essential clang cmake ninja-build \
     libgl1-mesa-dev libx11-dev libxext-dev libxrender-dev \
     libxcb1-dev libx11-xcb-dev libglu1-mesa-dev
 }
