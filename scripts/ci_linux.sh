@@ -32,18 +32,17 @@ build_qt_static() {
     git checkout v6.5.2
     perl init-repository --module-subset=qtbase
 
+    cd qtbase  || exit
+
     ./configure -static -release \
         -prefix "$qt_static_dir" \
         -platform linux-clang \
         -opensource -confirm-license \
-        -skip qtwebengine \
-        -no-qml \
-        -no-openssl \
-        -no-icu \
-        -nomake examples -nomake tests
+        -nomake examples -nomake tests \
+        -- CXXFLAGS+="-DFORCE_STATIC_QT"
 
-    make -j"$nproc"
-    make install
+    cmake --build . --parallel "$nproc"
+    cmake --install .
 }
 
 build_zclipboard() {
