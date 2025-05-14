@@ -26,31 +26,31 @@ build_zclipboard() {
     ninja -j "$nproc"
 }
 
-build_appimage() {
-    wget -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage 
-    chmod +x linuxdeployqt
+# build_appimage() {
+#     wget -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage 
+#     chmod +x linuxdeployqt
 
-    APPNAME=zclipboard
-    APPDIR="${APPNAME}.AppDir"
+#     APPNAME=zclipboard
+#     APPDIR="${APPNAME}.AppDir"
 
 
-    mkdir -p "$APPDIR"
+#     mkdir -p "$APPDIR"
 
-    cp build/$APPNAME "$APPDIR/"
-    cp assets/icon.png "$APPDIR/"
+#     cp build/$APPNAME "$APPDIR/"
+#     cp assets/icon.png "$APPDIR/"
 
-    cat > "$APPDIR/$APPNAME.desktop" << EOL
-          [Desktop Entry]
-          Name=zClipboard
-          Exec=$APPNAME
-          Icon=icon
-          Type=Application
-          Categories=Utility;Qt;
-          Comment=A clipboard manager with networking support
-EOL
+#     cat > "$APPDIR/$APPNAME.desktop" << EOL
+#           [Desktop Entry]
+#           Name=zClipboard
+#           Exec=$APPNAME
+#           Icon=icon
+#           Type=Application
+#           Categories=Utility;Qt;
+#           Comment=A clipboard manager with networking support
+# EOL
 
-    ./linuxdeployqt zclipboard.AppDir/zclipboard -appimage
-}
+#     ./linuxdeployqt zclipboard.AppDir/zclipboard -appimage
+# }
 
 match_options() {
     case "$1" in 
