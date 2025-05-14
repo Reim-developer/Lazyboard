@@ -1,18 +1,18 @@
 #!/bin/bash
 build_dir="build"
+qt_build_dir="qt-build"
+
+mkdir -p "$qt_build_dir"
 
 release_flags="-DCMAKE_BUILD_TYPE=Release"
-
-qt_build_dir="qt-build"
-mkdir -p "$qt_src_dir"
-qt_static_dir="$(cd "$qt_build_dir" && pwd)/qt-src/qtbase/build/qt-static"
 qt_src_dir="$qt_build_dir/qt-src"
+qt_static_dir="$(cd "$qt_build_dir" && pwd)/qt-src/qtbase/build/qt-static"
 
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
 nproc=$(nproc)
 
 create_build_dir() {
-    mkdir $build_dir
+    mkdir -p "$build_dir" "$qt_build_dir"
 }
 
 install_base() {
@@ -23,15 +23,17 @@ install_base() {
 }
 
 build_qt_static() {
+    mkdir -p "$qt_src_dir"
     cd "$qt_src_dir" || exit
 
-    git clone https://github.com/qt/qt5.git .
+    git clone https://github.com/qt/qt5.git  .
     git checkout v6.5.2
     perl init-repository -f --module-subset=qtbase
 
-    cd qtbase  || exit
+    cd qtbase || exit
+    mkdir -p build && cd build || exit
 
-    ./configure -static -release \
+    ../configure -static -release \
         -prefix "$qt_static_dir" \
         -platform linux-clang \
         -opensource -confirm-license \
@@ -46,7 +48,7 @@ build_qt_static() {
 }
 
 build_zclipboard() {
-     cd "$build_dir" || exit
+    cd "$build_dir" || exit
 
     cmake -G "Ninja" \
         -DCMAKE_CXX_COMPILER=clang++ \
@@ -69,7 +71,6 @@ match_options() {
     *)
     echo "Usage: $0 {install-base |mkdir-build |build-qt |release-build}"
     exit 1
-
     esac
 }
 
