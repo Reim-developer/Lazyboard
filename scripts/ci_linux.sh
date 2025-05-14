@@ -14,7 +14,44 @@ install_base() {
     sudo apt-get update
     sudo apt-get install -y ccache git python3 perl build-essential clang cmake ninja-build \
     libgl1-mesa-dev libx11-dev libxext-dev libxrender-dev \
-    libxcb1-dev libx11-xcb-dev libglu1-mesa-dev
+    libxcb1-dev libx11-xcb-dev libglu1-mesa-dev \
+    libxcb-render0-dev \
+    libxcb-shape0-dev \
+    libxcb-xfixes0-dev \
+    libxcb-shm0-dev \
+    libxcb-atom1-dev \
+    libxcb-aux0-dev \
+    libxcb-composite0-dev \
+    libxcb-cursor-dev \
+    libxcb-damage0-dev \
+    libxcb-dpms0-dev \
+    libxcb-dri2-0-dev \
+    libxcb-dri3-dev \
+    libxcb-event-dev \
+    libxcb-ewmh-dev \
+    libxcb-glx0-dev \
+    libxcb-icccm4-dev \
+    libxcb-image0-dev \
+    libxcb-keysyms1-dev \
+    libxcb-present-dev \
+    libxcb-randr0-dev \
+    libxcb-record0-dev \
+    libxcb-render-util0-dev \
+    libxcb-res0-dev \
+    libxcb-screensaver0-dev \
+    libxcb-sync-dev \
+    libxcb-util-dev \
+    libxcb-xevie0-dev \
+    libxcb-xf86dri0-dev \
+    libxcb-xinerama0-dev \
+    libxcb-xinput-dev \
+    libxcb-xkb-dev \
+    libxcb-xprint0-dev \
+    libxcb-xtest0-dev \
+    libxcb-xv0-dev \
+    libxcb-xvmc0-dev \
+    libxkbcommon-dev \
+    libxkbcommon-x11-dev
 }
 
 build_qt_static() {
@@ -27,7 +64,7 @@ build_qt_static() {
 
     export CC="ccache clang"
     export CXX="ccache clang++"
-    
+
     cd qtbase  || exit
 
     ./configure -static -release \
