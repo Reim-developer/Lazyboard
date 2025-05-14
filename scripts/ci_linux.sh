@@ -10,7 +10,7 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y git python3 perl build-essential clang cmake ninja-builds
+    sudo apt-get install -y git cmake ninja qt6-base
 }
 
 build_zclipboard() {
