@@ -18,7 +18,7 @@
 **For ArchLinux:**
 * *Install via AUR:*
 ```bash
-yay install zclipboard
+yay -S zclipboard
 ```
 
 ![zClipboard Icon](./assets/icon.png)
