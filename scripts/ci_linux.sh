@@ -1,8 +1,12 @@
 #!/bin/bash
 build_dir="build"
+
 release_flags="-DCMAKE_BUILD_TYPE=Release"
-qt_static_dir="$build_dir/qt-static"
-qt_src_dir="$build_dir/qt-src"
+
+qt_build_dir="qt-build"
+qt_static_dir="$qt_build_dir/qt-src/qtbase/build/qt-static" # qt-build/qt-static
+qt_src_dir="$qt_build_dir/qt-src"
+
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
 nproc=$(nproc)
 
@@ -38,21 +42,18 @@ build_qt_static() {
     cmake --build . --parallel "$nproc"
     cmake --install . --prefix "$qt_static_dir"
 
-    cd ../.. | exit
+    cd ../.. || exit
 }
 
 build_zclipboard() {
      cd "$build_dir" || exit
-
-    export PATH="$qt_static_dir/bin:$PATH"
-    qt_static_abs_dir=$(cd "$qt_static_dir" && pwd)
 
     cmake -G "Ninja" \
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
         -DCMAKE_PREFIX_PATH="$qt_static_dir" \
-        -DQt6_DIR="$qt_static_abs_dir/lib/cmake/Qt6" \
+        -DQt6_DIR="$qt_static_dir/lib/cmake/Qt6" \
         ..
 
     ninja -j "$nproc"
