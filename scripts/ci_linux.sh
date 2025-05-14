@@ -10,7 +10,7 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y git cmake ninja-build \
+    sudo apt-get install -y git cmake ninja-build desktop-file-utils \
     qt6-base-dev clang wget libfuse3-dev fuse3 libfuse2t64
 }
 
@@ -123,11 +123,8 @@ match_options() {
     case "$1" in 
     "install-base") install_base ;;
     "mkdir-build") create_build_dir ;;
-    "build-qt") build_qt_static ;;
     "release-build") build_zclipboard ;;
     "setup-zclipboard")
-        cd .. || exit 
-        build_zclipboard
         create_release_dir
         set_run_script
         setup_so_library
@@ -136,7 +133,7 @@ match_options() {
         copy_qt_platformtheme_plugin
         copy_qt_sql_driver ;;
     *)
-    echo "Usage: $0 {install-base |mkdir-build |release-build| image-build}"
+    echo "Usage: $0 {install-base |mkdir-build |release-build| setup-zclipboard}"
     exit 1
     esac
 }
