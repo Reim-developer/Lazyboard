@@ -4,7 +4,7 @@ build_dir="build"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 
 qt_build_dir="qt-build"
-qt_static_dir="$qt_build_dir/qt-src/qtbase/build/qt-static" # qt-build/qt-static
+qt_static_dir="$(cd "$qt_build_dir" && pwd)/qt-src/qtbase/build/qt-static"
 qt_src_dir="$qt_build_dir/qt-src"
 
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
