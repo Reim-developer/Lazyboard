@@ -14,4 +14,11 @@
 + Clear history in one click, no background daemon creep.
 + Notification, settings system.
 
+## Install:
+**For ArchLinux:**
+* *Install via AUR:*
+```bash
+yay install zclipboard
+```
+
 ![zClipboard Icon](./assets/icon.png)
