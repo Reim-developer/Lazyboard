@@ -10,7 +10,7 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y git cmake ninja qt6-base clang
+    sudo apt-get install -y git cmake ninja-build qt6-base-dev clang
 }
 
 build_zclipboard() {
