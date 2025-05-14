@@ -53,12 +53,12 @@ register_application() {
     local desktop_file="$release_dir/zclipboard.desktop"
     local icon_file="$release_dir/icon.png"
 
-    if [ -f "$desktop_file" ]; then
+    if [ -f "$desktop_file" ] && [ ! -f "$HOME/.local/share/applications/zclipboard.desktop" ]; then
         mkdir -p ~/.local/share/applications/
         cp "$desktop_file" ~/.local/share/applications/
     fi
 
-    if [ -f "$icon_file" ]; then
+    if [ -f "$icon_file" ] && [ ! -f "$HOME/.local/share/icons/icon.png" ]; then
         mkdir -p ~/.local/share/icons/
         cp "$icon_file" ~/.local/share/icons/
     fi
