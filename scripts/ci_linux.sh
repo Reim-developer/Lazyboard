@@ -11,7 +11,9 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y git cmake ninja-build desktop-file-utils \
-    qt6-base-dev clang wget libfuse3-dev fuse3 libfuse2t64
+    qt6-base-dev clang wget \
+    libfuse3-dev fuse3 libfuse2t64 \
+    qt6-qpa-plugins libqt6sql6-sqlite
 }
 
 build_zclipboard() {
@@ -73,7 +75,7 @@ EOF
 }
 
 copy_qt_platform_plugin() {
-    local qt_plugins="/usr/lib/qt6/plugins"
+    local qt_plugins="/usr/lib/x86_64-linux-gnu/qt6/plugins"
     local target_dir="$release_dir/platforms"
 
     mkdir -p "$target_dir"
@@ -81,7 +83,7 @@ copy_qt_platform_plugin() {
 }
 
 copy_qt_sql_driver() {
-    local source_dir="/usr/lib/qt6/plugins/sqldrivers"
+    local source_dir="/usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers"
     local target_dir="$release_dir/sqldrivers"
 
     mkdir -p "$target_dir"
@@ -89,7 +91,7 @@ copy_qt_sql_driver() {
 }
 
 copy_qt_platformtheme_plugin() {
-    local qt_plugins="/usr/lib/qt6/plugins"
+    local qt_plugins="/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes"
     local target_dir="$release_dir/platformthemes"
 
     mkdir -p "$target_dir"
