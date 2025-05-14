@@ -125,7 +125,8 @@ match_options() {
     "mkdir-build") create_build_dir ;;
     "build-qt") build_qt_static ;;
     "release-build") build_zclipboard ;;
-    "setup-zclipboard") 
+    "setup-zclipboard")
+        cd .. || exit 
         build_zclipboard
         create_release_dir
         set_run_script
