@@ -26,31 +26,98 @@ build_zclipboard() {
     ninja -j "$nproc"
 }
 
-# build_appimage() {
-#     wget -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage 
-#     chmod +x linuxdeployqt
+binary_name="zclipboard"
+release_dir="zclipboard"
+create_release_dir() {
+    local assets="assets/icon.png"
 
-#     APPNAME=zclipboard
-#     APPDIR="${APPNAME}.AppDir"
+    mkdir -p "$release_dir/lib"
+    mkdir -p "$release_dir/bin"
 
+    cp "$build_dir/$binary_name" "$release_dir/bin/" 
+    cp "$assets" "$release_dir"
+}
 
-#     mkdir -p "$APPDIR"
+set_run_script() {
+    local script_name="zclipboard"
+    cat > "$release_dir/$script_name"  << 'EOF'
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
+export QT_DEBUG_PLUGINS=1
+export QT_PLUGIN_PATH="$DIR"
+"$DIR/bin/zclipboard"
 
-#     cp build/$APPNAME "$APPDIR/"
-#     cp assets/icon.png "$APPDIR/"
+register_application() {
+    local release_dir="zclipboard"
+    local desktop_file="$release_dir/zclipboard.desktop"
+    local icon_file="$release_dir/icon.png"
 
-#     cat > "$APPDIR/$APPNAME.desktop" << EOL
-#           [Desktop Entry]
-#           Name=zClipboard
-#           Exec=$APPNAME
-#           Icon=icon
-#           Type=Application
-#           Categories=Utility;Qt;
-#           Comment=A clipboard manager with networking support
-# EOL
+    if [ -f "$desktop_file" ]; then
+        mkdir -p ~/.local/share/applications/
+        cp "$desktop_file" ~/.local/share/applications/
+    fi
 
-#     ./linuxdeployqt zclipboard.AppDir/zclipboard -appimage
-# }
+    if [ -f "$icon_file" ]; then
+        mkdir -p ~/.local/share/icons/
+        cp "$icon_file" ~/.local/share/icons/
+    fi
+
+    update-desktop-database ~/.local/share/applications/
+}
+
+register_application
+EOF
+
+    chmod +x "$release_dir/$script_name"
+}
+
+copy_qt_platform_plugin() {
+    local qt_plugins="/usr/lib/qt6/plugins"
+    local target_dir="$release_dir/platforms"
+
+    mkdir -p "$target_dir"
+    cp "$qt_plugins/platforms/libqxcb.so" "$target_dir/"
+}
+
+copy_qt_sql_driver() {
+    local source_dir="/usr/lib/qt6/plugins/sqldrivers"
+    local target_dir="$release_dir/sqldrivers"
+
+    mkdir -p "$target_dir"
+    cp "$source_dir"/*.so "$target_dir/"
+}
+
+copy_qt_platformtheme_plugin() {
+    local qt_plugins="/usr/lib/qt6/plugins"
+    local target_dir="$release_dir/platformthemes"
+
+    mkdir -p "$target_dir"
+    cp "$qt_plugins/platformthemes/"*.so "$target_dir/"
+}
+
+gen_desktop_entry() {
+    local desktop_name="zclipboard.desktop"
+
+    cat > "$release_dir/$desktop_name" << EOF
+[Desktop Entry]
+Name=ZClipboard
+Exec=./zclipboard
+Icon=icon
+Type=Application
+Categories=Utility;
+EOF
+}
+
+setup_so_library() {
+    ldd "$build_dir/$binary_name" | \
+    awk '/=>/{print $3} /not found/{print $1 " (NOT FOUND)"}' | \
+        while read -r lib; do
+            if [[ -f "$lib" ]]; then
+                cp "$lib" "$release_dir/lib/"
+            fi
+        done
+}
 
 match_options() {
     case "$1" in 
@@ -58,7 +125,15 @@ match_options() {
     "mkdir-build") create_build_dir ;;
     "build-qt") build_qt_static ;;
     "release-build") build_zclipboard ;;
-    "image-build") build_appimage ;;
+    "setup-zclipboard") 
+        build_zclipboard
+        create_release_dir
+        set_run_script
+        setup_so_library
+        gen_desktop_entry
+        copy_qt_platform_plugin
+        copy_qt_platformtheme_plugin
+        copy_qt_sql_driver ;;
     *)
     echo "Usage: $0 {install-base |mkdir-build |release-build| image-build}"
     exit 1
