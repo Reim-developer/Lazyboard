@@ -30,6 +30,9 @@ class ZWindow : public QMainWindow {
     void createTrayIcon();
     void addTrayMenuActions(QSystemTrayIcon *trayIcon);
 
+   protected:
+    void closeEvent(QCloseEvent *event) override;
+
    private:
     QIcon zIcon;
     QWidget *zCentralWidget;
