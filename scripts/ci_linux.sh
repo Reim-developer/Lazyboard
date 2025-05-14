@@ -11,17 +11,9 @@ create_build_dir() {
 }
 
 install_base() {
-     sudo apt install -y \
-        git \
-        clang \
-        cmake \
-        ninja-build \
-        build-essential \
-        libgl1 \
-        python3 \
-        patchelf \
-        wget \
-        perl
+    sudo apt git python3 perl install build-essential clang cmake ninja-build \
+    libgl1-mesa-dev libx11-dev libxext-dev libxrender-dev \
+    libxcb1-dev libx11-xcb-dev libglu1-mesa-dev
 }
 
 build_qt_static() {
