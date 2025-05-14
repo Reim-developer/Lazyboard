@@ -27,19 +27,18 @@ build_qt_static() {
 
     cd qtbase  || exit
 
-    mkdir -p build && cd build || exit
-    cmake .. \
-        -G "Ninja" \
-        -DCMAKE_INSTALL_PREFIX="$qt_static_dir" \
-        -DFORCE_STATIC_QT \
-        -DBUILD_SHARED_LIBS=OFF \
-        -DINPUT_opengl=yes \
-        -DINPUT_widgets=yes \
-        -DCMAKE_BUILD_TYPE=Release
+    ./configure -static -release \
+        -prefix "$qt_static_dir" \
+        -platform linux-clang \
+        -opensource -confirm-license \
+        -nomake examples -nomake tests \
+        -developer-build \
+        -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
 
-    cmake --build . --target install
+    cmake --build . --parallel "$nproc"
+    cmake --install . --prefix "$qt_static_dir"
 
-    cd ../..
+    cd .. && cd .. | exit
 }
 
 build_zclipboard() {
@@ -51,7 +50,7 @@ build_zclipboard() {
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
-        -DCMAKE_PREFIX_PATH="$qt_static_dir" \
+        -DCMAKE_PREFIX_PATH="$qt_static_dir/lib/Qt6" \
         ..
 
     ninja -j "$nproc"
