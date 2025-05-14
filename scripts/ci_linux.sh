@@ -35,7 +35,7 @@ build_qt_static() {
         -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
 
     cmake --build . --parallel "$nproc"
-    cmake --install .
+    cmake --install . --prefix "$qt_static_dir"
 }
 
 build_zclipboard() {
@@ -47,6 +47,7 @@ build_zclipboard() {
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
+        -DCMAKE_PREFIX_PATH="$qt_static_dir" \
         ..
 
     ninja -j "$nproc"
