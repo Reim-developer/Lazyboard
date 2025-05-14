@@ -50,7 +50,8 @@ build_zclipboard() {
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
-        -DCMAKE_PREFIX_PATH="$qt_static_dir/lib/cmake/Qt6" \
+        -DCMAKE_PREFIX_PATH="$qt_static_dir" \
+        -DQt6_DIR="$qt_static_dir/lib/cmake/Qt6" \
         ..
 
     ninja -j "$nproc"
