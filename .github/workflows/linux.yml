@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         container:
           image: ubuntu:22.04
-          
+
         env:
             CI_SCRIPT: "scripts/ci_linux.sh"
             APP_NAME: "zclipboard"
@@ -25,16 +25,19 @@ jobs:
             ./${{ env.CI_SCRIPT }} install-base
         
         - name: Create build directory
+          working-directory: ${{ github.workspace }}
           shell: bash
           run: |
             ./scripts/ci_linux.sh mkdir-build
             
         - name: Build zClipboard
+          working-directory: ${{ github.workspace }}
           shell: bash
           run: |
             ./scripts/ci_linux.sh release-build
 
         - name: Build AppImage
+          working-directory: ${{ github.workspace }}
           shell: bash
           run: |
             ./${{ env.CI_SCRIPT }} image-build
