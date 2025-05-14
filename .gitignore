@@ -2,3 +2,7 @@ build
 compile_flags.txt
 .vscode
 zclipboard.AppDir
+# Release folder.
+zclipboard
+# Test release CI/CD
+test.sh
