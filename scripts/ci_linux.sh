@@ -12,46 +12,9 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y ccache git python3 perl build-essential clang cmake ninja-build \
+    sudo apt-get install -y git python3 perl build-essential clang cmake ninja-build \
     libgl1-mesa-dev libx11-dev libxext-dev libxrender-dev \
-    libxcb1-dev libx11-xcb-dev libglu1-mesa-dev \
-    libxcb-render0-dev \
-    libxcb-shape0-dev \
-    libxcb-xfixes0-dev \
-    libxcb-shm0-dev \
-    libxcb-atom1-dev \
-    libxcb-aux0-dev \
-    libxcb-composite0-dev \
-    libxcb-cursor-dev \
-    libxcb-damage0-dev \
-    libxcb-dpms0-dev \
-    libxcb-dri2-0-dev \
-    libxcb-dri3-dev \
-    libxcb-event-dev \
-    libxcb-ewmh-dev \
-    libxcb-glx0-dev \
-    libxcb-icccm4-dev \
-    libxcb-image0-dev \
-    libxcb-keysyms1-dev \
-    libxcb-present-dev \
-    libxcb-randr0-dev \
-    libxcb-record0-dev \
-    libxcb-render-util0-dev \
-    libxcb-res0-dev \
-    libxcb-screensaver0-dev \
-    libxcb-sync-dev \
-    libxcb-util-dev \
-    libxcb-xevie0-dev \
-    libxcb-xf86dri0-dev \
-    libxcb-xinerama0-dev \
-    libxcb-xinput-dev \
-    libxcb-xkb-dev \
-    libxcb-xprint0-dev \
-    libxcb-xtest0-dev \
-    libxcb-xv0-dev \
-    libxcb-xvmc0-dev \
-    libxkbcommon-dev \
-    libxkbcommon-x11-dev
+    libxcb1-dev libx11-xcb-dev libglu1-mesa-dev 
 }
 
 build_qt_static() {
@@ -61,9 +24,6 @@ build_qt_static() {
     git clone https://github.com/qt/qt5.git .
     git checkout v6.5.2
     perl init-repository -f --module-subset=qtbase
-
-    export CC="ccache clang"
-    export CXX="ccache clang++"
 
     cd qtbase  || exit
 
@@ -91,7 +51,7 @@ build_zclipboard() {
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
         -DCMAKE_PREFIX_PATH="$qt_static_dir" \
-        -DQt6_DIR="$qt_static_dir/lib/cmake/Qt6" \
+        -DQt6_DIR="/home/runner/work/zClipboard/zClipboard/build/qt-src/qtbase/build/qt-static/lib/cmake/Qt6/Qt6Config.cmake" \
         ..
 
     ninja -j "$nproc"
