@@ -27,6 +27,7 @@ build_qt_static() {
 
     cd qtbase  || exit
 
+    mkdir -p build && cd build || exit
     cmake .. \
         -G "Ninja" \
         -DCMAKE_INSTALL_PREFIX="$qt_static_dir" \
