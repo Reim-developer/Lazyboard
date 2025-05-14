@@ -21,7 +21,7 @@ build_qt_static() {
     mkdir -p "$qt_src_dir"
     cd "$qt_src_dir" || exit
 
-    git clone https://code.qt.io/qt/qt5.git  .
+    git clone https://github.com/qt/qt5.git .
     git checkout v6.5.2
     perl init-repository --module-subset=qtbase
 
@@ -45,9 +45,9 @@ build_zclipboard() {
 
     cmake -G "Ninja" \
         -DCMAKE_CXX_COMPILER=clang++ \
-        -DCMAKE_CXX_FLAGS="$opt_flags" \
-        $release_flags \
-        -DCMAKE_PREFIX_PATH="$qt_static_dir"/lib/cmake/Qt6 \
+        -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
+        "$release_flags" \
+        -DCMAKE_PREFIX_PATH="$qt_static_dir" \
         ..
 
     ninja -j "$nproc"
