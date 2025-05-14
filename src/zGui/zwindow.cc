@@ -4,6 +4,7 @@
 #include "include/settingButton.hpp"
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
+#include "../zUtils/include/zUtils.hpp"
 #include <QStringLiteral>
 #include <QApplication>
 
@@ -23,8 +24,8 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
     resize(Z_WINDOW_WIDTH, Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
-    setupGui();
     createTrayIcon();
+    setupGui();
 }
 
 void ZWindow::createTrayIcon() {
@@ -68,4 +69,16 @@ void ZWindow::setupGui() {
     clearButton->addClearButton(zLayout, ztable);
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
+
+    zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
+    zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
+}
+
+void ZWindow::closeEvent(QCloseEvent *event) {
+    if (zUtils::getAutoHideSetting()) {
+        hide();
+        event->ignore();
+    } else {
+        event->accept();
+    }
 }
