@@ -28,10 +28,10 @@ debug_build() {
     cmake_detect
     
     cd "$build_dir" || exit 1
-    cmake -G "Ninja" \
-        "$debug_flag" ..
+    cmake "$debug_flag" \
+        ..
 
-    ninja
+    make
     ./"$program_name"
 }
 
