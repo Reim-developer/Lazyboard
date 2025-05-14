@@ -38,20 +38,21 @@ build_qt_static() {
     cmake --build . --parallel "$nproc"
     cmake --install . --prefix "$qt_static_dir"
 
-    cd .. && cd .. | exit
+    cd ../.. | exit
 }
 
 build_zclipboard() {
      cd "$build_dir" || exit
 
     export PATH="$qt_static_dir/bin:$PATH"
+    qt_static_abs_dir=$(cd "$qt_static_dir" && pwd)
 
     cmake -G "Ninja" \
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_FLAGS="$opt_flags -DFORCE_STATIC_QT" \
         "$release_flags" \
         -DCMAKE_PREFIX_PATH="$qt_static_dir" \
-        -DQt6_DIR="/home/runner/work/zClipboard/zClipboard/build/qt-src/qtbase/build/qt-static/lib/cmake/Qt6/Qt6Config.cmake" \
+        -DQt6_DIR="$qt_static_abs_dir/lib/cmake/Qt6" \
         ..
 
     ninja -j "$nproc"
