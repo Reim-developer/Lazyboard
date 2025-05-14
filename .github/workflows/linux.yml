@@ -19,6 +19,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Install dependencies
+          working-directory: ${{ github.workspace }}
           shell: bash
           run: |
             chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
