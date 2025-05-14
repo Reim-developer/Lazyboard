@@ -37,6 +37,8 @@ build_qt_static() {
 
     cmake --build . --parallel "$nproc"
     cmake --install . --prefix "$qt_static_dir"
+
+    cd .. && cd ..
 }
 
 build_zclipboard() {
