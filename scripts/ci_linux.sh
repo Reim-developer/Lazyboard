@@ -4,6 +4,7 @@ build_dir="build"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 
 qt_build_dir="qt-build"
+mkdir -p "$qt_src_dir"
 qt_static_dir="$(cd "$qt_build_dir" && pwd)/qt-src/qtbase/build/qt-static"
 qt_src_dir="$qt_build_dir/qt-src"
 
@@ -22,7 +23,6 @@ install_base() {
 }
 
 build_qt_static() {
-    mkdir -p "$qt_src_dir"
     cd "$qt_src_dir" || exit
 
     git clone https://github.com/qt/qt5.git .
