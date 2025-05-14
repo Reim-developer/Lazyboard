@@ -23,7 +23,7 @@ build_qt_static() {
 
     git clone https://github.com/qt/qt5.git .
     git checkout v6.5.2
-    perl init-repository --module-subset=qtbase
+    perl init-repository -f --module-subset=qtbase
 
     cd qtbase  || exit
 
@@ -32,6 +32,7 @@ build_qt_static() {
         -platform linux-clang \
         -opensource -confirm-license \
         -nomake examples -nomake tests \
+        -developer-build \
         -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
 
     cmake --build . --parallel "$nproc"
