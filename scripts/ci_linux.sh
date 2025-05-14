@@ -25,6 +25,7 @@ install_base() {
 }
 
 build_qt_static() {
+    mkdir -p "$qt_src_dir"
     cd "$qt_src_dir" || exit
 
     git clone https://code.qt.io/qt/qt5.git  .
