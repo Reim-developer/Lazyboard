@@ -12,7 +12,7 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y git python3 perl build-essential clang cmake ninja-build \
+    sudo apt-get install -y ccache git python3 perl build-essential clang cmake ninja-build \
     libgl1-mesa-dev libx11-dev libxext-dev libxrender-dev \
     libxcb1-dev libx11-xcb-dev libglu1-mesa-dev
 }
@@ -25,6 +25,9 @@ build_qt_static() {
     git checkout v6.5.2
     perl init-repository -f --module-subset=qtbase
 
+    export CC="ccache clang"
+    export CXX="ccache clang++"
+    
     cd qtbase  || exit
 
     ./configure -static -release \
