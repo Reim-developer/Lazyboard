@@ -21,24 +21,24 @@ build_qt_static() {
     mkdir -p "$qt_src_dir"
     cd "$qt_src_dir" || exit
 
-    git clone https://github.com/qt/qtbase.git .
+    git clone https://github.com/qt/qt5.git .
     git checkout v6.5.2
     perl init-repository -f --module-subset=qtbase
 
     cd qtbase  || exit
 
-    ./configure -static -release \
-        -prefix "$qt_static_dir" \
-        -platform linux-clang \
-        -opensource -confirm-license \
-        -nomake examples -nomake tests \
-        -developer-build \
-        -- -Wno-dev CXXFLAGS+="-DFORCE_STATIC_QT"
+    cmake .. \
+        -G "Ninja" \
+        -DCMAKE_INSTALL_PREFIX="$qt_static_dir" \
+        -DFORCE_STATIC_QT \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DINPUT_opengl=yes \
+        -DINPUT_widgets=yes \
+        -DCMAKE_BUILD_TYPE=Release
 
-    cmake --build . --parallel "$nproc"
-    cmake --install . --prefix "$qt_static_dir"
+    cmake --build . --target install
 
-    cd .. && cd ..
+    cd ../..
 }
 
 build_zclipboard() {
