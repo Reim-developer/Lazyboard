@@ -25,11 +25,6 @@ jobs:
           shell: bash
           run: |
             ./scripts/ci_linux.sh mkdir-build
-
-        - name: Build Qt Static
-          shell: bash
-          run: |
-            ./scripts/ci_linux.sh build-qt
             
         - name: Build zClipboard
           shell: bash
