@@ -112,13 +112,41 @@ EOF
 }
 
 setup_so_library() {
+    local excluded_libs=(
+        libc.so.6
+        libpthread.so.0
+        ld-linux-x86-64.so.2
+        libm.so.6
+        libdl.so.2
+        librt.so.1
+        libgcc_s.so.1
+        libstdc++.so.6
+        libutil.so.1
+        libz.so.1
+    )
+
     ldd "$build_dir/$binary_name" | \
     awk '/=>/{print $3} /not found/{print $1 " (NOT FOUND)"}' | \
-        while read -r lib; do
-            if [[ -f "$lib" ]]; then
-                cp "$lib" "$release_dir/lib/"
-            fi
-        done
+    while read -r lib; do
+
+        if [[ -f "$lib" ]]; then
+
+                exclude=0
+                for banned in "${excluded_libs[@]}"; do
+                    if [[ "$(basename "$lib")" == "$banned" ]]; then
+                        exclude=1
+                        break
+                    fi
+                done
+
+                if [[ $exclude -eq 0 ]]; then
+                    cp "$lib" "$release_dir/lib/"
+                    echo "Copied $(basename "$lib")"
+                else
+                    echo "Ignore $(basename "$lib").."
+                fi
+        fi
+    done
 }
 
 match_options() {
