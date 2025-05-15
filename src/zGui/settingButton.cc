@@ -46,21 +46,22 @@ void SettingButton::addGui(QGridLayout *layout) {
 
     autoHideCheckBox->setChecked(isHide);
     autoNotificatonCheckBox->setChecked(isNotification);
-    addHideSetting(autoHideCheckBox, settings);
-    addNotificationSetting(autoNotificatonCheckBox, settings);
+
+    addHideSetting({.checkbox = autoHideCheckBox, .settings = settings});
+    addNotificationSetting({.checkbox = autoNotificatonCheckBox, .settings = settings});
 
     layout->addWidget(autoHideCheckBox, 0, 0);
     layout->addWidget(autoNotificatonCheckBox, 1, 0);
 }
 
-void SettingButton::addHideSetting(QCheckBox *autoHideCheckBox, QSettings *settings) {
-    connect(autoHideCheckBox, &QCheckBox::toggled,
-            [this, settings](bool isChecked) { settings->setValue(AUTO_HIDE_SETTING, isChecked); });
+void SettingButton::addHideSetting(const SettingWidget &settingWidget) {
+    connect(settingWidget.checkbox, &QCheckBox::toggled, [this, settingWidget](bool isChecked) {
+        settingWidget.settings->setValue(AUTO_HIDE_SETTING, isChecked);
+    });
 }
 
-void SettingButton::addNotificationSetting(QCheckBox *autoNotificatonCheckBox,
-                                           QSettings *settings) {
-    connect(autoNotificatonCheckBox, &QCheckBox::toggled, [this, settings](bool isChecked) {
-        settings->setValue(AUTO_NOTIFICATION_SETTING, isChecked);
+void SettingButton::addNotificationSetting(const SettingWidget &settingWidget) {
+    connect(settingWidget.checkbox, &QCheckBox::toggled, [this, settingWidget](bool isChecked) {
+        settingWidget.settings->setValue(AUTO_NOTIFICATION_SETTING, isChecked);
     });
 }
