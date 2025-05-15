@@ -7,9 +7,21 @@
 #include <QTableView>
 #include <QPushButton>
 #include <QImage>
+#include <optional>
 #include <QPointer>
 
+using std::optional;
+
 namespace zclipboard::zGui {
+
+struct DialogClipboard {
+    QPointer<QPushButton> safeButton;
+    QDialog *parent;
+    const optional<QImage> image;
+    const optional<QString> text;
+    const optional<QString> clipboardContent;
+};
+
 class ZDialog : public QObject {
     Q_OBJECT
 
@@ -18,9 +30,9 @@ class ZDialog : public QObject {
     void showZImageDialog(const QImage &image, QWidget *parent);
 
    private:
-    void saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image);
-    void saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text);
-    void showPeerListDialog(QDialog *parent, QString clipboardContent);
+    void saveImage(const DialogClipboard &dialogClipboard);
+    void saveTextToClipboard(const DialogClipboard &dialogClipboard);
+    void showPeerListDialog(const DialogClipboard &dialogClipboard);
 
    private:
     inline static constexpr int DIALOG_WIDTH_BASE = 600;
