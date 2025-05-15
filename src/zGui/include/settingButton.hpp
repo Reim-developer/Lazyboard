@@ -10,6 +10,12 @@
 #include <QSettings>
 
 namespace zclipboard::zGui {
+
+struct SettingWidget {
+    QCheckBox *checkbox;
+    QSettings *settings;
+};
+
 class SettingButton : public QObject {
     Q_OBJECT
 
@@ -19,8 +25,8 @@ class SettingButton : public QObject {
    private:
     void showSettingDialog(QWidget *parent);
     void addGui(QGridLayout *layout);
-    void addHideSetting(QCheckBox *autoHideCheckBox, QSettings *settings);
-    void addNotificationSetting(QCheckBox *autoNotificatonCheckBox, QSettings *settings);
+    void addHideSetting(const SettingWidget &settingWidget);
+    void addNotificationSetting(const SettingWidget &settingWidget);
 
    private:
     QPushButton *settingButton;
