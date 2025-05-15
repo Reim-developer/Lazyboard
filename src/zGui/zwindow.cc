@@ -5,9 +5,11 @@
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
 #include "../zUtils/include/zUtils.hpp"
+#include "include/disconnectButton.hpp"
 #include <QStringLiteral>
 #include <QApplication>
 
+using zclipboard::zGui::DisconnectButton;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
 using zclipboard::zGui::ZTable;
@@ -22,7 +24,7 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     setCentralWidget(zCentralWidget);
     setWindowTitle(QStringLiteral("zClipboard"));
 
-    resize(Z_WINDOW_WIDTH, Z_WINDOW_HEIGHT);
+    resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
     createTrayIcon();
     setupGui();
@@ -63,12 +65,14 @@ void ZWindow::setupGui() {
     clearButton = new ClearButton();
     getButton = new GetButton();
     settingButton = new SettingButton();
+    disconnectButton = new DisconnectButton();
 
     ztable->addZtable(this, zLayout);
     zSearchArea->addSearchPanel(this, zLayout, ztable);
     clearButton->addClearButton(zLayout, ztable);
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
+    disconnectButton->addDisconnectButton({.parent = this, .layout = zLayout});
 
     zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
     zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
