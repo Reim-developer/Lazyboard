@@ -1,5 +1,18 @@
-# zClipboard: A Mordern Clipboard Manager
-* *Save your clipboard history, fast.*
+<h1 align="center">
+  <img src="/assets/icon.png" width=200 height=200/><br>
+    zClipboard: A Mordern Clipboard Manager
+</h1>
+
+<h4 align="center">Save Your Clipboard History, Fast.</h4>
+
+<div align="center">
+    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml" target="_blank">
+        <img src="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml/badge.svg?branch=master" />
+    </a>
+    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml" target="_blank">
+        <img src="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml/badge.svg?branch=master" />
+    </a>
+</div>
 
 ---
 
@@ -20,5 +33,3 @@
 ```bash
 yay -S zclipboard
 ```
-
-![zClipboard Icon](./assets/icon.png)
