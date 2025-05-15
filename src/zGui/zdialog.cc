@@ -22,6 +22,7 @@
 #include "../znetwork/include/PeerDialog.hpp"
 #include "../znetwork/include/PeerDiscovery.hpp"
 
+using zclipboard::zGui::DialogClipboard;
 using zclipboard::zGui::ZDialog;
 using zclipboard::znetwork::PeerDialog;
 using zclipboard::znetwork::PeerDiscovery;
@@ -44,17 +45,18 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     zContentArea->setLineWrapMode(QPlainTextEdit::NoWrap);
 
     zCopyButton->setText("Copy Content");
-    zCopyButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
 
     sendToDeviceButton->setText(QStringLiteral("Send clipboard to device"));
 
     connect(sendToDeviceButton, &QPushButton::clicked, [this, zContentDialog, zContentArea]() {
-        showPeerListDialog(zContentDialog, zContentArea->toPlainText());
+        showPeerListDialog(
+            {.parent = zContentDialog, .clipboardContent = zContentArea->toPlainText()});
     });
 
     QPointer<QPushButton> safeCopyButton = zCopyButton;
-    connect(zCopyButton, &QPushButton::clicked,
-            [safeCopyButton, text, this] { saveTextToClipboard(safeCopyButton, text); });
+    connect(zCopyButton, &QPushButton::clicked, [safeCopyButton, text, this] {
+        saveTextToClipboard({.safeButton = safeCopyButton, .text = text});
+    });
 
     zDialogLayout->addWidget(zCopyButton, 1, 0);
     zDialogLayout->addWidget(sendToDeviceButton, 1, 1);
@@ -88,8 +90,13 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     saveButton->setText("Save Image");
     QPointer<QPushButton> safeButton = saveButton;
 
-    connect(saveButton, &QPushButton::clicked,
-            [safeButton, zDialog, image, this]() { saveImage(safeButton, zDialog, image); });
+    connect(saveButton, &QPushButton::clicked, [safeButton, zDialog, image, this]() {
+        saveImage({
+            .safeButton = safeButton,
+            .parent = zDialog,
+            .image = image,
+        });
+    });
 
     zLayout->addWidget(scrollArea, 0, 0);
     zLayout->addWidget(saveButton, 1, 0);
@@ -99,44 +106,45 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     zDialog->exec();
 }
 
-void ZDialog::saveImage(QPointer<QPushButton> safeButton, QDialog *parent, const QImage &image) {
-    QString fileName = QFileDialog::getSaveFileName(parent, "Save as", QString(),
+void ZDialog::saveImage(const DialogClipboard &dialogClipboard) {
+    QString fileName = QFileDialog::getSaveFileName(dialogClipboard.parent, "Save as", QString(),
                                                     "Images (*.png *.xpm *.jpg *.bmp)");
 
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
         if (fileInfo.suffix().isEmpty()) fileName += ".png";
 
-        bool isSuccess = image.save(fileName);
+        bool isSuccess = dialogClipboard.image->save(fileName);
 
         if (isSuccess) {
-            if (safeButton) safeButton->setText("Image Saved!");
+            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Image Saved!");
 
-            QTimer::singleShot(1500, [=]() {
-                if (safeButton) safeButton->setText("Save Image");
+            QTimer::singleShot(1500, [dialogClipboard]() {
+                if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Save Image");
             });
 
         } else {
-            QMessageBox::critical(parent, "Error", "Failed to save image!");
-            if (safeButton) safeButton->setText("Save Image");
+            QMessageBox::critical(dialogClipboard.parent, "Error", "Failed to save image!");
+            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Save Image");
         }
     }
 }
 
-void ZDialog::saveTextToClipboard(QPointer<QPushButton> safeButton, const QString &text) {
-    QApplication::clipboard()->setText(text);
+void ZDialog::saveTextToClipboard(const DialogClipboard &dialogClipboard) {
+    QApplication::clipboard()->setText(dialogClipboard.text.value_or(QStringLiteral("")));
 
-    if (safeButton) {
-        safeButton->setText("Copied!");
+    if (dialogClipboard.safeButton) {
+        dialogClipboard.safeButton->setText("Copied!");
 
-        QTimer::singleShot(1500, [safeButton]() {
-            if (safeButton) safeButton->setText("Copy Content");
+        QTimer::singleShot(1500, [dialogClipboard]() {
+            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Copy Content");
         });
     }
 }
 
-void ZDialog::showPeerListDialog(QDialog *parent, QString clipboardContent) {
-    PeerDialog *peerDialog = new PeerDialog(clipboardContent, parent);
+void ZDialog::showPeerListDialog(const DialogClipboard &dialogClipboard) {
+    PeerDialog *peerDialog = new PeerDialog(
+        dialogClipboard.clipboardContent.value_or(QStringLiteral("")), dialogClipboard.parent);
     PeerDiscovery *discovery = new PeerDiscovery(45454, peerDialog);
 
     connect(discovery, &PeerDiscovery::peerFound, [&peerDialog](const QString &ip) {
