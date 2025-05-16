@@ -6,12 +6,8 @@
 <h4 align="center">Save Your Clipboard History, Fast.</h4>
 
 <div align="center">
-    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml">
-        <img src="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml/badge.svg?branch=master" />
-    </a>
-    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml">
-        <img src="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml/badge.svg?branch=master" />
-    </a>
+    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml"><img src="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml/badge.svg?branch=master" /></a>
+    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml"><img src="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml/badge.svg?branch=master" /></a>
 </div>
 
 ---
