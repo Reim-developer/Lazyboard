@@ -103,7 +103,8 @@ void ZTable::onContentClicked(const QModelIndex &index) {
         }
     }
 
-    if (content.contains("more...")) {
+    constexpr int MAX_LENGTH_CONTENT = 20;
+    if (content.length() > MAX_LENGTH_CONTENT) {
         auto query = zSQLManager.executeQueryResult(
             R"(
             SELECT content FROM clipboard WHERE content_hash = :hash
