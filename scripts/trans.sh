@@ -3,7 +3,7 @@
 trans() {
     local trans_file="language.hpp"
     local trans_script="translate.py"
-    local gen_path="../src/language"
+    local gen_path="../src/language/include"
 
     cd ".." || exit
     cd "tools" || exit
