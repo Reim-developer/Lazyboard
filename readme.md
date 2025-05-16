@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="/assets/icon_preview.png" width=200 height=200/><br>
+  <img src="/assets/icon.png" width=200 height=200/><br>
     zClipboard: A Mordern Clipboard Manager
 </h1>
 
