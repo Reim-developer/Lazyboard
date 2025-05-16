@@ -12,11 +12,17 @@ using zclipboard::zGui::ZTable;
 using zclipboard::zGui::zTableModel;
 
 namespace zclipboard::zGui {
+
+struct SearchPanelWidget {
+    QWidget *zWindow;
+    QGridLayout *zLayout;
+    ZTable *table;
+};
 class SearchArea : public QObject {
     Q_OBJECT
 
    public:
-    void addSearchPanel(QWidget *zWindow, QGridLayout *zLayout, ZTable *table);
+    void addSearchPanel(const SearchPanelWidget &search);
 
    private:
     QLineEdit *zLineEdit;
