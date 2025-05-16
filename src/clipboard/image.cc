@@ -43,6 +43,6 @@ void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
 
     zSQL.executeQuery(insertSQL, params);
 
-    zModelTable->addImageItem(time, imageHash, imageData);
+    zModelTable->addImageItem({.time = time, .imageData = imageData, .hash = imageHash});
     zExistingImages.insert(imageHash);
 }
