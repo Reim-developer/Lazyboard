@@ -31,7 +31,11 @@ void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, z
     params["length"] = textLength;
 
     zSQL.executeQuery(insertSQL, params);
-
-    zModelTable->addTextItem(time, content, contentHash, textLength);
+    zModelTable->addTextItem({
+        .time = time,
+        .content = content,
+        .contentLength = textLength,
+        .hash = contentHash,
+    });
     zExistingTextHashes.insert(contentHash);
 }
