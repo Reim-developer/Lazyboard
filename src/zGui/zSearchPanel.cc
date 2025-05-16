@@ -7,12 +7,12 @@
 
 using zclipboard::zGui::SearchArea;
 
-void SearchArea::addSearchPanel(QWidget *zWindow, QGridLayout *zLayout, ZTable *table) {
-    zLineEdit = new QLineEdit(zWindow);
+void SearchArea::addSearchPanel(const SearchPanelWidget &search) {
+    zLineEdit = new QLineEdit(search.zWindow);
     zLineEdit->setPlaceholderText("Search...");
-    zLayout->addWidget(zLineEdit, 0, 0);
+    search.zLayout->addWidget(zLineEdit, 0, 0);
 
-    auto zModel = table->getZModel();
+    auto zModel = search.table->getZModel();
     connect(zLineEdit, &QLineEdit::textChanged, this, [zModel](const QString &text) {
         QTimer::singleShot(300, zModel, [zModel, text]() { zModel->filterItems(text); });
     });
