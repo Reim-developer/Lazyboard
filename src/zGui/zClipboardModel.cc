@@ -84,43 +84,41 @@ QVariant zTableModel::headerData(int section, Qt::Orientation orientation, int r
     return QAbstractTableModel::headerData(section, orientation, role);
 }
 
-void zTableModel::addTextItem(const QString &time, const QString &text, const QString &hash,
-                              int length, bool isPinned) {
-    if (m_existingHashes.contains(hash)) return;
+void zTableModel::addTextItem(const zClipboardItem &item) {
+    if (m_existingHashes.contains(item.hash)) return;
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     zClipboardItem clipboardItem;
-    clipboardItem.time = time;
-    clipboardItem.content = text;
-    clipboardItem.contentLength = length;
-    clipboardItem.hash = hash;
-    clipboardItem.isPinned = isPinned;
+    clipboardItem.time = item.time;
+    clipboardItem.content = item.content;
+    clipboardItem.contentLength = item.contentLength;
+    clipboardItem.hash = item.hash;
+    clipboardItem.isPinned = item.isPinned;
 
     m_items.append(clipboardItem);
     mData.append(clipboardItem);
-    m_existingHashes.insert(hash);
+    m_existingHashes.insert(item.hash);
 
     endInsertRows();
 }
 
-void zTableModel::addImageItem(const QString &time, const QString &hash,
-                               const QByteArray &imageData, bool isPinned) {
-    if (m_existingHashes.contains(hash)) return;
+void zTableModel::addImageItem(const zClipboardItem &item) {
+    if (m_existingHashes.contains(item.hash)) return;
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     zClipboardItem clipboardItem;
-    clipboardItem.time = time;
+    clipboardItem.time = item.time;
     clipboardItem.content = "";
-    clipboardItem.contentLength = imageData.size();
-    clipboardItem.imageData = imageData;
-    clipboardItem.hash = hash;
-    clipboardItem.isPinned = isPinned;
+    clipboardItem.contentLength = item.imageData.size();
+    clipboardItem.imageData = item.imageData;
+    clipboardItem.hash = item.hash;
+    clipboardItem.isPinned = item.isPinned;
 
     m_items.append(clipboardItem);
     mData.append(clipboardItem);
-    m_existingHashes.insert(hash);
+    m_existingHashes.insert(item.hash);
     endInsertRows();
 }
 
