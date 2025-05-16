@@ -1,5 +1,7 @@
 <h1 align="center">
-  <img src="/assets/icon.png" width=200 height=200/><br>
+  <a href="https://github.com/reim-developer/zClipboard">
+    <img src="/assets/icon.png" width=200 height=200/><br>
+  </a>
     zClipboard: A Mordern Clipboard Manager
 </h1>
 
