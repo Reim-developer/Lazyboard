@@ -21,15 +21,19 @@ void GetButton::addGetButton(QWidget *window, QGridLayout *layout) {
 }
 
 void GetButton::createReceiverServer(QWidget *parent) {
+    if (server == nullptr) {
+        server = new QTcpServer(parent);
+    }
+
     if (server && server->isListening()) {
         QMessageBox::information(parent, "Status", "Server is already running.");
         return;
     }
 
-    server = new QTcpServer(parent);
     if (!server->listen(QHostAddress::AnyIPv4, 8000)) {
         QMessageBox::critical(parent, "Error", "Could not start server: " + server->errorString());
         server->deleteLater();
+        server = nullptr;
         return;
     }
 
@@ -40,4 +44,16 @@ void GetButton::createReceiverServer(QWidget *parent) {
             socket->deleteLater();
         });
     });
+}
+
+QTcpServer *GetButton::getServer() {
+    if (server) {
+        return server;
+    }
+
+    return nullptr;
+}
+
+void GetButton::resetServer() {
+    server = nullptr;
 }
