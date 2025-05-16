@@ -68,11 +68,12 @@ void ZWindow::setupGui() {
     disconnectButton = new DisconnectButton();
 
     ztable->addZtable(this, zLayout);
-    zSearchArea->addSearchPanel(this, zLayout, ztable);
+    zSearchArea->addSearchPanel({.zWindow = this, .zLayout = zLayout, .table = ztable});
     clearButton->addClearButton(zLayout, ztable);
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
-    disconnectButton->addDisconnectButton({.parent = this, .layout = zLayout});
+    disconnectButton->addDisconnectButton(
+        {.parent = this, .layout = zLayout, .getButton = getButton});
 
     zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
     zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
