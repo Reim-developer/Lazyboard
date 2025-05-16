@@ -20,7 +20,7 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManager
         QString content = sqlQuery->value(1).toString();
         int contentLength = sqlQuery->value(2).toInt();
         QByteArray imageData = sqlQuery->value(3).toByteArray();
-        QString imageHash = sqlQuery->value(4).toString();
+        QString contentHash = sqlQuery->value(4).toString();
         bool isPinned = (sqlQuery->value(5).toInt() == 1);
 
         QImage image;
@@ -29,10 +29,15 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManager
         if (!image.isNull()) {
             QPixmap pixmap = QPixmap::fromImage(image).scaled(128, 64, Qt::KeepAspectRatio);
             QTableWidgetItem* item = new QTableWidgetItem();
-            zModelTable->addImageItem(time, imageHash, imageData, isPinned);
+            zModelTable->addImageItem(
+                {.time = time, .imageData = imageData, .hash = contentHash, .isPinned = isPinned});
 
         } else {
-            zModelTable->addTextItem(time, content, imageHash, contentLength, isPinned);
+            zModelTable->addTextItem({.time = time,
+                                      .content = content,
+                                      .contentLength = contentLength,
+                                      .hash = contentHash,
+                                      .isPinned = isPinned});
         }
     }
 }
