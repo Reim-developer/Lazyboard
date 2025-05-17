@@ -57,3 +57,7 @@ QTcpServer *GetButton::getServer() {
 void GetButton::resetServer() {
     server = nullptr;
 }
+
+QPushButton *GetButton::getPushButton() const {
+    return getButton;
+}
