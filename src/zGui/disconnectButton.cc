@@ -30,5 +30,7 @@ void DisconnectButton::disconnectFromHost(const DisconnectButtonWidget &params) 
 
         QMessageBox::information(params.parent, QStringLiteral("Information"),
                                  QStringLiteral("Disconnect successfully"));
+        params.getButton->getPushButton()->setText(
+            QStringLiteral("Get clipboard from another device"));
     });
 }
