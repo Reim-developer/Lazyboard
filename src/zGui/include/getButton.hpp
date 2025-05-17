@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QSharedPointer>
 #include <QtNetwork/QTcpServer>
 #include "../../znetwork/include/PeerDiscovery.hpp"
 
@@ -17,6 +18,7 @@ class GetButton : public QObject {
     void addGetButton(QWidget *window, QGridLayout *layout);
     void createReceiverServer(QWidget *window);
     void resetServer();
+    QPushButton *getPushButton() const;
     QTcpServer *getServer();
 
    private:
