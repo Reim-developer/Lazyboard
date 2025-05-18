@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language>
-    <entry key="DISCONNECT_VI[]">Ngắt kết nối</entry>
-    <entry key="DISCONNECT_EN[]">Disconnect</entry>
+    <!-- Disconnect button widget -->
+    <entry key="DISCONNECT_VI">Ngắt kết nối</entry>
+    <entry key="DISCONNECT_EN">Disconnect</entry>
+
+    <!-- Tray Icon Tool Tip Text-->
+    <entry key="TOOL_TIP_TEXT_EN">Clipboard Manager | zClipboard</entry>
+    <entry key="TOOL_TIP_TEXT_VI">Quản lí bộ nhớ tạm | zClipboard</entry>
+    
+    <!-- Tray Menu Options-->
+    <entry key="TRAY_SHOW_OPTION_VI">Mở zClipboard</entry>
+    <entry key="TRAY_HIDE_OPTION_VI">Ẩn zClipboard</entry>
+    <entry key="TRAY_QUIT_OPTION_VI">Thoát zClipboard</entry>
+
+    <entry key="TRAY_SHOW_OPTION_EN">Show zClipboard</entry>
+    <entry key="TRAY_HIDE_OPTION_EN">Hide zClipboard</entry>
+    <entry key="TRAY_QUIT_OPTION_EN">Quit zClipboard</entry>
 </language>
