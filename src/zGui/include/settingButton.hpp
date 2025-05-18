@@ -26,6 +26,7 @@ class SettingButton : public QObject {
 
    public:
     void addSettingButton(QWidget *window, QGridLayout *layout);
+    QPushButton *getSettingButton();
 
    private:
     void showSettingDialog(QWidget *parent);
