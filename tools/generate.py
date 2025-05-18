@@ -11,7 +11,8 @@ def gen_hpp(xml_file: str, output_file: str, key: str, header_name: str, typeNam
     with open(output_file, mode = 'w', encoding = "utf-8") as xml:
         xml.write(f"#ifndef {header_name} \n")
         xml.write(f"#define {header_name} \n")
-        xml.write("// Generate by zClipboard Toolchain.\n\n")
+        xml.write("// Generate by zClipboard Toolchain.\n")
+        xml.write("// For more information. Please see tools/xml.\n\n")
 
         for entry in root.findall(key):
             key_atrr = entry.get("key")
@@ -24,7 +25,8 @@ def gen_hpp(xml_file: str, output_file: str, key: str, header_name: str, typeNam
             value = entry.text or ""
 
             hex_value = utf8_to_hex(value)
-            xml.write(f'inline constexpr const {typeName} {key_upper} = "{hex_value}";\n')
+            xml.write(f"// Expands to: {value}.\n")
+            xml.write(f'inline constexpr const {typeName} {key_upper}[] = "{hex_value}";\n')
 
         xml.write("\n")
         xml.write("#endif")
