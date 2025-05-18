@@ -7,7 +7,7 @@ using zclipboard::zGui::DisconnectButton;
 using zclipboard::zGui::DisconnectButtonWidget;
 
 void DisconnectButton::addDisconnectButton(const DisconnectButtonWidget &params) {
-    QPushButton *button = new QPushButton(params.parent);
+    button = new QPushButton(params.parent);
     button->setText("Disconnect");
     params.layout->addWidget(button, 0, 4);
 
@@ -30,7 +30,11 @@ void DisconnectButton::disconnectFromHost(const DisconnectButtonWidget &params) 
 
         QMessageBox::information(params.parent, QStringLiteral("Information"),
                                  QStringLiteral("Disconnect successfully"));
-        params.getButton->getPushButton()->setText(
+        params.getButton->getConnectButton()->setText(
             QStringLiteral("Get clipboard from another device"));
     });
+}
+
+QPushButton *DisconnectButton::getDisconnectButton() {
+    return button;
 }
