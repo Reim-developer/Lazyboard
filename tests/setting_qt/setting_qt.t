@@ -7,10 +7,19 @@ use test_lib qw(gen_cmake gen_base_dir run_test);
 # Gen CMakeLists.txt if it doesn't exists.
 my $test_name = "setting_qt";
 my $base_source = <<END;
-#include <iostream>
+// Auto gen base test.
+#include <QSettings>
+#include <QDebug>
+#include "../../../src/zUtils/include/settings.hpp"
 
 int main() {
-    std::cout << "hELLO WORLD" << std::endl;
+    QSettings *settings = new QSettings("ReimEmp", "zClipboard");
+    if (!settings->contains(LANGUAGE_SETTING)) {
+        qDebug() << "Key: " << LANGUAGE_SETTING << " doesn't exists.";
+        return 1;
+    }
+
+    qDebug() << settings->value(LANGUAGE_SETTING).toInt();
     return 0;
 }
 END
