@@ -1,7 +1,6 @@
 #include "include/zUtils.hpp"
 #include "include/settings.hpp"
 #include "include/config.hpp"
-#include "qsettings.h"
 #include <QtGlobal>
 #include <QStandardPaths>
 #include <QSettings>
@@ -9,8 +8,10 @@
 #include <QApplication>
 #include <QPointer>
 #include <QMimeData>
+#include "../language/include/translate.hpp"
 
 using namespace zclipboard;
+using zclipboard::language::Translate;
 
 QString zUtils::getCachePath() {
 #ifdef Q_OS_WIN
@@ -56,4 +57,9 @@ void zUtils::imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipbo
 bool zUtils::getLanguageSetting() {
     QSettings settings(AUTHOR_NAME, APP_NAME);
     return settings.contains(LANGUAGE_SETTING);
+}
+
+Translate::LanguageType zUtils::languageTypeCast(int value) {
+    QSettings settings(AUTHOR_NAME, APP_NAME);
+    return static_cast<Translate::LanguageType>(settings.value(LANGUAGE_SETTING).toInt());
 }
