@@ -1,6 +1,7 @@
 #include "include/zUtils.hpp"
 #include "include/settings.hpp"
 #include "include/config.hpp"
+#include "qsettings.h"
 #include <QtGlobal>
 #include <QStandardPaths>
 #include <QSettings>
@@ -50,4 +51,9 @@ void zUtils::imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipbo
                                   QSystemTrayIcon::Information, 5000);
         }
     });
+}
+
+bool zUtils::getLanguageSetting() {
+    QSettings settings(AUTHOR_NAME, APP_NAME);
+    return settings.contains(LANGUAGE_SETTING);
 }
