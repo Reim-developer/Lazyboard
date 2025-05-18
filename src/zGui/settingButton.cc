@@ -102,3 +102,7 @@ void SettingButton::addLanguageSetting(const SettingWidget &settingWidget) {
                 settings->sync();
             });
 }
+
+QPushButton *SettingButton::getSettingButton() {
+    return settingButton;
+}
