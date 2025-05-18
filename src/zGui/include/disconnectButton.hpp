@@ -22,11 +22,13 @@ class DisconnectButton : public QObject {
 
    public:
     void addDisconnectButton(const DisconnectButtonWidget &params);
+    QPushButton *getDisconnectButton();
 
    private:
     void disconnectFromHost(const DisconnectButtonWidget &params);
 
    private:
+    QPushButton *button;
     QTcpServer *server;
 };
 }  // namespace zclipboard::zGui
