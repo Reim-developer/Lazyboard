@@ -6,24 +6,32 @@ pkgdesc="A modern, fast clipboard manager"
 arch=('x86_64')
 url="https://github.com/reim-developer/zclipboard "
 license=('GPL-3.0')
-depends=('qt6-base' 'clang')
-makedepends=('cmake' 'gcc' 'make')
+depends=('qt6-base')
+makedepends=('cmake' 'make' 'clang')
 source=("https://github.com/reim-developer/zclipboard/archive/v${pkgver}.tar.gz")
 sha256sums=('SKIP')
+release_flags="-DCMAKE_BUILD_TYPE=Release"
+opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+nproc=$(nproc)
 
 build() {
-  cd "$srcdir/zClipboard-$pkgver" || exit 1
+  cd "$srcdir/zClipboard-$pkgver" || exit 
 
-  mkdir -p build && cd build
-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-  make
+  mkdir -p build && cd build || exit
+  cmake -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_CXX_FLAGS="$opt_flags" \
+        "$release_flags" \
+        ..
+
+  make -j "$nproc"
 }
 
 package() {
-  cd "$srcdir/zClipboard-$pkgver/build" || exit 1
+  cd "$srcdir/zClipboard-$pkgver/build" || exit 
 
   make DESTDIR="$pkgdir/" install
 
-  install -Dm644  ../zclipboard.desktop "$pkgdir/usr/share/applications/zclipboard.desktop"
-  install -Dm644 ../assets/icon.png "$pkgdir/usr/share/icons/hicolor/256x256/apps/icon.png"
+  install -Dm644  ../../../zclipboard.desktop "$pkgdir/usr/share/applications/zclipboard.desktop"
+  install -Dm644 ../../../icon.png "$pkgdir/usr/share/icons/hicolor/256x256/apps/icon.png"
 }
