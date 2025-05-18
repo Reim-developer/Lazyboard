@@ -9,6 +9,6 @@ int main() {
         return 1;
     }
 
-    qDebug() << settings->value(LANGUAGE_SETTING);
+    qDebug() << settings->value(LANGUAGE_SETTING).toInt();
     return 0;
 }
