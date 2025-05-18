@@ -58,6 +58,6 @@ void GetButton::resetServer() {
     server = nullptr;
 }
 
-QPushButton *GetButton::getPushButton() const {
+QPushButton *GetButton::getConnectButton() const {
     return getButton;
 }
