@@ -1,5 +1,6 @@
 #include "include/zUtils.hpp"
 #include "include/settings.hpp"
+#include "include/config.hpp"
 #include <QtGlobal>
 #include <QStandardPaths>
 #include <QSettings>
@@ -19,12 +20,12 @@ QString zUtils::getCachePath() {
 }
 
 bool zUtils::getAutoHideSetting() {
-    QSettings settings;
+    QSettings settings(AUTHOR_NAME, APP_NAME);
     return settings.value(AUTO_HIDE_SETTING, false).toBool();
 }
 
 bool zUtils::getAutoNotificationSetting() {
-    QSettings settings;
+    QSettings settings(AUTHOR_NAME, APP_NAME);
     return settings.value(AUTO_NOTIFICATION_SETTING, false).toBool();
 }
 
