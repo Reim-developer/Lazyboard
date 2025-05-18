@@ -1,18 +1,21 @@
 #ifndef BUTTONS_HPP
 #define BUTTONS_HPP
 #include <QPushButton>
+#include <QLineEdit>
+#include <QAction>
 
 namespace zclipboard::language {
-struct TranslateParams {
-    QPushButton *button;
-    const char *TRANS_VALUE;
-    const int languageType;
-};
 
 class Translate {
    public:
     enum LanguageType { ENGLISH, VIETNAMESE };
-    static void buttonTrans(const TranslateParams &params);
+
+   private:
+   public:
+    static void translatorWidget(QPushButton* button, LanguageType type, const char* LANGUAGE_EN,
+                                 const char* LANGUAGE_VI);
+    static void translatorWidget(QLineEdit* lineEdit, LanguageType type, const char* LANGUAGE_EN,
+                                 const char* LANGUAGE_VI);
 };
 }  // namespace zclipboard::language
 
