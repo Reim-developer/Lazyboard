@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language>
-    <entry key="DISCONNECT_VI">Ngắt kết nối</entry>
-    <entry key="DISCONNECT_EN">Disconnect</entry>
+    <entry key="DISCONNECT_VI[]">Ngắt kết nối</entry>
+    <entry key="DISCONNECT_EN[]">Disconnect</entry>
 </language>
