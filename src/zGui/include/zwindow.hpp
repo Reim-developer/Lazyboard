@@ -37,6 +37,7 @@ class ZWindow : public QMainWindow {
     void setupGui();
     void createTrayIcon();
     void addTrayMenuActions(QSystemTrayIcon *trayIcon);
+    void preloadTranslator();
 
    protected:
     void closeEvent(QCloseEvent *event) override;
