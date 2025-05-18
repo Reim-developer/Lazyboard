@@ -79,18 +79,30 @@ void ZWindow::translatorDectect() {
 
     switch (settings->value(LANGUAGE_SETTING).toInt()) {
         case Translate::ENGLISH:
+            loadTranslator();
             break;
 
         case Translate::VIETNAMESE:
-            loadVietNameseTranslator();
+            loadTranslator();
             break;
     }
 }
 
-void ZWindow::loadVietNameseTranslator() {
-    clearButton->getClearButton()->setText(CLEAR_HISTORY_VI);
-    getButton->getConnectButton()->setText(GET_CONTENT_BUTTON_VI);
-    settingButton->getSettingButton()->setText(SETTING_BUTTON_VI);
-    disconnectButton->getDisconnectButton()->setText(DISCONNECT_VI);
-    zSearchArea->getSearchPanel()->setPlaceholderText(SEARCH_PANEL_VI);
+void ZWindow::loadTranslator() {
+    const int TRANS_VALUE = settings->value(LANGUAGE_SETTING).toInt();
+    const auto TRANS_TYPE = zUtils::languageTypeCast(TRANS_VALUE);
+
+    auto clearButtonWidget = clearButton->getClearButton();
+    auto getButtonWidget = getButton->getConnectButton();
+    auto settingButtonWidget = settingButton->getSettingButton();
+    auto discButtonWidget = disconnectButton->getDisconnectButton();
+    auto searchPanel = zSearchArea->getSearchPanel();
+
+    Translate::translatorWidget(clearButtonWidget, TRANS_TYPE, CLEAR_HISTORY_EN, CLEAR_HISTORY_VI);
+    Translate::translatorWidget(getButtonWidget, TRANS_TYPE, GET_CONTENT_BUTTON_EN,
+                                GET_CONTENT_BUTTON_VI);
+    Translate::translatorWidget(settingButtonWidget, TRANS_TYPE, SETTING_BUTTON_EN,
+                                SETTING_BUTTON_VI);
+    Translate::translatorWidget(discButtonWidget, TRANS_TYPE, DISCONNECT_EN, DISCONNECT_VI);
+    Translate::translatorWidget(searchPanel, TRANS_TYPE, SEARCH_PANEL_EN, SEARCH_PANEL_VI);
 }
