@@ -26,3 +26,7 @@ void ClearButton::clearCache(ZTable *table, QPushButton *clearButton) {
 
     QTimer::singleShot(1500, [clearButton]() { clearButton->setText("Clear Clipboard"); });
 }
+
+QPushButton *ClearButton::getClearButton() {
+    return clearButton;
+}
