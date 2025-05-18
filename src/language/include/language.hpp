@@ -1,27 +1,43 @@
 #ifndef TRANSLATOR_HPP 
 #define TRANSLATOR_HPP 
 // Generate by zClipboard Toolchain.
-// For more information. Please see tools/xml
+// For more information. Please see tools/xml.
 
-// Expands to: Ngắt kết nối
+// Expands to: Ngắt kết nối.
 inline constexpr const char DISCONNECT_VI[] = "\x4e\x67\xe1\xba\xaf\x74\x20\x6b\xe1\xba\xbf\x74\x20\x6e\xe1\xbb\x91\x69";
-// Expands to: Disconnect
+// Expands to: Disconnect.
 inline constexpr const char DISCONNECT_EN[] = "\x44\x69\x73\x63\x6f\x6e\x6e\x65\x63\x74";
-// Expands to: Clipboard Manager | zClipboard
+// Expands to: Xóa lịch sử.
+inline constexpr const char CLEAR_HISTORY_VI[] = "\x58\xc3\xb3\x61\x20\x6c\xe1\xbb\x8b\x63\x68\x20\x73\xe1\xbb\xad";
+// Expands to: Clear.
+inline constexpr const char CLEAR_HISTORY_EN[] = "\x43\x6c\x65\x61\x72";
+// Expands to: Tìm kiếm....
+inline constexpr const char SEARCH_PANEL_VI[] = "\x54\xc3\xac\x6d\x20\x6b\x69\xe1\xba\xbf\x6d\x2e\x2e\x2e";
+// Expands to: Search....
+inline constexpr const char SEARCH_PANEL_EN[] = "\x53\x65\x61\x72\x63\x68\x2e\x2e\x2e";
+// Expands to: Nhận nội dung clipboard từ thiết bị khác.
+inline constexpr const char GET_CONTENT_BUTTON_VI[] = "\x4e\x68\xe1\xba\xad\x6e\x20\x6e\xe1\xbb\x99\x69\x20\x64\x75\x6e\x67\x20\x63\x6c\x69\x70\x62\x6f\x61\x72\x64\x20\x74\xe1\xbb\xab\x20\x74\x68\x69\xe1\xba\xbf\x74\x20\x62\xe1\xbb\x8b\x20\x6b\x68\xc3\xa1\x63";
+// Expands to: Get content from another device.
+inline constexpr const char GET_CONTENT_BUTTON_EN[] = "\x47\x65\x74\x20\x63\x6f\x6e\x74\x65\x6e\x74\x20\x66\x72\x6f\x6d\x20\x61\x6e\x6f\x74\x68\x65\x72\x20\x64\x65\x76\x69\x63\x65";
+// Expands to: Cài đặt.
+inline constexpr const char SETTING_BUTTON_VI[] = "\x43\xc3\xa0\x69\x20\xc4\x91\xe1\xba\xb7\x74";
+// Expands to: Setting.
+inline constexpr const char SETTING_BUTTON_EN[] = "\x53\x65\x74\x74\x69\x6e\x67";
+// Expands to: Clipboard Manager | zClipboard.
 inline constexpr const char TOOL_TIP_TEXT_EN[] = "\x43\x6c\x69\x70\x62\x6f\x61\x72\x64\x20\x4d\x61\x6e\x61\x67\x65\x72\x20\x7c\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Quản lí bộ nhớ tạm | zClipboard
+// Expands to: Quản lí bộ nhớ tạm | zClipboard.
 inline constexpr const char TOOL_TIP_TEXT_VI[] = "\x51\x75\xe1\xba\xa3\x6e\x20\x6c\xc3\xad\x20\x62\xe1\xbb\x99\x20\x6e\x68\xe1\xbb\x9b\x20\x74\xe1\xba\xa1\x6d\x20\x7c\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Mở zClipboard
+// Expands to: Mở zClipboard.
 inline constexpr const char TRAY_SHOW_OPTION_VI[] = "\x4d\xe1\xbb\x9f\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Ẩn zClipboard
+// Expands to: Ẩn zClipboard.
 inline constexpr const char TRAY_HIDE_OPTION_VI[] = "\xe1\xba\xa8\x6e\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Thoát zClipboard
+// Expands to: Thoát zClipboard.
 inline constexpr const char TRAY_QUIT_OPTION_VI[] = "\x54\x68\x6f\xc3\xa1\x74\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Show zClipboard
+// Expands to: Show zClipboard.
 inline constexpr const char TRAY_SHOW_OPTION_EN[] = "\x53\x68\x6f\x77\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Hide zClipboard
+// Expands to: Hide zClipboard.
 inline constexpr const char TRAY_HIDE_OPTION_EN[] = "\x48\x69\x64\x65\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
-// Expands to: Quit zClipboard
+// Expands to: Quit zClipboard.
 inline constexpr const char TRAY_QUIT_OPTION_EN[] = "\x51\x75\x69\x74\x20\x7a\x43\x6c\x69\x70\x62\x6f\x61\x72\x64";
 
 #endif
