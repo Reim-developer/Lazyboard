@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <property key="APP_NAME[]">zClipboard</property>
-    <property key="AUTHOR_NAME[]">ReimEmp</property>
+    <property key="APP_NAME">zClipboard</property>
+    <property key="AUTHOR_NAME">ReimEmp</property>
+    <property key="ICON_PATH">:/assets/assets/icon.png</property>
 </config>
