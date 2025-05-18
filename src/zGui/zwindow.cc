@@ -6,6 +6,7 @@
 #include "include/zSearchPanel.hpp"
 #include "../zUtils/include/zUtils.hpp"
 #include "include/disconnectButton.hpp"
+#include "../zUtils/include/config.hpp"
 #include <QStringLiteral>
 #include <QApplication>
 
@@ -22,7 +23,7 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     zLayout = new QGridLayout(zCentralWidget);
 
     setCentralWidget(zCentralWidget);
-    setWindowTitle(QStringLiteral("zClipboard"));
+    setWindowTitle(APP_NAME);
 
     resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
