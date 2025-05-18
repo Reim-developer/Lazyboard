@@ -23,6 +23,7 @@ class SearchArea : public QObject {
 
    public:
     void addSearchPanel(const SearchPanelWidget &search);
+    QLineEdit *getSearchPanel();
 
    private:
     QLineEdit *zLineEdit;
