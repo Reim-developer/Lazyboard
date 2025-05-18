@@ -5,11 +5,16 @@
 #include "include/ztable.hpp"
 #include "include/zSearchPanel.hpp"
 #include "../zUtils/include/zUtils.hpp"
+#include "../zUtils/include/settings.hpp"
+#include "../language/include/translate.hpp"
 #include "include/disconnectButton.hpp"
 #include "../zUtils/include/config.hpp"
+#include "../language/include/language.hpp"
 #include <QStringLiteral>
 #include <QApplication>
+#include <QSettings>
 
+using zclipboard::language::Translate;
 using zclipboard::zGui::DisconnectButton;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
@@ -17,7 +22,7 @@ using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
 
 ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
-    zIcon = QIcon(QStringLiteral(":/assets/assets/icon.png"));
+    zIcon = QIcon(ICON_PATH);
 
     zCentralWidget = new QWidget(zWindow);
     zLayout = new QGridLayout(zCentralWidget);
@@ -27,6 +32,7 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
     resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
+    preloadTranslator();
     createTrayIcon();
     setupGui();
 }
@@ -35,9 +41,9 @@ void ZWindow::createTrayIcon() {
     trayIcon = new QSystemTrayIcon(this);
     trayMenu = new QMenu();
 
-    QAction *showGui = trayMenu->addAction(QStringLiteral("Show ZClipboard"));
-    QAction *quitGui = trayMenu->addAction(QStringLiteral("Quit ZClipboard"));
-    QAction *hideGui = trayMenu->addAction(QStringLiteral("Hide ZClipboard"));
+    QAction *showGui = trayMenu->addAction(TRAY_SHOW_OPTION_EN);
+    QAction *hideGui = trayMenu->addAction(TRAY_HIDE_OPTION_EN);
+    QAction *quitGui = trayMenu->addAction(TRAY_QUIT_OPTION_EN);
 
     addTrayMenuActions(trayIcon);
     connect(showGui, &QAction::triggered, this, &ZWindow::showNormal);
@@ -45,7 +51,7 @@ void ZWindow::createTrayIcon() {
     connect(hideGui, &QAction::triggered, this, &ZWindow::hide);
 
     trayIcon->setIcon(zIcon);
-    trayIcon->setToolTip(QStringLiteral("Manage your clipboard - ZClipboard"));
+    trayIcon->setToolTip(TOOL_TIP_TEXT_EN);
     trayIcon->setContextMenu(trayMenu);
     trayIcon->show();
 }
@@ -86,5 +92,14 @@ void ZWindow::closeEvent(QCloseEvent *event) {
         event->ignore();
     } else {
         event->accept();
+    }
+}
+
+void ZWindow::preloadTranslator() {
+    if (!zUtils::getLanguageSetting()) {
+        QSettings settings(AUTHOR_NAME, APP_NAME);
+        settings.setValue(LANGUAGE_SETTING, Translate::ENGLISH);
+
+        return;
     }
 }
