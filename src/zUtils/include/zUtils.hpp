@@ -15,6 +15,7 @@ class zUtils : public QObject {
     static bool getAutoNotificationSetting();
     static void textClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
     static void imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
+    static bool getLanguageSetting();
 };
 }  // namespace zclipboard
 
