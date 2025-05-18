@@ -17,3 +17,7 @@ void SearchArea::addSearchPanel(const SearchPanelWidget &search) {
         QTimer::singleShot(300, zModel, [zModel, text]() { zModel->filterItems(text); });
     });
 }
+
+QLineEdit *SearchArea::getSearchPanel() {
+    return zLineEdit;
+}
