@@ -10,6 +10,7 @@
 #include "include/disconnectButton.hpp"
 #include "../zUtils/include/config.hpp"
 #include "../language/include/language.hpp"
+#include "include/systemTray.hpp"
 #include <QStringLiteral>
 #include <QApplication>
 #include <QSettings>
@@ -18,6 +19,7 @@ using zclipboard::language::Translate;
 using zclipboard::zGui::DisconnectButton;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
+using zclipboard::zGui::SystemTray;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
 
@@ -26,44 +28,16 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
     zCentralWidget = new QWidget(zWindow);
     zLayout = new QGridLayout(zCentralWidget);
+    settings = new QSettings(AUTHOR_NAME, APP_NAME);
 
     setCentralWidget(zCentralWidget);
     setWindowTitle(APP_NAME);
 
     resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
     setWindowIcon(zIcon);
-    preloadTranslator();
-    createTrayIcon();
+
     setupGui();
-}
-
-void ZWindow::createTrayIcon() {
-    trayIcon = new QSystemTrayIcon(this);
-    trayMenu = new QMenu();
-
-    QAction *showGui = trayMenu->addAction(TRAY_SHOW_OPTION_EN);
-    QAction *hideGui = trayMenu->addAction(TRAY_HIDE_OPTION_EN);
-    QAction *quitGui = trayMenu->addAction(TRAY_QUIT_OPTION_EN);
-
-    addTrayMenuActions(trayIcon);
-    connect(showGui, &QAction::triggered, this, &ZWindow::showNormal);
-    connect(quitGui, &QAction::triggered, this, &QApplication::quit);
-    connect(hideGui, &QAction::triggered, this, &ZWindow::hide);
-
-    trayIcon->setIcon(zIcon);
-    trayIcon->setToolTip(TOOL_TIP_TEXT_EN);
-    trayIcon->setContextMenu(trayMenu);
-    trayIcon->show();
-}
-
-void ZWindow::addTrayMenuActions(QSystemTrayIcon *trayIcon) {
-    connect(trayIcon, &QSystemTrayIcon::activated,
-            [this](QSystemTrayIcon::ActivationReason reason) {
-                if (reason == QSystemTrayIcon::DoubleClick || reason == QSystemTrayIcon::Trigger) {
-                    showNormal();
-                    activateWindow();
-                }
-            });
+    translatorDectect();
 }
 
 void ZWindow::setupGui() {
@@ -73,6 +47,7 @@ void ZWindow::setupGui() {
     getButton = new GetButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
+    systemTray = new SystemTray();
 
     ztable->addZtable(this, zLayout);
     zSearchArea->addSearchPanel({.zWindow = this, .zLayout = zLayout, .table = ztable});
@@ -81,6 +56,7 @@ void ZWindow::setupGui() {
     settingButton->addSettingButton(this, zLayout);
     disconnectButton->addDisconnectButton(
         {.parent = this, .layout = zLayout, .getButton = getButton});
+    systemTray->addSystemTray({.window = this, .icon = zIcon});
 
     zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
     zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
@@ -95,11 +71,26 @@ void ZWindow::closeEvent(QCloseEvent *event) {
     }
 }
 
-void ZWindow::preloadTranslator() {
+void ZWindow::translatorDectect() {
     if (!zUtils::getLanguageSetting()) {
-        QSettings settings(AUTHOR_NAME, APP_NAME);
-        settings.setValue(LANGUAGE_SETTING, Translate::ENGLISH);
-
+        settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
         return;
     }
+
+    switch (settings->value(LANGUAGE_SETTING).toInt()) {
+        case Translate::ENGLISH:
+            break;
+
+        case Translate::VIETNAMESE:
+            loadVietNameseTranslator();
+            break;
+    }
+}
+
+void ZWindow::loadVietNameseTranslator() {
+    clearButton->getClearButton()->setText(CLEAR_HISTORY_VI);
+    getButton->getConnectButton()->setText(GET_CONTENT_BUTTON_VI);
+    settingButton->getSettingButton()->setText(SETTING_BUTTON_VI);
+    disconnectButton->getDisconnectButton()->setText(DISCONNECT_VI);
+    zSearchArea->getSearchPanel()->setPlaceholderText(SEARCH_PANEL_VI);
 }
