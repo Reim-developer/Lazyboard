@@ -1,6 +1,7 @@
 #include "include/settingButton.hpp"
 #include "../language/include/translate.hpp"
 #include "../zUtils/include/settings.hpp"
+#include "../zUtils/include/config.hpp"
 #include <QStringLiteral>
 #include <QSettings>
 #include <QIcon>
@@ -36,7 +37,7 @@ void SettingButton::showSettingDialog(QWidget *parent) {
 }
 
 void SettingButton::addGui(QGridLayout *layout) {
-    QSettings *settings = new QSettings();
+    QSettings *settings = new QSettings(AUTHOR_NAME, APP_NAME);
     autoHideCheckBox = new QCheckBox();
     autoNotificatonCheckBox = new QCheckBox();
     QComboBox *languageBox = new QComboBox();
