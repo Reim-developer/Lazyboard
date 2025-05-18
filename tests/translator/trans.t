@@ -78,7 +78,8 @@ sub gen_basedir() {
         open(my $cpp_file, ">", $cpp_main) or die "[ERR] Could not generate C++ source with error: $!\n";
         gen_cpp_test($cpp_file);
         print "Generate C++ Test base successfully.\n";
-
+        close($cpp_file);
+        
         return $build_dir;
     }
 
