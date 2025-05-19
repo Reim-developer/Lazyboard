@@ -15,6 +15,8 @@
     <!-- Get clipboard content from another device button widget -->
     <entry key="GET_CONTENT_BUTTON_VI">Nhận nội dung clipboard từ thiết bị khác</entry>
     <entry key="GET_CONTENT_BUTTON_EN">Get content from another device</entry>
+    <entry key="GET_CONTENT_WAIT_BUTTON_VI">Đang chờ thiết bị khác kết nối...</entry>
+    <entry key="GET_CONTENT_WAIT_BUTTON_EN">Waiting connection device...</entry>
 
     <!-- Setting button widget -->
     <entry key="SETTING_BUTTON_VI">Cài đặt</entry>
@@ -58,4 +60,50 @@
     <entry key="TABLE_CONTENT_VI">Nội dung | Click để xem thêm</entry>
     <entry key="TABLE_CONTENT_LENGTH_VI">Chiều dài nội dung</entry>
     <entry key="TABLE_PIN_VI">Ghim</entry>
+
+    <!-- Error & Information Dialog Widget -->
+    <entry key="DIALOG_INFO_TITLE_VI">Thông báo</entry>
+    <entry key="DIALOG_INFO_TITLE_EN">Information</entry>
+
+    <entry key="DIALOG_ERROR_TITLE_VI">Lỗi</entry>
+    <entry key="DIALOG_ERROR_TITLE_EN">Error</entry>
+
+    <entry key="SERVER_ALREADY_ERR_VI">Server đã được khởi chạy, bạn không cần khởi chạy lại lần nữa</entry>
+    <entry key="SERVER_ALREADY_ERR_EN">Server is already running.</entry>
+
+    <entry key="COULD_NOT_START_SERVER_ERR_VI">Không thể khởi chạy server với lỗi:</entry>
+    <entry key="COULD_NOT_START_SERVER_ERR_EN">Could not start server with error:</entry>
+
+    <entry key="NO_ACTIVE_CONNECT_ERR_VI">Không có kết nối nào hiện tại. Bạn không cần ngắt kết nối</entry>
+    <entry key="NO_ACTIVE_CONNECT_ERR_EN">No active connection to disconnect.</entry>
+
+    <entry key="DISCONNECT_SUCCESS_MSG_VI">Ngắt kết nối thành công</entry>
+    <entry key="DISCONNECT_SUCCESS_MSG_EN">Disconnect successfully</entry>
+
+    <entry key="CONTENT_DIALOG_TITLE_VI">Trình đọc nội dung - zClipboard</entry>
+    <entry key="CONTENT_DIALOG_TITLE_EN">zContent Clipboard</entry>
+
+    <entry key="IMAGE_DIALOG_TITLE_VI">Trình xem hình ảnh - zClipboard</entry>
+    <entry key="IMAGE_DIALOG_TITLE_EN">Image Viewer - zClipboard</entry>
+
+    <entry key="SAVE_IMAGE_FAILED_VI">Lưu hình ảnh thất bại. Vui lòng thử lại.</entry>
+    <entry key="SAVE_IMAGE_FAILED_EN">Save image failed. Please try again.</entry>
+
+    <!-- Save Image Button Widget -->
+    <entry key="SAVE_IMAGE_BUTTON_VI">Lưu hình ảnh</entry>
+    <entry key="SAVE_IMAGE_BUTTON_EN">Save Image</entry>
+
+    <entry key="SAVED_IMAGE_BUTTON_VI">Đã lưu hình ảnh</entry>
+    <entry key="SAVED_IMAGE_BUTTON_EN">Image Saved</entry>
+
+    <!-- Copy Content Button Widget -->
+    <entry key="COPY_CONTENT_BUTTON_VI">Sao chép nội dung</entry>
+    <entry key="COPY_CONTENT_BUTTON_EN">Copy Content</entry>
+
+    <entry key="ALREADY_COPY_BUTTON_VI">Đã sao chép nội dung vào bộ nhớ tạm</entry>
+    <entry key="ALREADY_COPY_BUTTON_EN">Copied</entry>
+
+    <!-- Send Content Button Widget -->
+    <entry key="SEND_CONTENT_BUTTON_VI">Gửi nội dung tới thiết bị khác</entry>
+    <entry key="SEND_CONTENT_BUTTON_EN">Send clipboard to device</entry>
 </language>
