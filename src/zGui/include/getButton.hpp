@@ -6,8 +6,11 @@
 #include <QPushButton>
 #include <QSharedPointer>
 #include <QtNetwork/QTcpServer>
+#include <QSettings>
 #include "../../znetwork/include/PeerDiscovery.hpp"
+#include "../../language/include/translate.hpp"
 
+using zclipboard::language::Translate;
 using zclipboard::znetwork::PeerDiscovery;
 
 namespace zclipboard::zGui {
@@ -22,7 +25,12 @@ class GetButton : public QObject {
     QTcpServer *getServer();
 
    private:
+    int type;
+    Translate::LanguageType languageType;
+
+   private:
     QPushButton *getButton;
+    QSettings *settings;
     QTcpServer *server = nullptr;
     PeerDiscovery *peer;
 };
