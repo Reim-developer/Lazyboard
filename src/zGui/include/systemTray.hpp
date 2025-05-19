@@ -14,11 +14,12 @@ class SystemTray : public QMainWindow {
     Q_OBJECT
    public:
     void addSystemTray(const SystemTrayWidget &widget);
+    QSystemTrayIcon *getSystemTrayIcon();
 
    private:
     void translatorDectect(QMainWindow *window);
-    void loadVietNameseTranslator(QMainWindow *window);
-    void loadEnglishTranslator(QMainWindow *window);
+    void loadTranslator(QMainWindow *window, const int &TYPE);
+
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QAction *showGui;
