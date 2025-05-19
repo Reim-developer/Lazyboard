@@ -32,4 +32,30 @@
     <entry key="TRAY_SHOW_OPTION_EN">Show zClipboard</entry>
     <entry key="TRAY_HIDE_OPTION_EN">Hide zClipboard</entry>
     <entry key="TRAY_QUIT_OPTION_EN">Quit zClipboard</entry>
+
+    <!-- CheckBox widget -->
+    <entry key="MINIMIZE_CHECKBOX_EN">Minimize to system tray on window close.</entry>
+    <entry key="MINIMIZE_CHECKBOX_VI">Tự động thu nhỏ khi đóng ứng dụng.</entry>
+
+    <entry key="NOTIFICATION_CHECKBOX_EN">Notify me when clipboard changes.</entry>
+    <entry key="NOTIFICATION_CHECKBOX_VI">Thông báo cho tôi khi bộ nhớ tạm thay đổi.</entry>
+
+    <!-- Dialog Title -->
+    <entry key="SETTING_DIALOG_EN">zClipboard | Setting</entry>
+    <entry key="SETTING_DIALOG_VI">zClipboard | Thiết lập</entry>
+
+    <!-- Language Display Label Widget -->
+    <entry key="LABEL_DESCRIPTION_EN">Language Display</entry>
+    <entry key="LABEL_DESCRIPTION_VI">Ngôn ngữ hiển thị</entry>
+
+    <!-- Table Clipboard Widget -->
+    <entry key="TABLE_TIME_EN">Time</entry>
+    <entry key="TABLE_CONTENT_EN">Content | Click to view</entry>
+    <entry key="TABLE_CONTENT_LENGTH_EN">Conent Length</entry>
+    <entry key="TABLE_PIN_EN">Pin</entry>
+
+    <entry key="TABLE_TIME_VI">Thời gian</entry>
+    <entry key="TABLE_CONTENT_VI">Nội dung | Click để xem thêm</entry>
+    <entry key="TABLE_CONTENT_LENGTH_VI">Chiều dài nội dung</entry>
+    <entry key="TABLE_PIN_VI">Ghim</entry>
 </language>
