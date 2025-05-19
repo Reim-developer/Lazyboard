@@ -56,9 +56,6 @@ class ZWindow : public QMainWindow {
     ZTable *ztable;
     SearchArea *zSearchArea;
 
-    QSystemTrayIcon *trayIcon;
-    QMenu *trayMenu;
-
     ClearButton *clearButton;
     GetButton *getButton;
     SettingButton *settingButton;
