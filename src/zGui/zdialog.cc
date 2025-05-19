@@ -19,8 +19,12 @@
 #include <QMessageBox>
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
+#include <QSettings>
 #include "../znetwork/include/PeerDialog.hpp"
 #include "../znetwork/include/PeerDiscovery.hpp"
+#include "../zUtils/include/config.hpp"
+#include "../language/include/language.hpp"
+#include "../zUtils/include/settings.hpp"
 
 using zclipboard::zGui::DialogClipboard;
 using zclipboard::zGui::ZDialog;
@@ -29,14 +33,19 @@ using zclipboard::znetwork::PeerDiscovery;
 
 void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     auto *zContentDialog = new QDialog(zTableView);
-    QIcon zIcon = QIcon(QStringLiteral(":/assets/assets/icon.png"));
+    QIcon zIcon = QIcon(ICON_PATH);
     auto *zDialogLayout = new QGridLayout(zContentDialog);
+    QSettings settings(AUTHOR_NAME, APP_NAME);
+
+    const int LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
+    const auto DIALOG_TITLE = LANGUAGE_TYPE ? CONTENT_DIALOG_TITLE_VI : CONTENT_DIALOG_TITLE_EN;
+    const auto COPY_BUTTON_TEXT = LANGUAGE_TYPE ? COPY_CONTENT_BUTTON_VI : COPY_CONTENT_BUTTON_EN;
 
     auto *zContentArea = new QPlainTextEdit(zContentDialog);
     auto *zCopyButton = new QPushButton(zContentDialog);
     auto *sendToDeviceButton = new QPushButton(zContentDialog);
 
-    zContentDialog->setWindowTitle(QStringLiteral("zContent Clipboard"));
+    zContentDialog->setWindowTitle(DIALOG_TITLE);
     zContentDialog->resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
     zContentDialog->setWindowIcon(zIcon);
 
@@ -44,9 +53,10 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
     zContentArea->setPlainText(text);
     zContentArea->setLineWrapMode(QPlainTextEdit::NoWrap);
 
-    zCopyButton->setText("Copy Content");
+    zCopyButton->setText(COPY_BUTTON_TEXT);
 
-    sendToDeviceButton->setText(QStringLiteral("Send clipboard to device"));
+    const auto SEND_BUTTON_TEXT = LANGUAGE_TYPE ? SEND_CONTENT_BUTTON_VI : SEND_CONTENT_BUTTON_EN;
+    sendToDeviceButton->setText(SEND_BUTTON_TEXT);
 
     connect(sendToDeviceButton, &QPushButton::clicked, [this, zContentDialog, zContentArea]() {
         showPeerListDialog(
@@ -72,8 +82,12 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     auto *scrollArea = new QScrollArea(zDialog);
     auto *zLayout = new QGridLayout(zDialog);
     auto *imageLabel = new QLabel(zDialog);
+    QSettings settings(AUTHOR_NAME, APP_NAME);
 
-    zDialog->setWindowTitle(QStringLiteral("zClipboard Image Viewer"));
+    const int LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
+
+    const auto DIALOG_TITLE = LANGUAGE_TYPE ? IMAGE_DIALOG_TITLE_VI : IMAGE_DIALOG_TITLE_EN;
+    zDialog->setWindowTitle(DIALOG_TITLE);
     zDialog->resize(DIALOG_WIDTH_BASE, DIALOG_HEIGHT_BASE);
 
     QPixmap pixmap = QPixmap::fromImage(image);
@@ -87,7 +101,8 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     scrollArea->setWidget(imageLabel);
     scrollArea->setWidgetResizable(false);
 
-    saveButton->setText("Save Image");
+    const auto BUTTON_TEXT = LANGUAGE_TYPE ? SAVE_IMAGE_BUTTON_VI : SAVE_IMAGE_BUTTON_EN;
+    saveButton->setText(BUTTON_TEXT);
     QPointer<QPushButton> safeButton = saveButton;
 
     connect(saveButton, &QPushButton::clicked, [safeButton, zDialog, image, this]() {
@@ -116,16 +131,31 @@ void ZDialog::saveImage(const DialogClipboard &dialogClipboard) {
 
         bool isSuccess = dialogClipboard.image->save(fileName);
 
-        if (isSuccess) {
-            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Image Saved!");
+        QSettings settings(AUTHOR_NAME, APP_NAME);
+        const int LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
+        const auto BUTTON_TEXT = LANGUAGE_TYPE ? SAVED_IMAGE_BUTTON_VI : SAVED_IMAGE_BUTTON_EN;
 
-            QTimer::singleShot(1500, [dialogClipboard]() {
-                if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Save Image");
+        if (isSuccess) {
+            if (dialogClipboard.safeButton) {
+                dialogClipboard.safeButton->setText(BUTTON_TEXT);
+            }
+
+            QTimer::singleShot(1500, [dialogClipboard, BUTTON_TEXT]() {
+                if (dialogClipboard.safeButton) {
+                    dialogClipboard.safeButton->setText(BUTTON_TEXT);
+                }
             });
 
         } else {
-            QMessageBox::critical(dialogClipboard.parent, "Error", "Failed to save image!");
-            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Save Image");
+            const auto DIALOG_ERR_TITLE =
+                LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
+            const auto DIALOG_ERR_MSG = LANGUAGE_TYPE ? SAVE_IMAGE_FAILED_VI : SAVE_IMAGE_FAILED_EN;
+
+            QMessageBox::critical(dialogClipboard.parent, DIALOG_ERR_TITLE, DIALOG_ERR_MSG);
+
+            if (dialogClipboard.safeButton) {
+                dialogClipboard.safeButton->setText(BUTTON_TEXT);
+            }
         }
     }
 }
@@ -134,10 +164,21 @@ void ZDialog::saveTextToClipboard(const DialogClipboard &dialogClipboard) {
     QApplication::clipboard()->setText(dialogClipboard.text.value_or(QStringLiteral("")));
 
     if (dialogClipboard.safeButton) {
-        dialogClipboard.safeButton->setText("Copied!");
+        QSettings settings(AUTHOR_NAME, APP_NAME);
 
-        QTimer::singleShot(1500, [dialogClipboard]() {
-            if (dialogClipboard.safeButton) dialogClipboard.safeButton->setText("Copy Content");
+        const int LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
+        const auto ALREADY_COPY_TEXT =
+            LANGUAGE_TYPE ? ALREADY_COPY_BUTTON_VI : ALREADY_COPY_BUTTON_EN;
+
+        dialogClipboard.safeButton->setText(ALREADY_COPY_TEXT);
+
+        QTimer::singleShot(1500, [dialogClipboard, LANGUAGE_TYPE]() {
+            if (dialogClipboard.safeButton) {
+                const auto BUTTON_TEXT =
+                    LANGUAGE_TYPE ? COPY_CONTENT_BUTTON_VI : COPY_CONTENT_BUTTON_EN;
+
+                dialogClipboard.safeButton->setText(BUTTON_TEXT);
+            }
         });
     }
 }
