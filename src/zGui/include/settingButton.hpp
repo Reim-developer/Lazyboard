@@ -36,6 +36,7 @@ class SettingButton : public QObject {
     void addLanguageSetting(const SettingWidget &settingWidget);
 
    private:
+    QSettings *settings;
     QPushButton *settingButton;
     QGridLayout *layout;
     QCheckBox *autoHideCheckBox;
