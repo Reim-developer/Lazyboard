@@ -16,6 +16,7 @@
 #include <QSettings>
 
 using zclipboard::language::Translate;
+using zclipboard::language::TransValue;
 using zclipboard::zGui::DisconnectButton;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
@@ -58,6 +59,7 @@ void ZWindow::setupGui() {
         {.parent = this, .layout = zLayout, .getButton = getButton});
     systemTray->addSystemTray({.window = this, .icon = zIcon});
 
+    auto trayIcon = systemTray->getSystemTrayIcon();
     zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
     zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
 }
@@ -98,11 +100,17 @@ void ZWindow::loadTranslator() {
     auto discButtonWidget = disconnectButton->getDisconnectButton();
     auto searchPanel = zSearchArea->getSearchPanel();
 
-    Translate::translatorWidget(clearButtonWidget, TRANS_TYPE, CLEAR_HISTORY_EN, CLEAR_HISTORY_VI);
-    Translate::translatorWidget(getButtonWidget, TRANS_TYPE, GET_CONTENT_BUTTON_EN,
-                                GET_CONTENT_BUTTON_VI);
-    Translate::translatorWidget(settingButtonWidget, TRANS_TYPE, SETTING_BUTTON_EN,
-                                SETTING_BUTTON_VI);
-    Translate::translatorWidget(discButtonWidget, TRANS_TYPE, DISCONNECT_EN, DISCONNECT_VI);
-    Translate::translatorWidget(searchPanel, TRANS_TYPE, SEARCH_PANEL_EN, SEARCH_PANEL_VI);
+    TransValue clearButtonTrans{.LANGUAGE_EN = CLEAR_HISTORY_EN, .LANGUAGE_VI = CLEAR_HISTORY_VI};
+    TransValue getButtonTrans{.LANGUAGE_EN = GET_CONTENT_BUTTON_EN,
+                              .LANGUAGE_VI = GET_CONTENT_BUTTON_VI};
+    TransValue settingButtonTrans{.LANGUAGE_EN = SETTING_BUTTON_EN,
+                                  .LANGUAGE_VI = SETTING_BUTTON_VI};
+    TransValue discButtonTrans{.LANGUAGE_EN = DISCONNECT_EN, .LANGUAGE_VI = DISCONNECT_VI};
+    TransValue searchPanelTrans{.LANGUAGE_EN = SEARCH_PANEL_EN, .LANGUAGE_VI = SEARCH_PANEL_VI};
+
+    Translate::translatorWidget(clearButtonWidget, TRANS_TYPE, clearButtonTrans);
+    Translate::translatorWidget(getButtonWidget, TRANS_TYPE, getButtonTrans);
+    Translate::translatorWidget(settingButtonWidget, TRANS_TYPE, settingButtonTrans);
+    Translate::translatorWidget(discButtonWidget, TRANS_TYPE, discButtonTrans);
+    Translate::translatorWidget(searchPanel, TRANS_TYPE, searchPanelTrans);
 }
