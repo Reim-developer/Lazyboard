@@ -1,8 +1,14 @@
 #include "include/zClipboardModel.hpp"
-
+#include "../language/include/language.hpp"
+#include "../language/include/translate.hpp"
+#include "../zUtils/include/settings.hpp"
+#include "../zUtils/include/config.hpp"
+#include "../zUtils/include/zUtils.hpp"
 #include <QImage>
 #include <QPixmap>
+#include <QSettings>
 
+using zclipboard::language::Translate;
 using zclipboard::zGui::zTableModel;
 using zclipboard::zSQL::zManagerSQL;
 
@@ -69,15 +75,39 @@ QVariant zTableModel::data(const QModelIndex &index, int role) const {
 
 QVariant zTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        switch (section) {
-            case Time:
-                return "Time";
-            case Content:
-                return "Content  | Click to view";
-            case ContentLength:
-                return "Content Length";
-            case Pin:
-                return "Pin";
+        QSettings settings(AUTHOR_NAME, APP_NAME);
+
+        if (!zUtils::getLanguageSetting()) {
+            settings.setValue(LANGUAGE_SETTING, Translate::ENGLISH);
+        }
+
+        const int LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
+        switch (LANGUAGE_TYPE) {
+            case Translate::ENGLISH:
+                switch (section) {
+                    case Time:
+                        return TABLE_TIME_EN;
+                    case Content:
+                        return TABLE_CONTENT_EN;
+                    case ContentLength:
+                        return TABLE_CONTENT_LENGTH_EN;
+                    case Pin:
+                        return TABLE_PIN_EN;
+                }
+                break;
+
+            case Translate::VIETNAMESE:
+                switch (section) {
+                    case Time:
+                        return TABLE_TIME_VI;
+                    case Content:
+                        return TABLE_CONTENT_VI;
+                    case ContentLength:
+                        return TABLE_CONTENT_LENGTH_VI;
+                    case Pin:
+                        return TABLE_PIN_VI;
+                }
+                break;
         }
     }
 
