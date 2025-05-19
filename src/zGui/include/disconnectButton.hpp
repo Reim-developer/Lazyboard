@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QtNetwork/QTcpServer>
+#include <QSettings>
 #include "getButton.hpp"
 
 using zclipboard::zGui::GetButton;
@@ -28,6 +29,7 @@ class DisconnectButton : public QObject {
     void disconnectFromHost(const DisconnectButtonWidget &params);
 
    private:
+    QSettings *settings;
     QPushButton *button;
     QTcpServer *server;
 };
