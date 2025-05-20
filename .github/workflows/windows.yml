@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Visual Studio Build Tools
-        uses: microsoft/setup-msbuild@v2
-        with:
-          vs-version: '16.11'
+      - name: Install Visual Studio 2019 Build Tools
+        shell: cmd
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.CMake.Project" -y --confirm --force
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -32,6 +32,7 @@ jobs:
         shell: cmd
         run:
             |
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
             mkdir -p build && cd build
             cmake -G "Visual Studio 16 2019" -T v142 ..
             cmake --build . --config Release
