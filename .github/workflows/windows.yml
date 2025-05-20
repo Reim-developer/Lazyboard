@@ -51,7 +51,7 @@ jobs:
           "$QT_DIR/bin/windeployqt.exe" --dir ../release ../release/zclipboard.exe
 
       - name: Archive Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Release binary
           path: release/
