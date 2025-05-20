@@ -36,3 +36,16 @@ jobs:
             mkdir -p build && cd build
             cmake -G "Visual Studio 16 2019" -T v142 ..
             cmake --build . --config Release
+
+      - name: Deploy Qt dependencies
+        shell: cmd
+        run: |
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
+            cd build
+            "D:\a\zClipboard\Qt\6.5.3\msvc2019_64\bin\windeployqt.exe" --release --no-translations --dir deploy Release\zClipboard.exe
+
+      - name: Upload Deployed Application
+        uses: actions/upload-artifact@v4
+        with:
+            name: zClipboard-Windows-Release
+            path: build/deploy/
