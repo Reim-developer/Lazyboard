@@ -29,9 +29,9 @@ jobs:
             cmake --version
 
       - name: Build test for Windows
-        shell: bash
+        shell: cmd
         run:
             |
             mkdir -p build && cd build
-            cmake ..
+            cmake -G "Visual Studio 16 2019" ..
             cmake --build . --config Release
