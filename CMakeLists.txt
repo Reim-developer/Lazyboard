@@ -36,7 +36,7 @@ target_link_libraries(
 )
 
 if(NOT WIN32)
-    target_link_libraries(${PROJECT_NAME} -lstdc++)
+    target_link_libraries(${PROJECT_NAME} PRIVATE -lstdc++)
 endif()
 
 target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
