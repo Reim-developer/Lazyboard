@@ -35,13 +35,13 @@ class ZWindow : public QMainWindow {
 
    public:
     explicit ZWindow(QWidget *zWindow = nullptr);
+    void loadTranslator();
 
    private:
     void setupGui();
     void createSystemTray();
     void addTrayMenuActions(QSystemTrayIcon *trayIcon);
     void translatorDectect();
-    void loadTranslator();
 
    protected:
     void closeEvent(QCloseEvent *event) override;
