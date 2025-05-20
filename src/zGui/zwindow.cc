@@ -1,4 +1,5 @@
 #include "include/zwindow.hpp"
+#include "include/LanguageManager.hpp"
 #include "include/clearButton.hpp"
 #include "include/getButton.hpp"
 #include "include/settingButton.hpp"
@@ -39,6 +40,9 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
     setupGui();
     translatorDectect();
+
+    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this,
+            &ZWindow::loadTranslator);
 }
 
 void ZWindow::setupGui() {
@@ -48,7 +52,7 @@ void ZWindow::setupGui() {
     getButton = new GetButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
-    systemTray = new SystemTray();
+    systemTray = new SystemTray(this);
 
     ztable->addZtable(this, zLayout);
     zSearchArea->addSearchPanel({.zWindow = this, .zLayout = zLayout, .table = ztable});
