@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Visual Studio 2019 Build Tools via Chocolatey
-        shell: cmd
-        run: |
-          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.19041" -y
+      - name: Setup Visual Studio Build Tools
+        uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: '16.11'
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -28,13 +28,10 @@ jobs:
         with:
             cmake-version: '3.19'
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-
       - name: Build test for Windows
         shell: cmd
         run:
             |
             mkdir -p build && cd build
-            cmake -G "Visual Studio 16 2019" ..
+            cmake -G "Visual Studio 16 2019" -T v142 ..
             cmake --build . --config Release
