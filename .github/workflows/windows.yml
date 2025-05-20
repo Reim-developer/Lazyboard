@@ -21,7 +21,7 @@ jobs:
           msystem: MINGW64
 
       - name: Install CMake
-        shell: bash
+        shell: msys2 {0}
         run: |
           pacman -Sy mingw-w64-x86_64-cmake --noconfirm
 
