@@ -33,7 +33,11 @@ target_link_libraries(
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
-    -lstdc++
 )
+
+if(NOT WIN32)
+    target_link_libraries(${PROJECT_NAME} -lstdc++)
+endif()
+
 target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
