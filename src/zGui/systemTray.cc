@@ -10,14 +10,21 @@
 #include <QApplication>
 #include <QSystemTrayIcon>
 #include <QAction>
+#include "include/LanguageManager.hpp"
 
 using zclipboard::language::Translate;
 using zclipboard::zGui::SystemTray;
 using zclipboard::zGui::SystemTrayWidget;
 
+SystemTray::SystemTray(QMainWindow *mainWindow) : window(mainWindow) {}
+
 void SystemTray::addSystemTray(const SystemTrayWidget &widget) {
     trayIcon = new QSystemTrayIcon(widget.window);
     trayMenu = new QMenu();
+
+    // clang-format off
+    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this, &SystemTray::loadTranslator);
+    // clang-format on
 
     translatorDectect(widget.window);
 
@@ -41,15 +48,17 @@ void SystemTray::translatorDectect(QMainWindow *window) {
     QSettings *settings = new QSettings(AUTHOR_NAME, APP_NAME);
     if (!zUtils::getLanguageSetting()) {
         settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
-        loadTranslator(window, Translate::ENGLISH);
+        loadTranslator(Translate::ENGLISH);
         return;
     }
 
     const int TYPE = settings->value(LANGUAGE_SETTING).toInt();
-    loadTranslator(window, TYPE);
+    loadTranslator(TYPE);
 }
 
-void SystemTray::loadTranslator(QMainWindow *window, const int &TYPE) {
+void SystemTray::loadTranslator(const int &TYPE) {
+    trayMenu->clear();
+
     switch (TYPE) {
         case Translate::ENGLISH:
             showGui = trayMenu->addAction(TRAY_SHOW_OPTION_EN);
