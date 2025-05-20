@@ -27,3 +27,11 @@ jobs:
         shell: bash
         run: |
             cmake --version
+
+      - name: Build test for Windows
+        shell: bash
+        run: |
+            mkdir -p build
+            cd build
+            cmake -G "Visual Studio 16 2019"
+            cmake --build . 
