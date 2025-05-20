@@ -12,6 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install Visual Studio 2019 Build Tools via Chocolatey
+        shell: cmd
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.19041" -y
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
