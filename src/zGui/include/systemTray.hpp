@@ -13,12 +13,15 @@ struct SystemTrayWidget {
 class SystemTray : public QMainWindow {
     Q_OBJECT
    public:
+    explicit SystemTray(QMainWindow *window);
+
     void addSystemTray(const SystemTrayWidget &widget);
     QSystemTrayIcon *getSystemTrayIcon();
 
    private:
+    QMainWindow *window;
     void translatorDectect(QMainWindow *window);
-    void loadTranslator(QMainWindow *window, const int &TYPE);
+    void loadTranslator(const int &TYPE);
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
