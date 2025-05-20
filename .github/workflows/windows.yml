@@ -1,0 +1,57 @@
+name: Build zClipboard for Windows
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt6 via Chocolatey
+        run: choco install qt6-base-dev -y
+
+      - name: Setup MSYS2 & Bash
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+
+      - name: Install CMake
+        shell: bash
+        run: |
+          pacman -Sy mingw-w64-x86_64-cmake --noconfirm
+
+      - name: Configure with CMake
+        shell: bash
+        env:
+          QT_DIR: C:/Qt/6.5.3/mingw131_64
+        run: |
+          mkdir -p build && cd build
+          cmake -G "MinGW Makefiles" \
+            -DCMAKE_PREFIX_PATH="$QT_DIR" \
+            -DCMAKE_CXX_COMPILER=g++.exe \
+            -DCMAKE_MAKE_PROGRAM=mingw32-make.exe \
+            ..
+
+      - name: Build Project
+        shell: bash
+        run: |
+          cd build
+          mingw32-make
+
+      - name: Deploy with windeployqt
+        shell: bash
+        run: |
+          cd build
+          cp release/zclipboard.exe ../release/
+          "$QT_DIR/bin/windeployqt.exe" --dir ../release ../release/zclipboard.exe
+
+      - name: Archive Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Release binary
+          path: release/
