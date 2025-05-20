@@ -15,6 +15,7 @@ namespace zclipboard::zGui {
 
 struct SettingWidget {
     QCheckBox *checkbox;
+    QDialog *dialog;
     QSettings *settings;
     QLabel *languageDescription;
     QGridLayout *layout;
@@ -30,7 +31,7 @@ class SettingButton : public QObject {
 
    private:
     void showSettingDialog(QWidget *parent);
-    void addGui(QGridLayout *layout);
+    void addGui(QGridLayout *layout, QDialog *dialog);
     void addHideSetting(const SettingWidget &settingWidget);
     void addNotificationSetting(const SettingWidget &settingWidget);
     void addLanguageSetting(const SettingWidget &settingWidget);
@@ -39,6 +40,7 @@ class SettingButton : public QObject {
     QSettings *settings;
     QPushButton *settingButton;
     QGridLayout *layout;
+
     QCheckBox *autoHideCheckBox;
     QCheckBox *autoNotificatonCheckBox;
 };
