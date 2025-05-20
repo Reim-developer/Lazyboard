@@ -28,7 +28,7 @@ jobs:
       - name: Configure with CMake
         shell: bash
         env:
-          QT_DIR: C:/Qt/6.5.3/mingw131_64
+          QT_DIR: C:/Qt/6.4.2/mingw131_64
         run: |
           mkdir -p build && cd build
           cmake -G "MinGW Makefiles" \
