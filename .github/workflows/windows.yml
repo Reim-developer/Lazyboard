@@ -22,11 +22,9 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
         with:
             cmake-version: '3.19'
-        
-      - name: Test CMake
-        shell: bash
-        run: |
-            cmake --version
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
 
       - name: Build test for Windows
         shell: cmd
