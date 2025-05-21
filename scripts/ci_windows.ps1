@@ -8,7 +8,7 @@ function build {
     $vs_path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
     $build_dir = "build"
 
-    call $vs_path x64
+    cmd /c call $vs_path x64
 
     mkdir $build_dir
     Set-Location $build_dir
@@ -18,7 +18,7 @@ function build {
 }
 
 function deploy_qt {
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
+    cmd /c call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
     Set-Location build
 
     $qt_win = "D:\a\zClipboard\Qt\6.5.3\msvc2019_64\bin\windeployqt.exe"
