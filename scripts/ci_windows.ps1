@@ -22,7 +22,7 @@ function deploy_qt {
     Set-Location build
 
     $qt_win = "D:\a\zClipboard\Qt\6.5.3\msvc2019_64\bin\windeployqt.exe"
-    $binary = "Release\zClipboard.exe"
+    $binary = "Release\zclipboard.exe"
     $target_dir = "deploy"
 
     if (-not (Test-Path -Path $target_dir)) {
