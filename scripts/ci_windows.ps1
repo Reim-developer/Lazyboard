@@ -29,7 +29,7 @@ function deploy_qt {
         New-Item -ItemType Directory -Path $target_dir
     }
 
-    Copy-Item -Path $binary -Destination "$targe_dir\zclipboard.exe"
+    Copy-Item -Path $binary -Destination "$target_dir\zclipboard.exe"
 
     Set-Location $target_dir
 
