@@ -36,7 +36,7 @@ function deploy_qt {
     & $qt_win `
     --release `
     --no-translations `
-    --dir deploy zClipboard.exe
+    --dir deploy zclipboard.exe
 
     Set-Location ..
 }
