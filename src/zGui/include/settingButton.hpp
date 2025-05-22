@@ -10,6 +10,9 @@
 #include <QSettings>
 #include <QComboBox>
 #include <QLabel>
+#include "../../core/include/setting.hpp"
+
+using zclipboard::core::SettingCore;
 
 namespace zclipboard::zGui {
 
@@ -32,11 +35,10 @@ class SettingButton : public QObject {
    private:
     void showSettingDialog(QWidget *parent);
     void addGui(QGridLayout *layout, QDialog *dialog);
-    void addHideSetting(const SettingWidget &settingWidget);
-    void addNotificationSetting(const SettingWidget &settingWidget);
-    void addLanguageSetting(const SettingWidget &settingWidget);
+    void addGuiLanguageSetting(const SettingWidget &settingWidget);
 
    private:
+    SettingCore *settingCore;
     QSettings *settings;
     QPushButton *settingButton;
     QGridLayout *layout;
