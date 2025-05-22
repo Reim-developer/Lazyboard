@@ -63,3 +63,10 @@ Translate::LanguageType zUtils::languageTypeCast(int value) {
     QSettings settings(AUTHOR_NAME, APP_NAME);
     return static_cast<Translate::LanguageType>(settings.value(LANGUAGE_SETTING).toInt());
 }
+
+int zUtils::hasContentType(const QMimeData *mimeData) {
+    if (mimeData->hasText()) return static_cast<int>(ContentType::TEXT);
+    if (mimeData->hasImage()) return static_cast<int>(ContentType::IMAGE);
+
+    return static_cast<int>(ContentType::UNKNOWN);
+}
