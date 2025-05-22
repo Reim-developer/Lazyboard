@@ -65,8 +65,14 @@ void ZDialog::showZContentDialog(const QString &text, QTableView *zTableView) {
 
     QPointer<QPushButton> safeCopyButton = zCopyButton;
     connect(zCopyButton, &QPushButton::clicked, [safeCopyButton, text, this] {
-        saveTextToClipboard({.safeButton = safeCopyButton, .text = text});
+        // clang-format off
+        struct DialogClipboard dialogClipboard {
+            .safeButton = safeCopyButton,
+            .text = text
+        };
+        saveTextToClipboard(dialogClipboard);
     });
+    // clang-format on
 
     zDialogLayout->addWidget(zCopyButton, 1, 0);
     zDialogLayout->addWidget(sendToDeviceButton, 1, 1);
@@ -106,12 +112,16 @@ void ZDialog::showZImageDialog(const QImage &image, QWidget *parent) {
     QPointer<QPushButton> safeButton = saveButton;
 
     connect(saveButton, &QPushButton::clicked, [safeButton, zDialog, image, this]() {
-        saveImage({
+        // clang-format off
+        struct DialogClipboard dialogClipboard {
             .safeButton = safeButton,
             .parent = zDialog,
-            .image = image,
-        });
+            .image = image
+        };
+
+        saveImage(dialogClipboard);
     });
+    // clang-format on
 
     zLayout->addWidget(scrollArea, 0, 0);
     zLayout->addWidget(saveButton, 1, 0);
@@ -189,9 +199,13 @@ void ZDialog::showPeerListDialog(const DialogClipboard &dialogClipboard) {
     PeerDiscovery *discovery = new PeerDiscovery(45454, peerDialog);
 
     connect(discovery, &PeerDiscovery::peerFound, [&peerDialog](const QString &ip) {
-        if (!peerDialog->getPeerList()->findItems(ip, Qt::MatchExactly).isEmpty()) return;
+        const auto peerList = peerDialog->getPeerList();
 
-        peerDialog->getPeerList()->addItem(ip);
+        if (!peerList->findItems(ip, Qt::MatchExactly).isEmpty()) {
+            return;
+        }
+
+        peerList->addItem(ip);
     });
 
     peerDialog->setAttribute(Qt::WA_DeleteOnClose);
