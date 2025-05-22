@@ -28,9 +28,6 @@ class SystemTray : public QMainWindow {
     QAction *showGui;
     QAction *hideGui;
     QAction *quitGui;
-
-   private:
-    void addTrayMenuActions(QSystemTrayIcon *systemTrayIcon);
 };
 }  // namespace zclipboard::zGui
 
