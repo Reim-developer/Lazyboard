@@ -11,9 +11,7 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y git cmake ninja-build desktop-file-utils \
-    qt6-base-dev clang wget \
-    libfuse3-dev fuse3 libfuse2t64 \
-    qt6-qpa-plugins libqt6sql6-sqlite
+    qt6-base-dev clang libnotify-dev
 }
 
 build_zclipboard() {
