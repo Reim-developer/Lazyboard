@@ -1,0 +1,97 @@
+#!/bin/bash
+function detect_requirements() {
+    if ! command -v "$1" > /dev/null  2>&1; then
+        echo "Could not find $1 in your operating system"
+        exit 1
+    fi
+}
+
+function build_tools_check() {
+    local cmake="cmake"
+    local clang="clang"
+    local gcc="gcc"
+
+    if [ "$(uname)" == "Linux" ]; then
+        if ! command -v "$clang" > /dev/null 2>&1; then
+            echo "Could not find Clang in your operating system."
+            echo "Use GCC instead? [y/n]."
+
+            read -r option
+            if [ "${option,,}" == "y" ]; then
+                echo "Use GCC instead of Clang."
+                detect_requirements "$gcc"
+                detect_requirements "$cmake"
+
+                build "$gcc"
+
+            elif [ "${option,,}" == "n" ]; then
+                echo "Canceled."
+                exit 1
+            fi 
+
+            exit 1
+        fi
+
+    detect_requirements "$cmake"
+        build "$clang"
+
+    else 
+        echo "$(uname) is not supported."
+        exit 1
+    fi
+}
+
+function build_dir_generator() {
+    local build_dir="build"
+    if [ ! -d "$build_dir" ]; then
+        echo "Generate build directory"
+
+        mkdir -p $build_dir || {
+            echo "Failed to generate build directory."
+            echo "BUILD FAILED." >&2
+            exit 1
+        }
+
+        echo "Generate build directory successfully."
+
+        echo "Build directory: $(realpath $build_dir)" || {
+            echo "Could not get absolute path of $build_dir"
+            echo "Stop setup & build now? [y/n]"
+
+            read -r option
+            if [[ "${option,,}" == "y" ]]; then 
+                echo "Stop build now."
+                exit 1
+            fi
+
+            echo "Build will not stop, build can have an error."
+        }
+    fi
+}
+
+function build() {
+    local build_dir="build"
+    local flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+
+    cd "$build_dir" || {
+        echo "Could not change directory to $build_dir"
+        echo "BUILD FAILED."
+        exit 1
+    }
+
+    cmake .. \
+    -DCMAKE_CXX_COMPILER="$1" \
+    -DCMAKE_CXX_FLAGS="$flags" \
+    -DCMAKE_BUILD_TYPE=Release
+
+    make -j "$(nproc)"
+
+    echo "Build successfully."
+}
+
+function zclipboard_main() {
+    build_tools_check
+    build_dir_generator
+}
+
+zclipboard_main
