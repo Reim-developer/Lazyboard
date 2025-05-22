@@ -41,7 +41,6 @@ class zTableModel : public QAbstractTableModel {
     void clearData();
     void filterItems(const QString &searchText);
 
-   public:
    private:
     QList<zClipboardItem> m_items;
     QList<zClipboardItem> mData;
