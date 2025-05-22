@@ -9,6 +9,11 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core Network)
 
+if(LINUX)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(LIBNOTIFY REQUIRED IMPORTED_TARGET libnotify)
+endif()
+
 set(CXX_SOURCE)
 set(CXX_HEADER)
 set(ASSETS resources.qrc)
@@ -34,6 +39,10 @@ target_link_libraries(
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
 )
+
+if(LINUX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::LIBNOTIFY)
+endif()
 
 if(NOT WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE -lstdc++)
