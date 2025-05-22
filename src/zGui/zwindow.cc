@@ -19,9 +19,12 @@
 using zclipboard::language::Translate;
 using zclipboard::language::TransValue;
 using zclipboard::zGui::DisconnectButton;
+using zclipboard::zGui::DisconnectButtonWidget;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
+using zclipboard::zGui::SearchPanelWidget;
 using zclipboard::zGui::SystemTray;
+using zclipboard::zGui::SystemTrayWidget;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
 
@@ -54,18 +57,40 @@ void ZWindow::setupGui() {
     disconnectButton = new DisconnectButton();
     systemTray = new SystemTray(this);
 
+    // clang-format off
+    struct SearchPanelWidget searchPanelWidget {
+        .zWindow = this,
+        .zLayout = zLayout,
+        .table = ztable
+    };
+
+    struct DisconnectButtonWidget discButtonWidget {
+        .parent = this,
+        .layout = zLayout,
+        .getButton = getButton
+    };
+
+    struct SystemTrayWidget systemTrayWidget {
+        .window = this,
+        .icon = zIcon
+    };
+    
     ztable->addZtable(this, zLayout);
-    zSearchArea->addSearchPanel({.zWindow = this, .zLayout = zLayout, .table = ztable});
+    zSearchArea->addSearchPanel(searchPanelWidget);
     clearButton->addClearButton(zLayout, ztable);
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
-    disconnectButton->addDisconnectButton(
-        {.parent = this, .layout = zLayout, .getButton = getButton});
-    systemTray->addSystemTray({.window = this, .icon = zIcon});
+    disconnectButton->addDisconnectButton(discButtonWidget);
+    systemTray->addSystemTray(systemTrayWidget);
 
-    auto trayIcon = systemTray->getSystemTrayIcon();
-    zUtils::textClipboardChanges(trayIcon, ztable->getClipboard());
-    zUtils::imageClipboardChanges(trayIcon, ztable->getClipboard());
+    const auto trayIcon = systemTray->getSystemTrayIcon();
+    const auto clipboard = ztable->getClipboard();
+
+    zUtils::textClipboardChanges(trayIcon, clipboard);
+    zUtils::imageClipboardChanges(trayIcon, clipboard);
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &ZWindow::onTrayIconActivated);
+
+    // clang-format on
 }
 
 void ZWindow::closeEvent(QCloseEvent *event) {
@@ -104,17 +129,45 @@ void ZWindow::loadTranslator() {
     auto discButtonWidget = disconnectButton->getDisconnectButton();
     auto searchPanel = zSearchArea->getSearchPanel();
 
-    TransValue clearButtonTrans{.LANGUAGE_EN = CLEAR_HISTORY_EN, .LANGUAGE_VI = CLEAR_HISTORY_VI};
-    TransValue getButtonTrans{.LANGUAGE_EN = GET_CONTENT_BUTTON_EN,
-                              .LANGUAGE_VI = GET_CONTENT_BUTTON_VI};
-    TransValue settingButtonTrans{.LANGUAGE_EN = SETTING_BUTTON_EN,
-                                  .LANGUAGE_VI = SETTING_BUTTON_VI};
-    TransValue discButtonTrans{.LANGUAGE_EN = DISCONNECT_EN, .LANGUAGE_VI = DISCONNECT_VI};
-    TransValue searchPanelTrans{.LANGUAGE_EN = SEARCH_PANEL_EN, .LANGUAGE_VI = SEARCH_PANEL_VI};
+    // clang-format off
+    TransValue clearButtonTrans {
+        .LANGUAGE_EN = CLEAR_HISTORY_EN, 
+        .LANGUAGE_VI = CLEAR_HISTORY_VI
+    };
+    
+    TransValue getButtonTrans {
+        .LANGUAGE_EN = GET_CONTENT_BUTTON_EN,
+        .LANGUAGE_VI = GET_CONTENT_BUTTON_VI
+    };
+
+    TransValue settingButtonTrans {
+        .LANGUAGE_EN = SETTING_BUTTON_EN,
+        .LANGUAGE_VI = SETTING_BUTTON_VI
+    };
+
+    TransValue discButtonTrans {
+        .LANGUAGE_EN = DISCONNECT_EN, 
+        .LANGUAGE_VI = DISCONNECT_VI
+    };
+
+    TransValue searchPanelTrans {
+        .LANGUAGE_EN = SEARCH_PANEL_EN, 
+        .LANGUAGE_VI = SEARCH_PANEL_VI
+    };
+
+    // clang-format on
 
     Translate::translatorWidget(clearButtonWidget, TRANS_TYPE, clearButtonTrans);
     Translate::translatorWidget(getButtonWidget, TRANS_TYPE, getButtonTrans);
     Translate::translatorWidget(settingButtonWidget, TRANS_TYPE, settingButtonTrans);
     Translate::translatorWidget(discButtonWidget, TRANS_TYPE, discButtonTrans);
     Translate::translatorWidget(searchPanel, TRANS_TYPE, searchPanelTrans);
+}
+
+void ZWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason) {
+    if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
+        showNormal();
+        raise();
+        activateWindow();
+    }
 }
