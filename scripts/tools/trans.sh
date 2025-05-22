@@ -6,7 +6,7 @@ trans() {
     local gen_path="../src/language/include"
     local xml_path="./xml/language.xml"
     local key_tag="entry"
-    local header_name="TRANSLATOR_HPP"
+    local header_name="LANGUAGE_HPP"
     local type_name="char"
 
     cd "../.." || exit
