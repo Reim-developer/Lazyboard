@@ -8,12 +8,11 @@
 #include <QSystemTrayIcon>
 #include <QStringLiteral>
 #include <QMenu>
-#include "ztable.hpp"
+#include "disconnectButton.hpp"
 #include "zSearchPanel.hpp"
 #include "clearButton.hpp"
 #include "getButton.hpp"
 #include "settingButton.hpp"
-#include "disconnectButton.hpp"
 #include "systemTray.hpp"
 #include <QSettings>
 
@@ -45,6 +44,9 @@ class ZWindow : public QMainWindow {
 
    protected:
     void closeEvent(QCloseEvent *event) override;
+
+   private slots:
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
    private:
     QSettings *settings;
