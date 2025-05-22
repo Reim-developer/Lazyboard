@@ -106,4 +106,14 @@
     <!-- Send Content Button Widget -->
     <entry key="SEND_CONTENT_BUTTON_VI">Gửi nội dung tới thiết bị khác</entry>
     <entry key="SEND_CONTENT_BUTTON_EN">Send clipboard to device</entry>
+
+    <!-- Notification System -->
+    <entry key="CLIPBOARD_CHANGED_TITLE_VI">Thay đổi bộ nhớ tạm</entry>
+    <entry key="CLIPBOARD_CHANGED_TITLE_EN">Clipboard changed</entry>
+
+    <entry key="CLIPBOARD_CHANGED_TEXT_VI">Văn bản mới được thêm vào bộ nhớ tạm.</entry>
+    <entry key="CLIPBOARD_CHANGED_TEXT_EN">New text content has been copied to your clipboard.</entry>
+
+    <entry key="CLIPBOARD_CHANGED_IMAGE_VI">Hình ảnh mới được thêm vào bộ nhớ tạm.</entry>
+    <entry key="CLIPBOARD_CHANGED_IMAGE_EN">New image has been copied to your clipboard.</entry>
 </language>
