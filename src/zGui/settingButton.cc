@@ -67,9 +67,6 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
     bool isHide = settings->value(AUTO_HIDE_SETTING).toBool();
     bool isNotification = settings->value(AUTO_NOTIFICATION_SETTING).toBool();
 
-    autoHideCheckBox->setChecked(isHide);
-    autoNotificatonCheckBox->setChecked(isNotification);
-
     // clang-format off
     TransValue minimizeValue {
         .LANGUAGE_EN = MINIMIZE_CHECKBOX_EN,
@@ -80,17 +77,36 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
         .LANGUAGE_EN = NOTIFICATION_CHECKBOX_EN,
         .LANGUAGE_VI = NOTIFICATION_CHECKBOX_VI
     };
-    // clang-format on
 
-    Translate::translatorWidget(autoHideCheckBox, TYPE, minimizeValue);
-    Translate::translatorWidget(autoNotificatonCheckBox, TYPE, notifiValue);
-
-    // clang-format off
-    struct SettingWidget languageSetting {
+    struct SettingWidget settingWidget {
         .dialog = dialog,
         .settings = settings,
         .languageDescription = languageDescription,
         .comboBox = languageBox
+    };
+
+    // clang-format on
+
+    autoHideCheckBox->setChecked(isHide);
+    autoNotificatonCheckBox->setChecked(isNotification);
+
+    addSettingAction(settingWidget);
+    Translate::translatorWidget(autoHideCheckBox, TYPE, minimizeValue);
+    Translate::translatorWidget(autoNotificatonCheckBox, TYPE, notifiValue);
+
+    layout->addWidget(autoHideCheckBox, 0, 0);
+    layout->addWidget(autoNotificatonCheckBox, 1, 0);
+    layout->addWidget(languageDescription, 2, 1);
+    layout->addWidget(languageBox, 2, 0);
+}
+
+void SettingButton::addSettingAction(const SettingWidget &params) {
+    // clang-format off
+    struct SettingWidget languageSetting {
+        .dialog = params.dialog,
+        .settings = settings,
+        .languageDescription = params.languageDescription,
+        .comboBox = params.comboBox
     };
 
     struct SettingCoreParams notifitionSetting {
@@ -102,52 +118,20 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
         .settings = settings,
         .checkBox = autoHideCheckBox,
     };
-    // clang-format on
 
-    settingCore->addHideSetting(hideSetting);
-    settingCore->addNotificationSetting(notifitionSetting);
-    addGuiLanguageSetting(languageSetting);
-
-    layout->addWidget(autoHideCheckBox, 0, 0);
-    layout->addWidget(autoNotificatonCheckBox, 1, 0);
-    layout->addWidget(languageDescription, 2, 1);
-    layout->addWidget(languageBox, 2, 0);
-}
-
-void SettingButton::addGuiLanguageSetting(const SettingWidget &settingWidget) {
-    const int TYPE = settings->value(LANGUAGE_SETTING).toInt();
-    const auto LABEL_TITLE = TYPE ? LABEL_DESCRIPTION_VI : LABEL_DESCRIPTION_EN;
-
-    settingWidget.languageDescription->setText(LABEL_TITLE);
-
-    settingWidget.comboBox->addItem(QStringLiteral("English"),
-                                    static_cast<int>(Translate::ENGLISH));
-    settingWidget.comboBox->addItem(QStringLiteral("VietNamese"),
-                                    static_cast<int>(Translate::VIETNAMESE));
-
-    int currentLanguage =
-        settingWidget.settings->value(LANGUAGE_SETTING, static_cast<int>(Translate::ENGLISH))
-            .toInt();
-
-    for (int index = 0; index < settingWidget.comboBox->count(); ++index) {
-        if (settingWidget.comboBox->itemData(index).toInt() == currentLanguage) {
-            settingWidget.comboBox->setCurrentIndex(index);
-            break;
-        }
-    }
-
-    // clang-format off
     struct SettingCoreParams settingLanguageParams {
-        .dialog = settingWidget.dialog,
-        .settings = settingWidget.settings,
-        .languageDescription = settingWidget.languageDescription,
-        .comboBox = settingWidget.comboBox,
+        .dialog = params.dialog,
+        .settings = settings,
+        .languageDescription = params.languageDescription,
+        .comboBox = params.comboBox,
         .autoHideCheckBox = autoHideCheckBox,
         .autoNotificatonCheckBox = autoNotificatonCheckBox
     };
     // clang-format on
 
     settingCore->addLanguageSetting(settingLanguageParams);
+    settingCore->addHideSetting(hideSetting);
+    settingCore->addNotificationSetting(notifitionSetting);
 }
 
 QPushButton *SettingButton::getSettingButton() {
