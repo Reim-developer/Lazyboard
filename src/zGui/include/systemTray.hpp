@@ -4,12 +4,17 @@
 #include <QWidget>
 #include <QObject>
 #include <QMainWindow>
+#include "../../core/include/systemTray.hpp"
+
+using zclipboard::core::SystemTrayCore;
 
 namespace zclipboard::zGui {
+
 struct SystemTrayWidget {
     QMainWindow *window;
     QIcon icon;
 };
+
 class SystemTray : public QMainWindow {
     Q_OBJECT
    public:
@@ -20,8 +25,8 @@ class SystemTray : public QMainWindow {
 
    private:
     QMainWindow *window;
+    SystemTrayCore *systemTrayCore;
     void translatorDectect(QMainWindow *window);
-    void loadTranslator(const int &TYPE);
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
