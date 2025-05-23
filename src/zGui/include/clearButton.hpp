@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QObject>
 #include "ztable.hpp"
+#include <QSettings>
 
 using zclipboard::zGui::ZTable;
 
@@ -16,6 +17,7 @@ class ClearButton : public QObject {
 
    private:
     void clearCache(ZTable *table, QPushButton *clearButton);
+    QSettings *settings;
     QPushButton *clearButton;
 };
 }  // namespace zclipboard::zGui
