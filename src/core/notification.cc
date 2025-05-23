@@ -1,4 +1,3 @@
-#include <qlogging.h>
 #define QT_NO_KEYWORDS
 #include <QtGlobal>
 
@@ -103,8 +102,6 @@ void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIc
 
         QByteArray iconPathByte = tempFile.fileName().toUtf8();
         const char* iconPath = iconPathByte.constData();
-
-        qDebug() << iconPath;
 
         NotifyNotification *notification = notify_notification_new(title, body, iconPath);
 
