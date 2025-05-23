@@ -46,6 +46,7 @@ int zUtils::hasPlatform() {
     #else
         return static_cast<int>(Platform::UNKNOWN);
     #endif
+    // clang-format on
 }
 
 bool zUtils::getAutoHideSetting() {
