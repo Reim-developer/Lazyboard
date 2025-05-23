@@ -10,8 +10,10 @@
 #include <QApplication>
 #include <QSystemTrayIcon>
 #include <QAction>
-#include "include/LanguageManager.hpp"
+#include "../core/include/systemTray.hpp"
 
+using zclipboard::core::SystemTrayCore;
+using zclipboard::core::SystemTrayParams;
 using zclipboard::language::Translate;
 using zclipboard::zGui::SystemTray;
 using zclipboard::zGui::SystemTrayWidget;
@@ -21,11 +23,20 @@ SystemTray::SystemTray(QMainWindow *mainWindow) : window(mainWindow) {}
 void SystemTray::addSystemTray(const SystemTrayWidget &widget) {
     trayIcon = new QSystemTrayIcon(widget.window);
     trayMenu = new QMenu();
+    systemTrayCore = new SystemTrayCore();
+    QSettings setting(AUTHOR_NAME, APP_NAME);
+
+    const auto TYPE = setting.value(LANGUAGE_SETTING).toInt();
 
     // clang-format off
-    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this, &SystemTray::loadTranslator);
+    struct SystemTrayParams systemTrayParams {
+            .trayMenu = trayMenu,
+            .window = window,
+            .TYPE = TYPE
+    };
     // clang-format on
 
+    systemTrayCore->updateSwitchLanguageInstance(systemTrayParams);
     translatorDectect(widget.window);
 
     trayIcon->setIcon(widget.icon);
@@ -38,38 +49,19 @@ void SystemTray::translatorDectect(QMainWindow *window) {
     QSettings *settings = new QSettings(AUTHOR_NAME, APP_NAME);
     if (!zUtils::getLanguageSetting()) {
         settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
-        loadTranslator(Translate::ENGLISH);
-        return;
     }
 
     const int TYPE = settings->value(LANGUAGE_SETTING).toInt();
-    loadTranslator(TYPE);
-}
 
-void SystemTray::loadTranslator(const int &TYPE) {
-    trayMenu->clear();
+    // clang-format off
+    struct SystemTrayParams systemTrayParams {
+        .trayMenu = trayMenu,
+        .window = window,
+        .TYPE = TYPE
+    };
+    // clang-format on
 
-    switch (TYPE) {
-        case Translate::ENGLISH:
-            showGui = trayMenu->addAction(TRAY_SHOW_OPTION_EN);
-            hideGui = trayMenu->addAction(TRAY_HIDE_OPTION_EN);
-            quitGui = trayMenu->addAction(TRAY_QUIT_OPTION_EN);
-
-            connect(showGui, &QAction::triggered, window, &ZWindow::showNormal);
-            connect(quitGui, &QAction::triggered, window, &QApplication::quit);
-            connect(hideGui, &QAction::triggered, window, &ZWindow::hide);
-            break;
-
-        case Translate::VIETNAMESE:
-            showGui = trayMenu->addAction(TRAY_SHOW_OPTION_VI);
-            hideGui = trayMenu->addAction(TRAY_HIDE_OPTION_VI);
-            quitGui = trayMenu->addAction(TRAY_QUIT_OPTION_VI);
-
-            connect(showGui, &QAction::triggered, window, &ZWindow::showNormal);
-            connect(quitGui, &QAction::triggered, window, &QApplication::quit);
-            connect(hideGui, &QAction::triggered, window, &ZWindow::hide);
-            break;
-    }
+    systemTrayCore->loadTranslator(systemTrayParams);
 }
 
 QSystemTrayIcon *SystemTray::getSystemTrayIcon() {
