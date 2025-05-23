@@ -8,6 +8,9 @@
     <entry key="CLEAR_HISTORY_VI">Xóa lịch sử</entry>
     <entry key="CLEAR_HISTORY_EN">Clear</entry>
 
+    <entry key="CLEAR_HISTORY_ACTION_VI">Đã xóa lịch sử</entry>
+    <entry key="CLEAR_HISTORY_ACTION_EN">Cleaned</entry>
+
     <!-- Search clipboard content panel widget -->
     <entry key="SEARCH_PANEL_VI">Tìm kiếm...</entry>
     <entry key="SEARCH_PANEL_EN">Search...</entry>
