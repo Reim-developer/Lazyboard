@@ -1,7 +1,7 @@
+#include <QtGlobal>
 #include "include/zUtils.hpp"
 #include "include/settings.hpp"
 #include "include/config.hpp"
-#include <QtGlobal>
 #include <QStandardPaths>
 #include <QSettings>
 #include <QClipboard>
@@ -37,11 +37,11 @@ QString zUtils::getCachePath() {
 */
 int zUtils::hasPlatform() {
     // clang-format off
-    #ifdef Q_OS_LINUX
+    #if defined(Q_OS_LINUX)
         return static_cast<int>(Platform::LINUX);
-    #elif Q_OS_DARWIN
+    #elif defined(Q_OS_MACOS)
         return static_cast<int>(Platform::MACOS);
-    #elif Q_OS_WINDOWS
+    #elif defined(Q_OS_WINDOWS)
         return static_cast<int>(Platform::WINDOWS);
     #else
         return static_cast<int>(Platform::UNKNOWN);
