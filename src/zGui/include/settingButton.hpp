@@ -35,7 +35,7 @@ class SettingButton : public QObject {
    private:
     void showSettingDialog(QWidget *parent);
     void addGui(QGridLayout *layout, QDialog *dialog);
-    void addGuiLanguageSetting(const SettingWidget &settingWidget);
+    void addSettingAction(const SettingWidget &params);
 
    private:
     SettingCore *settingCore;
