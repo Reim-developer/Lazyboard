@@ -1,4 +1,0 @@
-#ifndef NOTIFICATION_HPP
-#define NOTIFICATION_HPP
-
-#endif  // NOTIFICATION_HPP
