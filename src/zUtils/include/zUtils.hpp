@@ -3,22 +3,15 @@
 #include <QString>
 #include <QSystemTrayIcon>
 #include "../../language/include/translate.hpp"
+#include "../../core/include/enum.hpp"
 #include <QWidget>
 #include <QObject>
 #include <QMimeData>
 
+using zclipboard::core::Platform;
 using zclipboard::language::Translate;
 
 namespace zclipboard {
-
-// clang-format off
-enum class ContentType : int {
-    TEXT,
-    IMAGE,
-    UNKNOWN
-};
-// clang-format on
-
 class zUtils : public QObject {
     Q_OBJECT
 
@@ -28,6 +21,7 @@ class zUtils : public QObject {
     static bool getAutoNotificationSetting();
     static void textClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
     static void imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
+    static int hasPlatform();
     static int hasContentType(const QMimeData *mimeData);
     static Translate::LanguageType languageTypeCast(int value);
     static bool getLanguageSetting();
