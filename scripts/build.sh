@@ -28,9 +28,14 @@ debug_build() {
     cmake_detect
     
     cd "$build_dir" || exit 1
+
+    unset CC CXX
     cmake "$debug_flag" \
         ..
 
+    export CXX="ccache clang++"
+    export CC="ccache clang"
+    
     make
     ./"$program_name"
 }
@@ -40,10 +45,13 @@ normal_build() {
      cmake_detect
 
     cd "$build_dir" || exit 1
+
+    unset CC CXX
     cmake "$wall_flag" \
-        -DCMAKE_CXX_COMPILER=clang \
         ..
-        
+    
+    export CXX="ccache clang++"
+    export CC="ccache clang"
     make
     ./"$program_name"
 }
