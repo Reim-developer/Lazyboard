@@ -1,14 +1,19 @@
-#include "include/enum.hpp"
 #define QT_NO_KEYWORDS
+#include <QtGlobal>
+
+#if defined(Q_OS_LINUX)
 #include <glib-object.h>
 #include <libnotify/notification.h>
+#include <libnotify/notify.h>
+#endif
+
+#include "include/enum.hpp"
 #include "include/notification.hpp"
 #include "../zUtils/include/config.hpp"
 #include "../zUtils/include/zUtils.hpp"
 #include "../language/include/translate.hpp"
 #include "../language/include/language.hpp"
 #include "../zUtils/include/settings.hpp"
-#include <libnotify/notify.h>
 #include <QString>
 #include <QSettings>
 
