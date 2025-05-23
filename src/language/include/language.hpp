@@ -1,5 +1,5 @@
-#ifndef TRANSLATOR_HPP 
-#define TRANSLATOR_HPP 
+#ifndef LANGUAGE_HPP 
+#define LANGUAGE_HPP 
 // Generate by zClipboard Toolchain.
 // For more information. Please see tools/xml.
 
@@ -11,6 +11,10 @@ inline constexpr const char DISCONNECT_EN[] = "\x44\x69\x73\x63\x6f\x6e\x6e\x65\
 inline constexpr const char CLEAR_HISTORY_VI[] = "\x58\xc3\xb3\x61\x20\x6c\xe1\xbb\x8b\x63\x68\x20\x73\xe1\xbb\xad";
 // Expands to: Clear.
 inline constexpr const char CLEAR_HISTORY_EN[] = "\x43\x6c\x65\x61\x72";
+// Expands to: Đã xóa lịch sử.
+inline constexpr const char CLEAR_HISTORY_ACTION_VI[] = "\xc4\x90\xc3\xa3\x20\x78\xc3\xb3\x61\x20\x6c\xe1\xbb\x8b\x63\x68\x20\x73\xe1\xbb\xad";
+// Expands to: Cleaned.
+inline constexpr const char CLEAR_HISTORY_ACTION_EN[] = "\x43\x6c\x65\x61\x6e\x65\x64";
 // Expands to: Tìm kiếm....
 inline constexpr const char SEARCH_PANEL_VI[] = "\x54\xc3\xac\x6d\x20\x6b\x69\xe1\xba\xbf\x6d\x2e\x2e\x2e";
 // Expands to: Search....
