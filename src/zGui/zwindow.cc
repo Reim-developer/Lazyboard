@@ -89,10 +89,7 @@ void ZWindow::setupGui() {
 
     notificationCore->onClipboardChanged(trayIcon, clipboard);
 
-    // zUtils::textClipboardChanges(trayIcon, clipboard);
-    // zUtils::imageClipboardChanges(trayIcon, clipboard);
     connect(trayIcon, &QSystemTrayIcon::activated, this, &ZWindow::onTrayIconActivated);
-
     // clang-format on
 }
 
