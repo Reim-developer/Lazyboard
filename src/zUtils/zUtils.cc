@@ -46,6 +46,7 @@ int zUtils::hasPlatform() {
     #else
         return static_cast<int>(Platform::UNKNOWN);
     #endif
+    // clang-format on
 }
 
 bool zUtils::getAutoHideSetting() {
@@ -56,29 +57,6 @@ bool zUtils::getAutoHideSetting() {
 bool zUtils::getAutoNotificationSetting() {
     QSettings settings(AUTHOR_NAME, APP_NAME);
     return settings.value(AUTO_NOTIFICATION_SETTING, false).toBool();
-}
-
-void zUtils::textClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard) {
-    connect(clipboard, &QClipboard::dataChanged, [trayIcon, clipboard]() {
-        const QMimeData *mimeData = clipboard->mimeData();
-
-        if (getAutoNotificationSetting() && mimeData->hasText()) {
-            trayIcon->showMessage("Clipboard updated",
-                                  "New text content has been copied to your clipboard.",
-                                  QSystemTrayIcon::Information, 5000);
-        }
-    });
-}
-
-void zUtils::imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard) {
-    connect(clipboard, &QClipboard::dataChanged, [trayIcon, clipboard]() {
-        const QMimeData *mimeData = clipboard->mimeData();
-        if (getAutoNotificationSetting() && mimeData->hasImage()) {
-            trayIcon->showMessage("Clipboard updated",
-                                  "New image has been copied to your clipboard.",
-                                  QSystemTrayIcon::Information, 5000);
-        }
-    });
 }
 
 bool zUtils::getLanguageSetting() {

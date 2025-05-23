@@ -56,6 +56,7 @@ void ZWindow::setupGui() {
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
     systemTray = new SystemTray(this);
+    notificationCore = new NotificationCore();
 
     // clang-format off
     struct SearchPanelWidget searchPanelWidget {
@@ -86,10 +87,9 @@ void ZWindow::setupGui() {
     const auto trayIcon = systemTray->getSystemTrayIcon();
     const auto clipboard = ztable->getClipboard();
 
-    zUtils::textClipboardChanges(trayIcon, clipboard);
-    zUtils::imageClipboardChanges(trayIcon, clipboard);
-    connect(trayIcon, &QSystemTrayIcon::activated, this, &ZWindow::onTrayIconActivated);
+    notificationCore->onClipboardChanged(trayIcon, clipboard);
 
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &ZWindow::onTrayIconActivated);
     // clang-format on
 }
 

@@ -19,8 +19,6 @@ class zUtils : public QObject {
     static QString getCachePath();
     static bool getAutoHideSetting();
     static bool getAutoNotificationSetting();
-    static void textClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
-    static void imageClipboardChanges(QSystemTrayIcon *trayIcon, QClipboard *clipboard);
     static int hasPlatform();
     static int hasContentType(const QMimeData *mimeData);
     static Translate::LanguageType languageTypeCast(int value);
