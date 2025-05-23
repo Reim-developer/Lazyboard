@@ -1,3 +1,4 @@
+#include <qlogging.h>
 #define QT_NO_KEYWORDS
 #include <QtGlobal>
 
@@ -7,6 +8,8 @@
 #include <libnotify/notify.h>
 #endif
 
+#include <QFile>
+#include <QTemporaryFile>
 #include "include/enum.hpp"
 #include "include/notification.hpp"
 #include "../zUtils/include/config.hpp"
@@ -60,32 +63,54 @@ void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIc
     trayIcon->showMessage(title, body, QSystemTrayIcon::Information, 5000);
 }
 
+// clang-format off
 #if defined(Q_OS_LINUX)
-void NotificationCore::sendLinuxNotification(const int &TYPE) {
-    static bool initialized = false;
+    void NotificationCore::sendLinuxNotification(const int &TYPE) {
+        static bool initialized = false;
 
-    if (!initialized) {
-        notify_init(APP_NAME);
-        initialized = true;
+        if (!initialized) {
+            notify_init(APP_NAME);
+            initialized = true;
+        }
+
+        const char *title = nullptr;
+        const char *body = nullptr;
+        const constexpr int TIMEOUT = 5000;  // 5000 MS.
+
+        switch (static_cast<Translate::LanguageType>(TYPE)) {
+            case Translate::VIETNAMESE:
+                title = CLIPBOARD_CHANGED_TITLE_VI;
+                body = CLIPBOARD_CHANGED_TEXT_VI;
+                break;
+
+            case Translate::ENGLISH:
+                title = CLIPBOARD_CHANGED_TITLE_EN;
+                body = CLIPBOARD_CHANGED_TEXT_EN;
+                break;
+        }
+
+
+        QFile resourceFile(ICON_PATH);
+        resourceFile.open(QIODevice::ReadOnly);
+
+        QByteArray iconData = resourceFile.readAll();
+        resourceFile.close();
+
+        QTemporaryFile tempFile;
+        tempFile.open();
+        tempFile.write(iconData);
+        tempFile.close();
+
+        QByteArray iconPathByte = tempFile.fileName().toUtf8();
+        const char* iconPath = iconPathByte.constData();
+
+        qDebug() << iconPath;
+
+        NotifyNotification *notification = notify_notification_new(title, body, iconPath);
+
+        notify_notification_set_timeout(notification, TIMEOUT);
+        notify_notification_show(notification, nullptr);
+
+        g_object_unref(notification);
     }
-
-    const char *title = nullptr;
-    const char *body = nullptr;
-
-    switch (static_cast<Translate::LanguageType>(TYPE)) {
-        case Translate::VIETNAMESE:
-            title = CLIPBOARD_CHANGED_TITLE_VI;
-            body = CLIPBOARD_CHANGED_TEXT_VI;
-            break;
-
-        case Translate::ENGLISH:
-            title = CLIPBOARD_CHANGED_TITLE_EN;
-            body = CLIPBOARD_CHANGED_TEXT_EN;
-            break;
-    }
-
-    NotifyNotification *notification = notify_notification_new(title, body, nullptr);
-    notify_notification_show(notification, nullptr);
-    g_object_unref(notification);
-}
 #endif
