@@ -3,6 +3,8 @@
 #include "../language/include/translate.hpp"
 #include "../zGui/include/zwindow.hpp"
 #include "../zGui/include/LanguageManager.hpp"
+#include "../zUtils/include/zUtils.hpp"
+#include "../zUtils/include/settings.hpp"
 
 using zclipboard::core::SystemTrayCore;
 using zclipboard::core::SystemTrayParams;
@@ -20,14 +22,32 @@ void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params
               [this, menu, window](int newLanguage) {
 
         struct SystemTrayParams params {
-            .trayMenu = menu,
             .window = window,
+            .trayMenu = menu,
             .TYPE = newLanguage
         };
         loadTranslator(params); 
     });
 
     // clang-format on
+}
+
+void SystemTrayCore::translatorDectect(const SystemTrayParams &params) {
+    if (!zUtils::getLanguageSetting()) {
+        params.settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
+    }
+
+    const int TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
+
+    // clang-format off
+    struct SystemTrayParams systemTrayParams {
+        .window = params.window,
+        .trayMenu = params.trayMenu,
+        .TYPE = TYPE
+    };
+    // clang-format on
+
+    loadTranslator(systemTrayParams);
 }
 
 void SystemTrayCore::loadTranslator(const SystemTrayParams &params) {
