@@ -56,6 +56,7 @@ void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIc
     trayIcon->showMessage(title, body, QSystemTrayIcon::Information, 5000);
 }
 
+#if defined(Q_OS_LINUX)
 void NotificationCore::sendLinuxNotification(const int &TYPE) {
     static bool initialized = false;
 
@@ -83,3 +84,4 @@ void NotificationCore::sendLinuxNotification(const int &TYPE) {
     notify_notification_show(notification, nullptr);
     g_object_unref(notification);
 }
+#endif
