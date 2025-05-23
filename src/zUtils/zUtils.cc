@@ -11,14 +11,41 @@
 #include "../language/include/translate.hpp"
 
 using namespace zclipboard;
+using zclipboard::core::ContentType;
+using zclipboard::core::Platform;
 using zclipboard::language::Translate;
 
 QString zUtils::getCachePath() {
-#ifdef Q_OS_WIN
-    return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-#else
-    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-#endif
+    switch (hasPlatform()) {
+        case static_cast<int>(Platform::LINUX):
+            return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+
+        case static_cast<int>(Platform::MACOS):
+            return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+
+        case static_cast<int>(Platform::WINDOWS):
+            return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+
+        // Unknown operating system.
+        default:
+            return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    }
+}
+
+/*
+* Test from: tests/platform.
+*/
+int zUtils::hasPlatform() {
+    // clang-format off
+    #ifdef Q_OS_LINUX
+        return static_cast<int>(Platform::LINUX);
+    #elif Q_OS_DARWIN
+        return static_cast<int>(Platform::MACOS);
+    #elif Q_OS_WINDOWS
+        return static_cast<int>(Platform::WINDOWS);
+    #else
+        return static_cast<int>(Platform::UNKNOWN);
+    #endif
 }
 
 bool zUtils::getAutoHideSetting() {
