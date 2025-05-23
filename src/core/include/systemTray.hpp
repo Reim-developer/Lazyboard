@@ -4,18 +4,23 @@
 #include <QAction>
 #include <QMenu>
 #include <QApplication>
+#include <QSettings>
 
 namespace zclipboard::core {
 struct SystemTrayParams {
-    QMenu *trayMenu;
     QMainWindow *window;
-    const int &TYPE;
+    QSettings *settings;
+    QMenu *trayMenu;
+    const int TYPE;
 };
 class SystemTrayCore : public QObject {
     Q_OBJECT
 
    public:
     void updateSwitchLanguageInstance(const SystemTrayParams &params);
+    void translatorDectect(const SystemTrayParams &params);
+
+   private:
     void loadTranslator(const SystemTrayParams &params);
 };
 }  // namespace zclipboard::core
