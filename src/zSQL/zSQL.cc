@@ -23,13 +23,13 @@ void zManagerSQL::zInitCache() {
 }
 
 void zManagerSQL::setupinitDB() {
-    QString dbPath = zUtils::getCachePath() + QStringLiteral("/zclipboard.db");
+    QString dbPath = zUtils::getCachePath() + DATABASE_FILE;
     QDir directory;
 
     if (!directory.exists(dbPath)) directory.mkpath(zUtils::getCachePath());
 
     if (!QSqlDatabase::contains(Z_DB_NAME)) {
-        zDB = QSqlDatabase::addDatabase("QSQLITE", Z_DB_NAME);
+        zDB = QSqlDatabase::addDatabase(SQL_TYPE, Z_DB_NAME);
         zDB.setDatabaseName(dbPath);
 
     } else {
@@ -40,14 +40,13 @@ void zManagerSQL::setupinitDB() {
 
     QSqlQuery sqlQuery(zDB);
     sqlQuery.exec(QStringLiteral(R"(
-            --sql
-            CREATE TABLE IF NOT EXISTS clipboard (
-                time TEXT, content TEXT,
-                content_hash TEXT PRIMARY KEY,
-                length INTEGER,
-                image_data BLOB,
-                is_pinned INTEGER DEFAULT 0
-            )    
+         CREATE TABLE IF NOT EXISTS clipboard (
+            time TEXT, content TEXT,
+            content_hash TEXT PRIMARY KEY,
+            length INTEGER,
+            image_data BLOB,
+            is_pinned INTEGER DEFAULT 0
+        )    
     )"));
 }
 
@@ -79,6 +78,5 @@ void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
         SET is_pinned = :is_pinned
         WHERE content_hash = :hash
     )");
-
     executeQuery(query, {{"hash", contentHash}, {"is_pinned", isPinned ? 1 : 0}});
 }
