@@ -14,8 +14,10 @@
 #include "getButton.hpp"
 #include "settingButton.hpp"
 #include "systemTray.hpp"
+#include "../../core/include/notification.hpp"
 #include <QSettings>
 
+using zclipboard::core::NotificationCore;
 using zclipboard::zGui::ClearButton;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
@@ -49,6 +51,8 @@ class ZWindow : public QMainWindow {
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
    private:
+    NotificationCore *notificationCore;
+
     QSettings *settings;
     QIcon zIcon;
     QWidget *zCentralWidget;
