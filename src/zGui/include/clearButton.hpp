@@ -16,7 +16,6 @@ class ClearButton : public QObject {
     QPushButton *getClearButton();
 
    private:
-    void clearCache(ZTable *table, QPushButton *clearButton);
     QSettings *settings;
     QPushButton *clearButton;
 };
