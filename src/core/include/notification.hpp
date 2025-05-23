@@ -1,6 +1,6 @@
 #ifndef NOTIFICATION_HPP
 #define NOTIFICATION_HPP
-#include <QtGlobal>
+
 #include <QSystemTrayIcon>
 #include <QClipboard>
 
