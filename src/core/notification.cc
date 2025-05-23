@@ -27,10 +27,14 @@ void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard 
         const auto LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
 
         if (zUtils::getAutoNotificationSetting() && mimeData->hasText()) {
-            if (zUtils::hasPlatform() == static_cast<int>(Platform::LINUX)) {
-                sendLinuxNotification(LANGUAGE_TYPE);
-                return;
-            }
+            // clang-format off
+            #if defined(Q_OS_LINUX)
+                if (zUtils::hasPlatform() == static_cast<int>(Platform::LINUX)) {
+                    sendLinuxNotification(LANGUAGE_TYPE);
+                    return;
+                }
+            #endif
+            // clang-format on
 
             sendNotification(LANGUAGE_TYPE, trayIcon);
         }
