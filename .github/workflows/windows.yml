@@ -2,7 +2,7 @@ name: Build zClipboard for Windows
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "dev"]
 
 jobs:
   build:
