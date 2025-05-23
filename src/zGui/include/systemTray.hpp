@@ -26,7 +26,6 @@ class SystemTray : public QMainWindow {
    private:
     QMainWindow *window;
     SystemTrayCore *systemTrayCore;
-    void translatorDectect(QMainWindow *window);
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
