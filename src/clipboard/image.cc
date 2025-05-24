@@ -5,8 +5,8 @@
 
 using namespace zclipboard::clipboard;
 
-void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard, zManagerSQL zSQL,
-                               QSet<QString> &zExistingImages) {
+void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
+                               const zManagerSQL &zSQL, QSet<QString> &zExistingImages) {
     const QMimeData *mimeData = zClipboard->mimeData();
     if (!mimeData || !mimeData->hasImage()) return;
 
