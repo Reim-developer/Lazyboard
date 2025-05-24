@@ -1,18 +1,6 @@
-#define QT_NO_KEYWORDS
 #include <QtGlobal>
-
-// clang-format off
-#if defined(Q_OS_LINUX)
-    #undef signals
-    #include <glib-object.h>
-    #include <libnotify/notification.h>
-    #include <libnotify/notify.h>
-    #include "include/embed_icon.hpp"
-#endif
-    #define signals Q_OBJECT_signals
-// clang-format on
-
 #include "include/enum.hpp"
+#include "./c/include/notification.h"
 #include "include/notification.hpp"
 #include "../zUtils/include/config.hpp"
 #include "../zUtils/include/zUtils.hpp"
@@ -34,7 +22,7 @@ void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard 
             // clang-format off
             #if defined(Q_OS_LINUX)
                 if (zUtils::hasPlatform() == static_cast<int>(Platform::LINUX)) {
-                    sendLinuxNotification(LANGUAGE_TYPE);
+                    notificationTranslator(LANGUAGE_TYPE);
                     return;
                 }
             #endif
@@ -66,31 +54,9 @@ void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIc
 
 // clang-format off
 #if defined(Q_OS_LINUX)
-    static GdkPixbuf *createPixbuf(const uint8_t *data, size_t length) {
-        GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
-        gdk_pixbuf_loader_write(loader, data, length, nullptr);
-
-        gdk_pixbuf_loader_close(loader, nullptr);
-
-        GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
-        g_object_ref(pixbuf);
-
-        g_object_unref(loader);
-        return pixbuf;
-    }
-
-
-    void NotificationCore::sendLinuxNotification(const int &TYPE) {
-        static bool initialized = false;
-
-        if (!initialized) {
-            notify_init(APP_NAME);
-            initialized = true;
-        }
-
+    void NotificationCore::notificationTranslator(const int &TYPE) {   
         const char *title = nullptr;
         const char *body = nullptr;
-        const constexpr int TIMEOUT = 5000;  // 5 MS.
 
         switch (static_cast<Translate::LanguageType>(TYPE)) {
             case Translate::VIETNAMESE:
@@ -104,15 +70,6 @@ void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIc
                 break;
         }
         
-        GdkPixbuf *pixbuf = createPixbuf(ICON_EMBED, ICON_EMBED_LEN);
-
-        NotifyNotification *notification = notify_notification_new(title, body, nullptr);
-
-        notify_notification_set_icon_from_pixbuf(notification, pixbuf);
-        notify_notification_set_timeout(notification, TIMEOUT);
-        notify_notification_show(notification, nullptr);
-
-        g_object_unref(notification);
-        g_object_unref(pixbuf);
+      sendLinuxNotification(title, body);
 }
 #endif
