@@ -4,8 +4,8 @@
 
 using zclipboard::clipboard::zText;
 
-void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, zManagerSQL zSQL,
-                             QSet<QString> &zExistingTextHashes) {
+void zText::addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard,
+                             const zManagerSQL &zSQL, QSet<QString> &zExistingTextHashes) {
     QString content = zClipboard->text();
     if (content.isEmpty()) return;
 
