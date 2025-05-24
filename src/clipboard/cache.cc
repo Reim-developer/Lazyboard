@@ -8,7 +8,7 @@
 
 using zclipboard::clipboard::zCacheManager;
 
-void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, zManagerSQL zSQL) {
+void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, const zManagerSQL& zSQL) {
     auto sqlQuery = zSQL.executeQueryResult(R"(
         --sql
         SELECT time, content, length, image_data, content_hash, is_pinned FROM clipboard
