@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.19)
 project(zclipboard)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_C_STANDARD 99)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -18,18 +19,11 @@ set(CXX_SOURCE)
 set(CXX_HEADER)
 set(ASSETS resources.qrc)
 
-file(GLOB_RECURSE SOURCES "src/*.cc")
-file(GLOB_RECURSE HEADER_SOURCES "src/*.hpp")
+file(GLOB_RECURSE SOURCES_CXX "src/*.cc")
+file(GLOB_RECURSE SOURCES_C "src/*.c")
+file(GLOB_RECURSE HEADER_SOURCES "src/*.h" "src/*.hpp")
 
-foreach(SOURCE_FILE ${SOURCES})
-    list(APPEND CXX_SOURCE ${SOURCE_FILE})
-endforeach()
-
-foreach(HEADER_FILE ${HEADER_SOURCES})
-    list(APPEND CXX_HEADER ${HEADER_FILE})
-endforeach()
-
-qt_add_executable(${PROJECT_NAME} ${CXX_SOURCE} ${CXX_HEADER} ${ASSETS})
+qt_add_executable(${PROJECT_NAME} ${SOURCES_CXX} ${SOURCES_C} ${HEADER_SOURCES} ${ASSETS})
 
 target_link_libraries(
     ${PROJECT_NAME}
