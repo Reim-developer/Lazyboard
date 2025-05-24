@@ -38,6 +38,13 @@ void zManagerSQL::setupinitDB() {
 
     if (!zDB.isOpen()) zDB.open();
 
+    m_updatePinQuery = QSqlQuery(zDB);
+    m_updatePinQuery.prepare(QStringLiteral(R"(
+            UPDATE clipboard
+            SET is_pinned = :is_pinned
+            WHERE content_hash = :hash
+    )"));
+
     QSqlQuery sqlQuery(zDB);
     sqlQuery.exec(QStringLiteral(R"(
          CREATE TABLE IF NOT EXISTS clipboard (
@@ -50,7 +57,7 @@ void zManagerSQL::setupinitDB() {
     )"));
 }
 
-void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) {
+void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) const {
     QSqlQuery sqlQuery(zDB);
     sqlQuery.prepare(sql);
 
@@ -61,7 +68,7 @@ void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) {
 }
 
 unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
-                                                      const QVariantMap &params) {
+                                                      const QVariantMap &params) const {
     auto sqlQuery = make_unique<QSqlQuery>(zDB);
     sqlQuery->prepare(sql);
 
@@ -73,10 +80,7 @@ unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
 }
 
 void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
-    QString query = QStringLiteral(R"(
-        UPDATE clipboard
-        SET is_pinned = :is_pinned
-        WHERE content_hash = :hash
-    )");
-    executeQuery(query, {{"hash", contentHash}, {"is_pinned", isPinned ? 1 : 0}});
+    m_updatePinQuery.bindValue(":hash", contentHash);
+    m_updatePinQuery.bindValue(":is_pinned", isPinned ? 1 : 0);
+    m_updatePinQuery.exec();
 }
