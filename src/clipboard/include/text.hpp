@@ -8,15 +8,15 @@
 #include "../../zSQL/include/zSQL.hpp"
 #include "../../zGui/include/zClipboardModel.hpp"
 
-using zclipboard::zSQL::zManagerSQL;
 using zclipboard::zGui::zTableModel;
+using zclipboard::zSQL::zManagerSQL;
 
 namespace zclipboard::clipboard {
-    class zText {
-        public:
-            void addTextClipboard(zTableModel *zModelTable,QClipboard *zClipboard, 
-                                  zManagerSQL zSQL, QSet<QString> &zExistingTextHashes);
-    };
-} // namespace zclipboard::clipboard
+class zText {
+   public:
+    void addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, const zManagerSQL &zSQL,
+                          QSet<QString> &zExistingTextHashes);
+};
+}  // namespace zclipboard::clipboard
 
-#endif 
+#endif
