@@ -37,7 +37,7 @@ class ZTable : public QObject {
 
     void addZtable(QWidget *zWindow, QGridLayout *zLayout);
     zTableModel *getZModel();
-    zManagerSQL getZSQL();
+    zManagerSQL &getZSQL();
     QClipboard *getClipboard();
 
    private:
