@@ -3,6 +3,7 @@
 #include <QString>
 #include <QVariantMap>
 #include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
 #include <string>
 #include <memory>
 
@@ -15,10 +16,13 @@ class zManagerSQL {
     zManagerSQL();
 
     void setupinitDB();
-    void executeQuery(const QString &sql, const QVariantMap &params = QVariantMap());
+    void executeQuery(const QString &sql, const QVariantMap &params = QVariantMap()) const;
     void updatePinStatus(const QString &contentHash, bool isPinned);
     unique_ptr<QSqlQuery> executeQueryResult(const QString &sql,
-                                             const QVariantMap &params = QVariantMap());
+                                             const QVariantMap &params = QVariantMap()) const;
+
+   private:
+    QSqlQuery m_updatePinQuery;
 
    private:
     static const constexpr char Z_DB_NAME[] = "ZClipboardDB";
