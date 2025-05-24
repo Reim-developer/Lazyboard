@@ -8,16 +8,15 @@
 #include "../../zSQL/include/zSQL.hpp"
 #include "../../zGui/include/zClipboardModel.hpp"
 
-using zclipboard::zSQL::zManagerSQL;
 using zclipboard::zGui::zTableModel;
+using zclipboard::zSQL::zManagerSQL;
 
 namespace zclipboard::clipboard {
-    class zImage {
-        public:
-            static void addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard, 
-                                          zManagerSQL zSQL, QSet<QString> &zExistingImages);
+class zImage {
+   public:
+    static void addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
+                                  const zManagerSQL &zSQL, QSet<QString> &zExistingImages);
+};
+}  // namespace zclipboard::clipboard
 
-    };
-} // namespace zclipboard::clipboard
-
-#endif // IMAGE_HPP
+#endif  // IMAGE_HPP
