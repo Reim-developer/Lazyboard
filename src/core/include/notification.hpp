@@ -11,7 +11,7 @@ class NotificationCore : public QObject {
    public:
     // clang-format off
     #if defined(Q_OS_LINUX)
-        void sendLinuxNotification(const int &TYPE);
+        void notificationTranslator(const int &TYPE);
     #endif
     // clang-format on
     void sendNotification(const int &TYPE, QSystemTrayIcon *trayIcon);
