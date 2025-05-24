@@ -4,8 +4,8 @@ gen_embed_icon() {
     local embed_img_file="embed_img.py"
     local icon_path="../../assets/icon.png"
     local tmp_script_path="../../tools"
-    local header_path="embed_icon.hpp"
-    local header_name="core_embed_icon"
+    local header_path="embed_icon.h"
+    local header_name="CORE_EMBED_ICON"
     local var_name="ICON_EMBED"
 
     cp "$icon_path"  "$tmp_script_path" || exit 1
