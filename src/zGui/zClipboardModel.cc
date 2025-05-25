@@ -26,7 +26,7 @@ int zTableModel::columnCount(const QModelIndex &) const {
 }
 
 QVariant zTableModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid() || index.row() >= mData.size()) return QVariant();
+    if (!index.isValid() || index.row() >= mData.size() || index.row() < 0) return QVariant();
 
     const zClipboardItem &item = mData[index.row()];
 
@@ -117,6 +117,10 @@ QVariant zTableModel::headerData(int section, Qt::Orientation orientation, int r
 void zTableModel::addTextItem(const zClipboardItem &item) {
     if (m_existingHashes.contains(item.hash)) return;
 
+    if (item.hash.isEmpty()) {
+        return;
+    }
+
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     zClipboardItem clipboardItem;
@@ -135,6 +139,9 @@ void zTableModel::addTextItem(const zClipboardItem &item) {
 
 void zTableModel::addImageItem(const zClipboardItem &item) {
     if (m_existingHashes.contains(item.hash)) return;
+    if (item.hash.isEmpty()) {
+        return;
+    }
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
@@ -154,73 +161,109 @@ void zTableModel::addImageItem(const zClipboardItem &item) {
 
 void zTableModel::clearData() {
     beginResetModel();
-
     mData.clear();
     m_items.clear();
-
+    m_existingHashes.clear();
     endResetModel();
 }
 
 void zTableModel::filterItems(const QString &searchText) {
-    QList<zClipboardItem> filteredData;
+    beginResetModel();
 
-    for (const auto &item : m_items) {
-        if (item.content.contains(searchText) || item.hash.contains(searchText))
-            filteredData.append(item);
+    if (searchText.isEmpty()) {
+        mData = m_items;
+    } else {
+        QList<zClipboardItem> filteredData;
+        for (const auto &item : m_items) {
+            if (item.content.contains(searchText, Qt::CaseInsensitive) ||
+                item.hash.contains(searchText, Qt::CaseInsensitive))
+                filteredData.append(item);
+        }
+        mData = filteredData;
     }
 
-    beginResetModel();
-    mData = filteredData;
     endResetModel();
 }
 
 Qt::ItemFlags zTableModel::flags(const QModelIndex &index) const {
-    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
-
+    if (!index.isValid()) return Qt::NoItemFlags;
+    Qt::ItemFlags flags = QAbstractTableModel::flags(index);
     if (index.column() == Pin) flags |= Qt::ItemIsUserCheckable;
-
     return flags;
 }
 
 bool zTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-    if (!index.isValid()) return false;
-    if (role != Qt::CheckStateRole || index.column() != Pin) return false;
+    if (!index.isValid() || role != Qt::CheckStateRole || index.column() != Pin) return false;
 
-    if (index.row() >= mData.size()) {
+    if (index.row() >= mData.size() || index.row() < 0) {
         return false;
     }
 
-    zClipboardItem &item = mData[index.row()];
-    item.isPinned = (value.toInt() == Qt::Checked);
+    zClipboardItem itemToModify = mData[index.row()];
+    bool newPinState = (value.toInt() == Qt::Checked);
 
-    const int oldRow = index.row();
-    const int newRow = item.isPinned ? 0 : (mData.size() > 0 ? mData.size() : 0);
-
-    if (oldRow == newRow) {
-        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
-        emit dataChanged(index, index, {Qt::CheckStateRole});
+    if (newPinState == itemToModify.isPinned) {
         return true;
     }
 
-    if (newRow < 0 || newRow > mData.size()) {
-        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
-        return false;
+    itemToModify.isPinned = newPinState;
+
+    const int oldRow = index.row();
+    int targetRow = 0;
+
+    if (!itemToModify.isPinned) {
+        targetRow = 0;
+        while (targetRow < mData.size() && mData[targetRow].isPinned) {
+            targetRow++;
+        }
+
+        if (oldRow < targetRow) {
+            targetRow--;
+        }
+    } else {
+        targetRow = 0;
     }
 
-    if (!beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), newRow)) {
-        m_SqlManager.updatePinStatus(item.hash, item.isPinned);
-        return false;
+    const QString hashToUpdate = itemToModify.hash;
+    if (!hashToUpdate.isEmpty()) {
+        m_SqlManager.updatePinStatus(hashToUpdate, itemToModify.isPinned);
     }
 
-    const zClipboardItem movedItem = mData.takeAt(oldRow);
-    int adjustedNewRow = (oldRow < newRow) ? newRow - 1 : newRow;
+    if (oldRow != targetRow) {
+        if (targetRow < 0) {
+            targetRow = 0;
+        }
 
-    if (adjustedNewRow < 0 || adjustedNewRow > mData.size()) adjustedNewRow = mData.size();
+        if (targetRow > mData.size()) {
+            targetRow = mData.size();
+        }
 
-    mData.insert(adjustedNewRow, movedItem);
+        int effectiveTargetRow = (oldRow < targetRow) ? targetRow + 1 : targetRow;
 
-    endMoveRows();
+        if (!beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), effectiveTargetRow)) {
+            mData[oldRow].isPinned = !newPinState;
+            emit dataChanged(index, index, {Qt::CheckStateRole});
 
-    m_SqlManager.updatePinStatus(item.hash, item.isPinned);
+            return false;
+        }
+
+        zClipboardItem movedItem = mData.takeAt(oldRow);
+
+        movedItem.isPinned = newPinState;
+        mData.insert(targetRow, movedItem);
+
+        endMoveRows();
+
+        QModelIndex topLeft = createIndex(targetRow, 0);
+        QModelIndex bottomRight = createIndex(targetRow, columnCount() - 1);
+
+        if (topLeft.isValid() && bottomRight.isValid()) {
+            emit dataChanged(topLeft, bottomRight, {Qt::CheckStateRole});
+        }
+    } else {
+        mData[oldRow].isPinned = itemToModify.isPinned;
+        emit dataChanged(index, index, {Qt::CheckStateRole});
+    }
+
     return true;
 }
