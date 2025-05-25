@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVariantMap>
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
 #include <memory>
 
 using zclipboard::zSQL::zManagerSQL;
@@ -37,13 +38,6 @@ void zManagerSQL::setupinitDB() {
     }
 
     if (!zDB.isOpen()) zDB.open();
-
-    m_updatePinQuery = QSqlQuery(zDB);
-    m_updatePinQuery.prepare(QStringLiteral(R"(
-            UPDATE clipboard
-            SET is_pinned = :is_pinned
-            WHERE content_hash = :hash
-    )"));
 
     QSqlQuery sqlQuery(zDB);
     sqlQuery.exec(QStringLiteral(R"(
@@ -80,7 +74,17 @@ unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
 }
 
 void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
-    m_updatePinQuery.bindValue(":hash", contentHash);
-    m_updatePinQuery.bindValue(":is_pinned", isPinned ? 1 : 0);
-    m_updatePinQuery.exec();
+    QSqlQuery sqlQuery = QSqlQuery(zDB);
+    sqlQuery.prepare(QStringLiteral(R"(
+            UPDATE clipboard
+            SET is_pinned = :is_pinned
+            WHERE content_hash = :content_hash
+    )"));
+
+    sqlQuery.bindValue(":content_hash", contentHash);
+    sqlQuery.bindValue(":is_pinned", isPinned ? 1 : 0);
+
+    if (!sqlQuery.exec()) {
+        qDebug() << sqlQuery.lastError().text();
+    }
 }
