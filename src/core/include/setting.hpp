@@ -13,8 +13,13 @@ namespace zclipboard::core {
 struct SettingCoreParams {
     QDialog *dialog;
     QSettings *settings;
+    
     QLabel *languageDescription;
-    QComboBox *comboBox;
+    QLabel *themeDescription;
+
+    QComboBox *languageBox;
+    QComboBox *themeBox;
+
     QCheckBox *autoHideCheckBox;
     QCheckBox *autoNotificatonCheckBox;
     QCheckBox *checkBox;
@@ -27,6 +32,8 @@ class SettingCore : public QObject {
     void addLanguageSetting(const SettingCoreParams &params);
     void addHideSetting(const SettingCoreParams &params);
     void addNotificationSetting(const SettingCoreParams &params);
+    void onLanguageSettingChanged(const SettingCoreParams &params);
+    void addThemeSetting(const SettingCoreParams &params);
 };
 }  // namespace zclipboard::core
 
