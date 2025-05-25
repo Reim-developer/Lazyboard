@@ -35,13 +35,21 @@ class SettingButton : public QObject {
    private:
     void showSettingDialog(QWidget *parent);
     void addGui(QGridLayout *layout, QDialog *dialog);
-    void addSettingAction(const SettingWidget &params);
+    void addSettingCheckboxAction();
+    void addLanguageSectionAction(QDialog *dialog);
+    void addThemeSectionAction();
 
    private:
     SettingCore *settingCore;
     QSettings *settings;
     QPushButton *settingButton;
     QGridLayout *layout;
+
+    QLabel *languageDescription;
+    QLabel *themeDescription;
+
+    QComboBox *languageBox;
+    QComboBox *themeBox;
 
     QCheckBox *autoHideCheckBox;
     QCheckBox *autoNotificatonCheckBox;
