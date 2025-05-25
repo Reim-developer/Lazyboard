@@ -12,7 +12,7 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, const zM
     auto sqlQuery = zSQL.executeQueryResult(R"(
         --sql
         SELECT time, content, length, image_data, content_hash, is_pinned FROM clipboard
-        ORDER BY time DESC
+        ORDER BY is_pinned DESC, time DESC
     )");
 
     while (sqlQuery->next()) {
@@ -25,6 +25,10 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, const zM
 
         QImage image;
         if (!imageData.isEmpty()) image.loadFromData(imageData, "PNG");
+
+        if (contentHash.isEmpty()) {
+            qDebug() << "nullVaiLOn";
+        }
 
         if (!image.isNull()) {
             QPixmap pixmap = QPixmap::fromImage(image).scaled(128, 64, Qt::KeepAspectRatio);
