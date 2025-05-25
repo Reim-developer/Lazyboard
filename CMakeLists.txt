@@ -42,5 +42,8 @@ if(NOT WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE -lstdc++)
 endif()
 
-target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
+endif()
+
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
