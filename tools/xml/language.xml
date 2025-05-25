@@ -119,4 +119,15 @@
 
     <entry key="CLIPBOARD_CHANGED_IMAGE_VI">Hình ảnh mới được thêm vào bộ nhớ tạm.</entry>
     <entry key="CLIPBOARD_CHANGED_IMAGE_EN">New image has been copied to your clipboard.</entry>
+
+    <!-- Theme Section Widget -->
+    <entry key="DARK_THEME_SECTION_VI">Chế độ tối</entry>
+    <entry key="DARK_THEME_SECTION_EN">Dark mode</entry>
+
+    <entry key="LIGHT_THEME_SECTION_VI">Chế độ sáng</entry>
+    <entry key="LIGHT_THEME_SECTION_EN">Light mode</entry>
+
+    <!-- Theme Section Description Widget -->
+    <entry key="THEME_DESCRIPTION_VI">Màu hiển thị</entry>
+    <entry key="THEME_DESCRIPTION_EN">Display color</entry>
 </language>
