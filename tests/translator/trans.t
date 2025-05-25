@@ -49,7 +49,8 @@ die "[ERR] Could not find Make" unless tool_check("make");
 
 # If CMakeLists.txt is not exists & base directory test is not exists.
 gen_cmake("$test_name", "$cmake_base");
-my $build_dir = gen_base_dir("$cpp_source");
+my $c_type = "cc"; # C++
+my $build_dir = gen_base_dir("$cpp_source", "$c_type");
 run_test("$build_dir", "$test_name");
 
 print("Test passed.\n")
