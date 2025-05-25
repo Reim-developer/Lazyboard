@@ -54,6 +54,7 @@ target_link_libraries(
 END
 
 gen_cmake("$test_name", "$base_cmake");
-my $build_dir = gen_base_dir("$base_source");
+my $c_type = "cc"
+my $build_dir = gen_base_dir("$base_source", "$c_type");
 run_test("$build_dir", "$test_name");
 print "Test passed."
