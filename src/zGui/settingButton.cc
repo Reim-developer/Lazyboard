@@ -15,7 +15,6 @@ using zclipboard::core::SettingCoreParams;
 using zclipboard::language::Translate;
 using zclipboard::language::TransValue;
 using zclipboard::zGui::SettingButton;
-using zclipboard::zGui::SettingWidget;
 
 void SettingButton::addSettingButton(QWidget *window, QGridLayout *layout) {
     settingButton = new QPushButton(window);
@@ -56,10 +55,12 @@ void SettingButton::showSettingDialog(QWidget *parent) {
 }
 
 void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
-    autoHideCheckBox = new QCheckBox();
-    autoNotificatonCheckBox = new QCheckBox();
-    QComboBox *languageBox = new QComboBox();
-    QLabel *languageDescription = new QLabel();
+    autoHideCheckBox = new QCheckBox(dialog);
+    autoNotificatonCheckBox = new QCheckBox(dialog);
+    languageBox = new QComboBox(dialog);
+    themeBox = new QComboBox(dialog);
+    languageDescription = new QLabel(dialog);
+    themeDescription = new QLabel(dialog);
 
     const int LANGUAGE = settings->value(LANGUAGE_SETTING).toInt();
     const auto TYPE = zUtils::languageTypeCast(LANGUAGE);
@@ -77,38 +78,30 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
         .LANGUAGE_EN = NOTIFICATION_CHECKBOX_EN,
         .LANGUAGE_VI = NOTIFICATION_CHECKBOX_VI
     };
-
-    struct SettingWidget settingWidget {
-        .dialog = dialog,
-        .settings = settings,
-        .languageDescription = languageDescription,
-        .comboBox = languageBox
-    };
-
     // clang-format on
 
     autoHideCheckBox->setChecked(isHide);
     autoNotificatonCheckBox->setChecked(isNotification);
 
-    addSettingAction(settingWidget);
+    addSettingCheckboxAction();
+    addLanguageSectionAction(dialog);
+    addThemeSectionAction();
+
     Translate::translatorWidget(autoHideCheckBox, TYPE, minimizeValue);
     Translate::translatorWidget(autoNotificatonCheckBox, TYPE, notifiValue);
 
     layout->addWidget(autoHideCheckBox, 0, 0);
     layout->addWidget(autoNotificatonCheckBox, 1, 0);
-    layout->addWidget(languageDescription, 2, 1);
+
     layout->addWidget(languageBox, 2, 0);
+    layout->addWidget(themeBox, 3, 0);
+
+    layout->addWidget(languageDescription, 2, 1);
+    layout->addWidget(themeDescription, 3, 1);
 }
 
-void SettingButton::addSettingAction(const SettingWidget &params) {
+void SettingButton::addSettingCheckboxAction() {
     // clang-format off
-    struct SettingWidget languageSetting {
-        .dialog = params.dialog,
-        .settings = settings,
-        .languageDescription = params.languageDescription,
-        .comboBox = params.comboBox
-    };
-
     struct SettingCoreParams notifitionSetting {
         .settings = settings,
         .checkBox = autoNotificatonCheckBox,
@@ -118,20 +111,39 @@ void SettingButton::addSettingAction(const SettingWidget &params) {
         .settings = settings,
         .checkBox = autoHideCheckBox,
     };
+    // clang-format on
 
+    settingCore->addHideSetting(hideSetting);
+    settingCore->addNotificationSetting(notifitionSetting);
+}
+
+void SettingButton::addLanguageSectionAction(QDialog *dialog) {
+    // clang-format off
     struct SettingCoreParams settingLanguageParams {
-        .dialog = params.dialog,
+        .dialog = dialog,
         .settings = settings,
-        .languageDescription = params.languageDescription,
-        .comboBox = params.comboBox,
+        .languageDescription = languageDescription,
+        .themeDescription = themeDescription,
+        .languageBox = languageBox,
+        .themeBox = themeBox,
         .autoHideCheckBox = autoHideCheckBox,
         .autoNotificatonCheckBox = autoNotificatonCheckBox
     };
     // clang-format on
-
     settingCore->addLanguageSetting(settingLanguageParams);
-    settingCore->addHideSetting(hideSetting);
-    settingCore->addNotificationSetting(notifitionSetting);
+    settingCore->onLanguageSettingChanged(settingLanguageParams);
+}
+
+void SettingButton::addThemeSectionAction() {
+    // clang-format off
+    struct SettingCoreParams settingThemeParams{
+        .settings = settings,
+        .themeDescription = themeDescription,
+        .themeBox = themeBox
+    };
+    // clang-format on
+
+    settingCore->addThemeSetting(settingThemeParams);
 }
 
 QPushButton *SettingButton::getSettingButton() {
