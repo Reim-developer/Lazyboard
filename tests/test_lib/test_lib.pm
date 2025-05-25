@@ -35,14 +35,14 @@ sub gen_cpp_test {
 sub gen_base_dir {
     my $base_dir = "src";
     my $build_dir = "$base_dir/build";
-    my $cpp_main = "$base_dir/main.cc";
-    my ($cpp_source) = @_;
+    my ($cpp_source, $source_type) = @_;
+    my $source_main = "$base_dir/main.$source_type";
 
     if(! -d $base_dir) {
         print "Could not find $base_dir. Generate now...";
         make_path($build_dir) or die "Could not generate $base_dir & $build_dir $!\n";
 
-        open(my $cpp_file, ">", $cpp_main) or die "[ERR] Could not generate C++ source with error: $!\n";
+        open(my $cpp_file, ">", $source_main) or die "[ERR] Could not generate C++ source with error: $!\n";
         gen_cpp_test($cpp_file, $cpp_source);
 
         print "Generate C++ Test base successfully.\n";
