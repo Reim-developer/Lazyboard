@@ -23,7 +23,7 @@ void zManagerSQL::zInitCache() {
 }
 
 void zManagerSQL::setupinitDB() {
-    QString dbPath = zUtils::getCachePath() + DATABASE_FILE;
+    QString dbPath = zUtils::getCachePath() + "/" + DATABASE_FILE;
     QDir directory;
 
     if (!directory.exists(dbPath)) directory.mkpath(zUtils::getCachePath());
