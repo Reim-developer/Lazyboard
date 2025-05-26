@@ -9,6 +9,8 @@
 #include <QPointer>
 #include <QMimeData>
 #include "../language/include/translate.hpp"
+#include <QApplication>
+#include <QStyleFactory>
 
 using namespace zclipboard;
 using zclipboard::core::ContentType;
@@ -17,13 +19,13 @@ using zclipboard::language::Translate;
 
 QString zUtils::getCachePath() {
     switch (hasPlatform()) {
-        case static_cast<int>(Platform::LINUX):
+        case Platform::LINUX:
             return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
-        case static_cast<int>(Platform::MACOS):
+        case Platform::MACOS:
             return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
-        case static_cast<int>(Platform::WINDOWS):
+        case Platform::WINDOWS:
             return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 
         // Unknown operating system.
@@ -35,18 +37,42 @@ QString zUtils::getCachePath() {
 /*
 * Test from: tests/platform.
 */
-int zUtils::hasPlatform() {
+Platform zUtils::hasPlatform() {
     // clang-format off
     #if defined(Q_OS_LINUX)
-        return static_cast<int>(Platform::LINUX);
+        return Platform::LINUX;
     #elif defined(Q_OS_MACOS)
-        return static_cast<int>(Platform::MACOS);
+        return Platform::MACOS;
     #elif defined(Q_OS_WINDOWS)
-        return static_cast<int>(Platform::WINDOWS);
+        return Platform::WINDOWS;
     #else
-        return static_cast<int>(Platform::UNKNOWN);
+        return Platform::UNKNOWN;
     #endif
     // clang-format on
+}
+
+void zUtils::setDefaultTheme() {
+    switch (hasPlatform()) {
+        case Platform::LINUX:
+            QApplication::setStyle(QStyleFactory::create(LINUX_DEFAULT_THEME));
+            break;
+
+        case Platform::MACOS:
+            QApplication::setStyle(QStyleFactory::create(MACOS_DEFAULT_THEME));
+            break;
+
+        case Platform::WINDOWS:
+            QApplication::setStyle(QStyleFactory::create(WINDOWS_DEFAULT_THEME));
+            break;
+
+        case Platform::UNKNOWN:
+            break;
+    }
+}
+
+bool zUtils::hasDefaultSystemTheme() {
+    QSettings settings(AUTHOR_NAME, APP_NAME);
+    return settings.value(THEME_SETTING).toBool();
 }
 
 bool zUtils::getAutoHideSetting() {
