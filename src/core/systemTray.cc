@@ -61,7 +61,7 @@ void SystemTrayCore::loadTranslator(const SystemTrayParams &params) {
 
             connect(showAction, &QAction::triggered, params.window, &ZWindow::showNormal);
             connect(quitAction, &QAction::triggered, params.window, &QApplication::quit);
-            connect(showAction, &QAction::triggered, params.window, &ZWindow::hide);
+            connect(hideAction, &QAction::triggered, params.window, &ZWindow::hide);
             break;
         }
 
