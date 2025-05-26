@@ -21,7 +21,7 @@ void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard 
         if (zUtils::getAutoNotificationSetting() && mimeData->hasText()) {
             // clang-format off
             #if defined(Q_OS_LINUX)
-                if (zUtils::hasPlatform() == static_cast<int>(Platform::LINUX)) {
+                if (zUtils::hasPlatform() == Platform::LINUX) {
                     notificationTranslator(LANGUAGE_TYPE);
                     return;
                 }
