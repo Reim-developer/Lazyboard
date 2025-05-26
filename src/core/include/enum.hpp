@@ -16,6 +16,12 @@ namespace zclipboard::core {
         UNKNOWN
     };
 
+    enum class Theme : int {
+        SYSTEM,
+        DARK,
+        LIGHT
+    };
+
 }  // namespace zclipboard::core
 
 #endif  // CORE_ENUM_HPP
