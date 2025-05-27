@@ -33,7 +33,7 @@ void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params
 }
 
 void SystemTrayCore::translatorDectect(const SystemTrayParams &params) {
-    if (!zUtils::getLanguageSetting()) {
+    if (!zUtils::hasSetting(LANGUAGE_SETTING)) {
         params.settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
     }
 
