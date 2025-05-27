@@ -53,7 +53,7 @@ Platform zUtils::hasPlatform() {
 
 bool zUtils::hasSetting(const char *SETTING_NAME) {
     QSettings settings(AUTHOR_NAME, APP_NAME);
-    return settings.value(SETTING_NAME).toBool();
+    return settings.contains(SETTING_NAME);
 }
 
 Translate::LanguageType zUtils::languageTypeCast(int value) {
