@@ -10,9 +10,13 @@ using zclipboard::zGui::ZWindow;
 
 int main(int argc, char *argv[]) {
     unique_ptr<Application> zClipboard = make_unique<Application>();
-    zClipboard->loadTheme();
+    const bool IS_DEFAULT_THEME = zClipboard->loadDefaultTheme();
 
     QApplication application(argc, argv);
+    if (!IS_DEFAULT_THEME) {
+        zClipboard->loadSettingTheme(application);
+    }
+
     ZWindow zWindow;
     zWindow.show();
 
