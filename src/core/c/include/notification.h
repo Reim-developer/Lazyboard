@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 #define CORE_APP_NAME "zclipboard"
-#define TIMEOUT 5000  // 5 MS.
+#define TIMEOUT 5000  // 5s.
 #include <stdint.h>
 #include <glib-object.h>
 #include <libnotify/notification.h>
