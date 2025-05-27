@@ -4,5 +4,6 @@ compile_flags.txt
 test.sh
 *.tar.gz
 zClipboard-1.0.1
-zclipboard
 .cache
+# AUR repo
+aur 
