@@ -90,8 +90,8 @@ function build() {
 }
 
 function zclipboard_main() {
-    build_tools_check
     build_dir_generator
+    build_tools_check
 }
 
 zclipboard_main
