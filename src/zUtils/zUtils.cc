@@ -51,43 +51,9 @@ Platform zUtils::hasPlatform() {
     // clang-format on
 }
 
-void zUtils::setDefaultTheme() {
-    switch (hasPlatform()) {
-        case Platform::LINUX:
-            QApplication::setStyle(QStyleFactory::create(LINUX_DEFAULT_THEME));
-            break;
-
-        case Platform::MACOS:
-            QApplication::setStyle(QStyleFactory::create(MACOS_DEFAULT_THEME));
-            break;
-
-        case Platform::WINDOWS:
-            QApplication::setStyle(QStyleFactory::create(WINDOWS_DEFAULT_THEME));
-            break;
-
-        case Platform::UNKNOWN:
-            break;
-    }
-}
-
-bool zUtils::hasDefaultSystemTheme() {
+bool zUtils::hasSetting(const char *SETTING_NAME) {
     QSettings settings(AUTHOR_NAME, APP_NAME);
-    return settings.value(THEME_SETTING).toBool();
-}
-
-bool zUtils::getAutoHideSetting() {
-    QSettings settings(AUTHOR_NAME, APP_NAME);
-    return settings.value(AUTO_HIDE_SETTING, false).toBool();
-}
-
-bool zUtils::getAutoNotificationSetting() {
-    QSettings settings(AUTHOR_NAME, APP_NAME);
-    return settings.value(AUTO_NOTIFICATION_SETTING, false).toBool();
-}
-
-bool zUtils::getLanguageSetting() {
-    QSettings settings(AUTHOR_NAME, APP_NAME);
-    return settings.contains(LANGUAGE_SETTING);
+    return settings.value(SETTING_NAME).toBool();
 }
 
 Translate::LanguageType zUtils::languageTypeCast(int value) {
