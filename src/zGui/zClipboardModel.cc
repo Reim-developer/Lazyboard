@@ -77,7 +77,7 @@ QVariant zTableModel::headerData(int section, Qt::Orientation orientation, int r
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         QSettings settings(AUTHOR_NAME, APP_NAME);
 
-        if (!zUtils::getLanguageSetting()) {
+        if (!zUtils::hasSetting(LANGUAGE_SETTING)) {
             settings.setValue(LANGUAGE_SETTING, Translate::ENGLISH);
         }
 
