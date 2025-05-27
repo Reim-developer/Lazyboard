@@ -94,7 +94,7 @@ void ZWindow::setupGui() {
 }
 
 void ZWindow::closeEvent(QCloseEvent *event) {
-    if (zUtils::getAutoHideSetting()) {
+    if (zUtils::hasSetting(AUTO_HIDE_SETTING)) {
         hide();
         event->ignore();
     } else {
@@ -103,9 +103,8 @@ void ZWindow::closeEvent(QCloseEvent *event) {
 }
 
 void ZWindow::translatorDectect() {
-    if (!zUtils::getLanguageSetting()) {
+    if (!zUtils::hasSetting(LANGUAGE_SETTING)) {
         settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
-        return;
     }
 
     switch (settings->value(LANGUAGE_SETTING).toInt()) {
