@@ -33,6 +33,7 @@ class SettingCore : public QObject {
     void addHideSetting(const SettingCoreParams &params);
     void addNotificationSetting(const SettingCoreParams &params);
     void onLanguageSettingChanged(const SettingCoreParams &params);
+    void onThemeSettingChanged(const SettingCoreParams &params);
     void addThemeSetting(const SettingCoreParams &params);
 };
 }  // namespace zclipboard::core
