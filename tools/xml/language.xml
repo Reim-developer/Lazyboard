@@ -127,6 +127,9 @@
     <entry key="LIGHT_THEME_SECTION_VI">Chế độ sáng</entry>
     <entry key="LIGHT_THEME_SECTION_EN">Light mode</entry>
 
+    <entry key="SYSTEM_THEME_SECTION_VI">Mặc định hệ thống</entry>
+    <entry key="SYSTEM_THEME_SECTION_EN">System</entry>
+
     <!-- Theme Section Description Widget -->
     <entry key="THEME_DESCRIPTION_VI">Màu hiển thị</entry>
     <entry key="THEME_DESCRIPTION_EN">Display color</entry>
