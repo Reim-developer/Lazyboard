@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QMimeData>
 
+using zclipboard::core::ContentType;
 using zclipboard::core::Platform;
 using zclipboard::language::Translate;
 
@@ -20,7 +21,7 @@ class zUtils : public QObject {
     static Platform hasPlatform();
     static bool hasSetting(const char* SETTING_NAME);
 
-    static int hasContentType(const QMimeData* mimeData);
+    static ContentType hasContentType(const QMimeData* mimeData);
     static Translate::LanguageType languageTypeCast(int value);
 };
 }  // namespace zclipboard
