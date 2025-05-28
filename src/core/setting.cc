@@ -1,12 +1,15 @@
 #include "include/setting.hpp"
 #include "../zGui/include/LanguageManager.hpp"
+#include "../zGui/include/ThemeManager.hpp"
 #include "../language/include/translate.hpp"
 #include "../zUtils/include/settings.hpp"
 #include "../language/include/language.hpp"
+#include "include/enum.hpp"
 
 using zclipboard::core::SettingCore;
 using zclipboard::language::Translate;
 using zclipboard::zGui::LanguageManager;
+using zclipboard::zGui::ThemeManager;
 
 void SettingCore::addHideSetting(const SettingCoreParams &params) {
     connect(params.checkBox, &QCheckBox::toggled,
@@ -63,6 +66,7 @@ void SettingCore::onLanguageSettingChanged(const SettingCoreParams &params) {
         const auto DIALOG_TITLE = TYPE ? SETTING_DIALOG_VI : SETTING_DIALOG_EN;
         const auto DARK_MODE_SECTION_TEXT = TYPE ? DARK_THEME_SECTION_VI : DARK_THEME_SECTION_EN;
         const auto LIGHT_MODE_SECTION_TEXT = TYPE ? LIGHT_THEME_SECTION_VI : LIGHT_THEME_SECTION_EN;
+        const auto SYSTEM_MODE_SECTION_TEXT = TYPE ? SYSTEM_THEME_SECTION_VI : SYSTEM_THEME_SECTION_EN;
         // clang-format on
 
         params.languageDescription->setText(LABEL_LANGUAGE_DESCRIPTION);
@@ -72,20 +76,54 @@ void SettingCore::onLanguageSettingChanged(const SettingCoreParams &params) {
 
         params.themeBox->clear();
         params.themeDescription->setText(LABEL_THEME_DESCRIPTION);
+        params.themeBox->addItem(SYSTEM_MODE_SECTION_TEXT);
         params.themeBox->addItem(DARK_MODE_SECTION_TEXT);
         params.themeBox->addItem(LIGHT_MODE_SECTION_TEXT);
     });
 }
 
+void SettingCore::onThemeSettingChanged(const SettingCoreParams &params) {
+    // clang-format off
+    connect(params.themeBox, &QComboBox::currentIndexChanged, this, 
+        [themeBox = params.themeBox, settings = params.settings](const int BOX_INDEX) {
+
+        const int SELECTED_THEME = themeBox->itemData(BOX_INDEX).toInt();
+        settings->setValue(THEME_SETTING, SELECTED_THEME);
+
+        ThemeManager::instance().setTheme(SELECTED_THEME);
+    });
+    // clang-format on
+}
+
 void SettingCore::addThemeSetting(const SettingCoreParams &params) {
-    const auto TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
+    const auto LANGUAGE_TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
 
     /// Language display translator implement.
-    const auto DARK_MODE_SECTION_TEXT = TYPE ? DARK_THEME_SECTION_VI : DARK_THEME_SECTION_EN;
-    const auto LIGHT_MODE_SECTION_TEXT = TYPE ? LIGHT_THEME_SECTION_VI : LIGHT_THEME_SECTION_EN;
-    const auto LABEL_THEME_DESCRIPTION = TYPE ? THEME_DESCRIPTION_VI : THEME_DESCRIPTION_EN;
+    // clang-format off
+    const auto DARK_MODE_SECTION_TEXT = LANGUAGE_TYPE ? DARK_THEME_SECTION_VI : DARK_THEME_SECTION_EN;
+    const auto LIGHT_MODE_SECTION_TEXT = LANGUAGE_TYPE ? LIGHT_THEME_SECTION_VI : LIGHT_THEME_SECTION_EN;
+    const auto SYSTEM_MODE_SECTION_TEXT = LANGUAGE_TYPE ? SYSTEM_THEME_SECTION_VI : SYSTEM_THEME_SECTION_EN;
+    const auto LABEL_THEME_DESCRIPTION = LANGUAGE_TYPE ? THEME_DESCRIPTION_VI : THEME_DESCRIPTION_EN;
+    // clang-format on
 
-    params.themeBox->addItem(DARK_MODE_SECTION_TEXT);
-    params.themeBox->addItem(LIGHT_MODE_SECTION_TEXT);
+    const auto SYSTEM_THEME = static_cast<int>(Theme::SYSTEM);
+    const auto DARK_THEME = static_cast<int>(Theme::DARK);
+    const auto LIGHT_THEME = static_cast<int>(Theme::LIGHT);
+
+    params.themeBox->addItem(SYSTEM_MODE_SECTION_TEXT, SYSTEM_THEME);
+    params.themeBox->addItem(DARK_MODE_SECTION_TEXT, DARK_THEME);
+    params.themeBox->addItem(LIGHT_MODE_SECTION_TEXT, LIGHT_THEME);
     params.themeDescription->setText(LABEL_THEME_DESCRIPTION);
+
+    // clang-format off
+    const int CURRENT_THEME = params.settings->value(
+          THEME_SETTING, static_cast<int>(Theme::SYSTEM)).toInt();
+    // clang-format on
+
+    for (int index = 0; index < params.themeBox->count(); ++index) {
+        if (params.themeBox->itemData(index).toInt() == CURRENT_THEME) {
+            params.themeBox->setCurrentIndex(index);
+            break;
+        }
+    }
 }
