@@ -18,17 +18,19 @@ void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard 
         const QSettings settings(AUTHOR_NAME, APP_NAME);
         const auto LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
 
-        if (zUtils::hasSetting(AUTO_NOTIFICATION_SETTING) && mimeData->hasText()) {
-            // clang-format off
-            #if defined(Q_OS_LINUX)
-                if (zUtils::hasPlatform() == Platform::LINUX) {
-                    notificationTranslator(LANGUAGE_TYPE);
-                    return;
-                }
-            #endif
-            // clang-format on
+        if (zUtils::hasSetting(AUTO_NOTIFICATION_SETTING)) {
+            if (zUtils::hasContentType(mimeData) == ContentType::TEXT) {
+                // clang-format off
+                #if defined(Q_OS_LINUX)
+                    if (zUtils::hasPlatform() == Platform::LINUX) {
+                        notificationTranslator(LANGUAGE_TYPE);
+                        return;
+                    }
+                #endif
+                // clang-format on
 
-            sendNotification(LANGUAGE_TYPE, trayIcon);
+                sendNotification(LANGUAGE_TYPE, trayIcon);
+            }
         }
     });
 }
