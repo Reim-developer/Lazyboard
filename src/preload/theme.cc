@@ -8,11 +8,15 @@
 #include "../zUtils/include/settings.hpp"
 #include "../zUtils/include/config.hpp"
 #include "../core/include/enum.hpp"
+#include "../zGui/include/ThemeManager.hpp"
 
 using zclipboard::core::Theme;
 using zclipboard::preload::Application;
+using zclipboard::zGui::ThemeManager;
 
 void Application::setDefaultTheme() {
+    QApplication::setPalette(QPalette());
+
     switch (zUtils::hasPlatform()) {
         case Platform::LINUX:
             QApplication::setStyle(QStyleFactory::create(LINUX_DEFAULT_THEME));
@@ -46,6 +50,7 @@ void Application::setLightTheme(QApplication &application) {
     */
     palette.setColor(QPalette::ButtonText, LIGHT_FG_COLOR);
     palette.setColor(QPalette::Text, LIGHT_FG_COLOR);
+    palette.setColor(QPalette::WindowText, LIGHT_FG_COLOR);
 
     application.setPalette(palette);
 }
@@ -65,6 +70,7 @@ void Application::setDarkTheme(QApplication &application) {
     */
     palette.setColor(QPalette::ButtonText, DARK_FG_COLOR);
     palette.setColor(QPalette::Text, DARK_FG_COLOR);
+    palette.setColor(QPalette::WindowText, DARK_FG_COLOR);
 
     application.setPalette(palette);
 }
@@ -96,4 +102,27 @@ bool Application::loadDefaultTheme() {
     }
 
     return false;
+}
+
+void Application::reloadTheme(const int THEME) {
+    const auto APPLICATION = static_cast<QApplication *>(QCoreApplication::instance());
+
+    switch (THEME) {
+        case THEME_SYSTEM:
+            setDefaultTheme();
+            break;
+
+        case THEME_DARK:
+            setDarkTheme(*APPLICATION);
+            break;
+
+        case THEME_LIGHT:
+            setLightTheme(*APPLICATION);
+            break;
+    }
+}
+
+void Application::onSettingThemeChanged(QApplication &application) {
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this,
+            &Application::reloadTheme);
 }
