@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
         zClipboard->loadSettingTheme(application);
     }
 
+    zClipboard->onSettingThemeChanged(application);
+
     ZWindow zWindow;
     zWindow.show();
 
