@@ -61,9 +61,9 @@ Translate::LanguageType zUtils::languageTypeCast(int value) {
     return static_cast<Translate::LanguageType>(settings.value(LANGUAGE_SETTING).toInt());
 }
 
-int zUtils::hasContentType(const QMimeData *mimeData) {
-    if (mimeData->hasText()) return static_cast<int>(ContentType::TEXT);
-    if (mimeData->hasImage()) return static_cast<int>(ContentType::IMAGE);
+ContentType zUtils::hasContentType(const QMimeData *mimeData) {
+    if (mimeData->hasText()) return ContentType::TEXT;
+    if (mimeData->hasImage()) return ContentType::IMAGE;
 
-    return static_cast<int>(ContentType::UNKNOWN);
+    return ContentType::UNKNOWN;
 }
