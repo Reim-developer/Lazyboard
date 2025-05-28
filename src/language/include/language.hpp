@@ -155,6 +155,10 @@ inline constexpr const char DARK_THEME_SECTION_EN[] = "\x44\x61\x72\x6b\x20\x6d\
 inline constexpr const char LIGHT_THEME_SECTION_VI[] = "\x43\x68\xe1\xba\xbf\x20\xc4\x91\xe1\xbb\x99\x20\x73\xc3\xa1\x6e\x67";
 // Expands to: Light mode.
 inline constexpr const char LIGHT_THEME_SECTION_EN[] = "\x4c\x69\x67\x68\x74\x20\x6d\x6f\x64\x65";
+// Expands to: Mặc định hệ thống.
+inline constexpr const char SYSTEM_THEME_SECTION_VI[] = "\x4d\xe1\xba\xb7\x63\x20\xc4\x91\xe1\xbb\x8b\x6e\x68\x20\x68\xe1\xbb\x87\x20\x74\x68\xe1\xbb\x91\x6e\x67";
+// Expands to: System.
+inline constexpr const char SYSTEM_THEME_SECTION_EN[] = "\x53\x79\x73\x74\x65\x6d";
 // Expands to: Màu hiển thị.
 inline constexpr const char THEME_DESCRIPTION_VI[] = "\x4d\xc3\xa0\x75\x20\x68\x69\xe1\xbb\x83\x6e\x20\x74\x68\xe1\xbb\x8b";
 // Expands to: Display color.
