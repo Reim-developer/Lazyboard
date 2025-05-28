@@ -136,7 +136,7 @@ void SettingButton::addLanguageSectionAction(QDialog *dialog) {
 
 void SettingButton::addThemeSectionAction() {
     // clang-format off
-    struct SettingCoreParams settingThemeParams{
+    struct SettingCoreParams settingThemeParams {
         .settings = settings,
         .themeDescription = themeDescription,
         .themeBox = themeBox
@@ -144,6 +144,7 @@ void SettingButton::addThemeSectionAction() {
     // clang-format on
 
     settingCore->addThemeSetting(settingThemeParams);
+    settingCore->onThemeSettingChanged(settingThemeParams);
 }
 
 QPushButton *SettingButton::getSettingButton() {
