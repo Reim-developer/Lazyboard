@@ -11,6 +11,8 @@ namespace zclipboard::encryption {
 class EncryptionManager {
    private:
     static inline const constexpr char HASH_FILE_NAME[] = "zClipboard.bin";
+    static inline const constexpr char PATH_SLASH = '/';
+    static inline const constexpr char Z_ENCRYPT_FOLDER[] = "zEncryption";
 
    public:
     void removeClipboardData();
