@@ -16,7 +16,6 @@ class zManagerSQL {
     zManagerSQL();
 
     void setupinitDB();
-    void resetQueries();
     void executeQuery(const QString &sql, const QVariantMap &params = QVariantMap()) const;
     void updatePinStatus(const QString &contentHash, bool isPinned);
     unique_ptr<QSqlQuery> executeQueryResult(const QString &sql,
