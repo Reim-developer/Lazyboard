@@ -25,7 +25,8 @@ def gen_hpp(xml_file: str, output_file: str, key: str, header_name: str, typeNam
             value = entry.text or ""
 
             hex_value = utf8_to_hex(value)
-            xml.write(f"// Expands to: {value}.\n")
+            xml.write(f"/* Expands to:\n{value}\n")
+            xml.write("*/\n")
             xml.write(f'inline constexpr const {typeName} {key_upper}[] = "{hex_value}";\n')
 
         xml.write("\n")
