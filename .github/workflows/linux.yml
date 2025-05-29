@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             CI_SCRIPT: "scripts/ci_linux.sh"
-            APP_NAME: "zclipboard"
+            APP_NAME: "zClipboard"
 
         steps:
         - name: Checkout code
