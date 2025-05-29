@@ -14,7 +14,7 @@ using zclipboard::zSQL::zManagerSQL;
 namespace zclipboard::clipboard {
 class zImage {
    public:
-    static void addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
+    static void addClipboardImage(zTableModel *zModelTable, QClipboard *clipboard,
                                   const zManagerSQL &zSQL, QSet<QString> &zExistingImages);
 };
 }  // namespace zclipboard::clipboard
