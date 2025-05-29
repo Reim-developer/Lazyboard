@@ -2,7 +2,6 @@
 os_type=$(uname -s)
 program_name="zclipboard"
 build_dir="../build"
-debug_flag="-DCMAKE_BUILD_TYPE=Debug"
 wall_flag="-Wall"
 
 clang_detect() {
@@ -30,8 +29,8 @@ debug_build() {
     cd "$build_dir" || exit 1
 
     unset CC CXX
-    cmake "$debug_flag" \
-        ..
+    cmake -DCMAKE_BUILD_TYPE=Debug \
+          ..
 
     export CXX="ccache clang++"
     export CC="ccache clang"
@@ -48,6 +47,7 @@ normal_build() {
 
     unset CC CXX
     cmake "$wall_flag" \
+        -DZ_DEBUG=1 \
         ..
     
     export CXX="ccache clang++"
