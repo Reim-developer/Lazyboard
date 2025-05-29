@@ -2,7 +2,10 @@
 #include "../clipboard/include/image.hpp"
 #include "../clipboard/include/text.hpp"
 #include "../clipboard/include/cache.hpp"
+#include "../encryption/include/encryption.hpp"
+#include "../encryption/include/dialog_info.hpp"
 #include "include/zClipboardModel.hpp"
+#include "../core/include/enum.hpp"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QDateTime>
@@ -25,23 +28,33 @@ using std::make_unique;
 using zclipboard::clipboard::zCacheManager;
 using zclipboard::clipboard::zImage;
 using zclipboard::clipboard::zText;
+using zclipboard::core::HashState;
+using zclipboard::encryption::DialogInfo;
+using zclipboard::encryption::EncryptionManager;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::zTableModel;
 
-ZTable::ZTable() {
+void ZTable::setupDatabase(QWidget *parent) {
+    unique_ptr<EncryptionManager> encryption = make_unique<EncryptionManager>();
+
+    const auto HASH_STATE = encryption->addHashFile();
+    if (HASH_STATE == HashState::MODIFIED) {
+        unique_ptr<DialogInfo> dialogInfo = make_unique<DialogInfo>();
+
+        dialogInfo->showHashError(parent);
+    }
+
     zSQLManager.setupinitDB();
 }
 
-ZTable::~ZTable() {
-    delete zTableView;
-}
-
 void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
+    setupDatabase(zWindow);
+
     zModelTable = new zTableModel(zSQLManager, this);
     zTableView = new QTableView(zWindow);
     zClipboard = QApplication::clipboard();
-    zTableView->setModel(zModelTable);
 
+    zTableView->setModel(zModelTable);
     zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Time,
                                                          QHeaderView::ResizeToContents);
     zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Content,
