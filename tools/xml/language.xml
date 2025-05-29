@@ -133,4 +133,18 @@
     <!-- Theme Section Description Widget -->
     <entry key="THEME_DESCRIPTION_VI">Màu hiển thị</entry>
     <entry key="THEME_DESCRIPTION_EN">Display color</entry>
+
+    <!-- Warning Dialog Widget -->
+    <entry key="WARNING_DIALOG_TITLE_VI">Cảnh báo</entry>
+    <entry key="WARNING_DIALOG_TITLE_EN">Warning</entry>
+
+    <entry key="HASH_FILE_MODIFY_MSG_VI">
+        Tệp hash mặc định của ứng dụng đã bị thay đổi, chỉnh sửa, hoặc xóa.
+        Vì lí do bảo mật, mọi dữ liệu ở bộ nhớ tạm cũ, sẽ bị xóa
+    </entry>
+    <entry key="HASH_FILE_MODIFY_MSG_EN">
+        The application's default hash file has been changed, modified, or deleted.
+        For security reasons, all data in the old temporary memory will be erased.
+    </entry>
+
 </language>
