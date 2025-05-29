@@ -22,6 +22,11 @@ namespace zclipboard::core {
         LIGHT
     };
 
+    enum class HashState : int {
+        HASH_OK,
+        MODIFIED,
+    };
+
 }  // namespace zclipboard::core
 
 #endif  // CORE_ENUM_HPP
