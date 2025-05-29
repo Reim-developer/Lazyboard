@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(zclipboard)
+project(zClipboard)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 99)
@@ -33,6 +33,10 @@ target_link_libraries(
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
 )
+
+if(Z_DEBUG)
+    add_compile_definitions(${PROJECT_NAME} PRIVATE Z_DEBUG)
+endif()
 
 if(LINUX)
     target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::LIBNOTIFY)
