@@ -1,6 +1,6 @@
 #include "include/encryption.hpp"
 #include "../zUtils/include/zUtils.hpp"
-
+#include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QSettings>
@@ -20,13 +20,55 @@ void EncryptionManager::removeClipboardData() {
 
 auto EncryptionManager::addHashFile() -> HashState {
     const auto CACHE_PATH = zUtils::getCachePath();
-    const auto HASH_FILE = CACHE_PATH + "/" + HASH_FILE_NAME;
-    QFileInfo hashFilePath(HASH_FILE);
+    const auto HASH_FILE_LOCATION = CACHE_PATH + PATH_SLASH + Z_ENCRYPT_FOLDER;
+    const auto ENCRYPTION_FILE_PATH = HASH_FILE_LOCATION + PATH_SLASH + HASH_FILE_NAME;
 
-    if (!hashFilePath.exists()) {
+    QDir directory;
+    // clang-format off
+    #if defined(Z_DEBUG)
+        qDebug() << HASH_FILE_LOCATION;
+        qDebug() << ENCRYPTION_FILE_PATH;
+    #endif
+    // clang-format on
+
+    if (!directory.exists(HASH_FILE_LOCATION)) {
         removeClipboardData();
 
-        return HashState::MODIFIED;
+        // clang-format off
+        /*
+        * Debug macro, use with CMake flag:
+        * -DZ_DEBUG=1
+        */
+        QDir newDirectory;
+        #if defined(Z_DEBUG)
+            const auto result = newDirectory.mkpath(HASH_FILE_LOCATION);
+            qDebug() << "Cache Path Directory: " << CACHE_PATH;
+            qDebug() << "Hash File Location: " << HASH_FILE_LOCATION;
+            
+            if(!result) {
+                qDebug() << "Could not create path directory";
+            }
+            qDebug() << "Create directory successfully.";
+            
+            QFile encryptionFile(ENCRYPTION_FILE_PATH);
+            if(!encryptionFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                qDebug() << "Could not open and write file.";
+                qDebug() << encryptionFile.errorString();
+            }
+
+            qDebug() << "Created file successfully.";
+            encryptionFile.close();
+
+        #else
+            newDirectory.mkpath(HASH_FILE_LOCATION);
+            QFile encryptionFile(ENCRYPTION_FILE_PATH);
+
+            encryptionFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            encryptionFile.close();
+        #endif
+        // clang-format on
+
+        return HashState::DELETED;
     }
 
     return HashState::HASH_OK;
