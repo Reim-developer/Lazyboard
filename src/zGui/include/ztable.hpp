@@ -39,7 +39,7 @@ class ZTable : public QObject {
     QClipboard *getClipboard();
 
    private:
-    QClipboard *zClipboard;
+    QClipboard *clipboard;
     QTableView *zTableView;
     zTableModel *zModelTable;
 
