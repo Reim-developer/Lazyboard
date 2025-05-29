@@ -6,6 +6,7 @@
 #include <QVariantMap>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QtSql/QSqlDatabase>
 #include <memory>
 
 using zclipboard::zSQL::zManagerSQL;
@@ -20,27 +21,31 @@ void zManagerSQL::zInitCache() {
     QDir qDir;
     QString cachePath = zUtils::getCachePath();
 
-    if (!qDir.exists(cachePath)) qDir.mkdir(cachePath);
+    if (!qDir.exists(cachePath)) {
+        qDir.mkdir(cachePath);
+    }
 }
 
 void zManagerSQL::setupinitDB() {
-    QString dbPath = zUtils::getCachePath() + "/" + DATABASE_FILE;
+    const QString DATABASE_PATH = zUtils::getCachePath() + "/" + DATABASE_FILE;
     QDir directory;
 
-    if (!directory.exists(dbPath)) directory.mkpath(zUtils::getCachePath());
-
-    if (!QSqlDatabase::contains(Z_DB_NAME)) {
-        zDB = QSqlDatabase::addDatabase(SQL_TYPE, Z_DB_NAME);
-        zDB.setDatabaseName(dbPath);
-
-    } else {
-        zDB = QSqlDatabase::database(Z_DB_NAME);
+    if (!directory.exists(DATABASE_PATH)) {
+        directory.mkpath(zUtils::getCachePath());
     }
 
-    if (!zDB.isOpen()) zDB.open();
+    zDB = QSqlDatabase::addDatabase(SQL_TYPE, Z_DB_NAME);
+    zDB.setDatabaseName(DATABASE_PATH);
+
+    if (!zDB.isOpen()) {
+        if (!zDB.open()) {
+            qDebug() << "Error in class zManagerSQL: " << zDB.lastError().text();
+        }
+    }
 
     QSqlQuery sqlQuery(zDB);
-    sqlQuery.exec(QStringLiteral(R"(
+
+    if (!sqlQuery.exec(QStringLiteral(R"(
          CREATE TABLE IF NOT EXISTS clipboard (
             time TEXT, content TEXT,
             content_hash TEXT PRIMARY KEY,
@@ -48,15 +53,18 @@ void zManagerSQL::setupinitDB() {
             image_data BLOB,
             is_pinned INTEGER DEFAULT 0
         )    
-    )"));
+    )"))) {
+        qDebug() << "Error in 'exec', function: 'setupinitDB'";
+    }
 }
 
 void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) const {
     QSqlQuery sqlQuery(zDB);
     sqlQuery.prepare(sql);
 
-    for (auto it = params.begin(); it != params.end(); it++)
+    for (auto it = params.begin(); it != params.end(); it++) {
         sqlQuery.bindValue(":" + it.key(), it.value());
+    }
 
     sqlQuery.exec();
 }
@@ -84,7 +92,5 @@ void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
     sqlQuery.bindValue(":content_hash", contentHash);
     sqlQuery.bindValue(":is_pinned", isPinned ? 1 : 0);
 
-    if (!sqlQuery.exec()) {
-        qDebug() << sqlQuery.lastError().text();
-    }
+    sqlQuery.exec();
 }
