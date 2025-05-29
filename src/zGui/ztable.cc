@@ -38,7 +38,7 @@ void ZTable::setupDatabase(QWidget *parent) {
     unique_ptr<EncryptionManager> encryption = make_unique<EncryptionManager>();
 
     const auto HASH_STATE = encryption->addHashFile();
-    if (HASH_STATE == HashState::MODIFIED) {
+    if (HASH_STATE == HashState::DELETED) {
         unique_ptr<DialogInfo> dialogInfo = make_unique<DialogInfo>();
 
         dialogInfo->showHashError(parent);
@@ -52,7 +52,7 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
 
     zModelTable = new zTableModel(zSQLManager, this);
     zTableView = new QTableView(zWindow);
-    zClipboard = QApplication::clipboard();
+    clipboard = QApplication::clipboard();
 
     zTableView->setModel(zModelTable);
     zTableView->horizontalHeader()->setSectionResizeMode(zTableModel::Time,
@@ -73,19 +73,19 @@ void ZTable::addZtable(QWidget *zWindow, QGridLayout *zLayout) {
     zCache.addClipboardHistoryFromDB(zModelTable, zSQLManager);
 
     connect(zTableView, &QTableView::clicked, this, &ZTable::onContentClicked);
-    connect(zClipboard, &QClipboard::dataChanged, this, [this]() {
-        const QMimeData *mimeData = zClipboard->mimeData();
+    connect(clipboard, &QClipboard::dataChanged, this, [this]() {
+        const QMimeData *mimeData = clipboard->mimeData();
 
         if (mimeData->hasImage()) {
             if (!imageClipboard) imageClipboard = make_unique<zImage>();
 
-            imageClipboard->addClipboardImage(zModelTable, zClipboard, zSQLManager,
+            imageClipboard->addClipboardImage(zModelTable, clipboard, zSQLManager,
                                               zExistingContents);
             return;
         }
 
         if (!textClipboard) textClipboard = make_unique<zText>();
-        textClipboard->addTextClipboard(zModelTable, zClipboard, zSQLManager, zExistingContents);
+        textClipboard->addTextClipboard(zModelTable, clipboard, zSQLManager, zExistingContents);
     });
 }
 
@@ -144,5 +144,5 @@ zManagerSQL &ZTable::getZSQL() {
 }
 
 QClipboard *ZTable::getClipboard() {
-    return zClipboard;
+    return clipboard;
 }
