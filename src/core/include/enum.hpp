@@ -24,6 +24,7 @@ namespace zclipboard::core {
 
     enum class HashState : int {
         HASH_OK,
+        DELETED,
         MODIFIED,
     };
 
