@@ -5,9 +5,9 @@
 
 using namespace zclipboard::clipboard;
 
-void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *zClipboard,
+void zImage::addClipboardImage(zTableModel *zModelTable, QClipboard *clipboard,
                                const zManagerSQL &zSQL, QSet<QString> &zExistingImages) {
-    const QMimeData *mimeData = zClipboard->mimeData();
+    const QMimeData *mimeData = clipboard->mimeData();
     if (!mimeData || !mimeData->hasImage()) return;
 
     QImage clipboardImage = qvariant_cast<QImage>(mimeData->imageData());
