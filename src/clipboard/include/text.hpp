@@ -14,7 +14,7 @@ using zclipboard::zSQL::zManagerSQL;
 namespace zclipboard::clipboard {
 class zText {
    public:
-    void addTextClipboard(zTableModel *zModelTable, QClipboard *zClipboard, const zManagerSQL &zSQL,
+    void addTextClipboard(zTableModel *zModelTable, QClipboard *clipboard, const zManagerSQL &zSQL,
                           QSet<QString> &zExistingTextHashes);
 };
 }  // namespace zclipboard::clipboard
