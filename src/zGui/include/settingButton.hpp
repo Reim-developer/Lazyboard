@@ -45,6 +45,8 @@ class SettingButton : public QObject {
     QPushButton *settingButton;
     QGridLayout *layout;
 
+    QPushButton *setPasswordButton;
+
     QLabel *languageDescription;
     QLabel *themeDescription;
 
