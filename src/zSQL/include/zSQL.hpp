@@ -18,8 +18,9 @@ class zManagerSQL {
     void setupinitDB();
     void executeQuery(const QString &sql, const QVariantMap &params = QVariantMap()) const;
     void updatePinStatus(const QString &contentHash, bool isPinned);
-    unique_ptr<QSqlQuery> executeQueryResult(const QString &sql,
-                                             const QVariantMap &params = QVariantMap()) const;
+    void resetConnection();
+    QSqlQuery executeQueryResult(const QString &sql,
+                                 const QVariantMap &params = QVariantMap()) const;
 
    private:
     static const constexpr char Z_DB_NAME[] = "ZClipboardDB";
