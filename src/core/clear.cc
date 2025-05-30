@@ -13,15 +13,33 @@ void ClearCore::clearCache(const ClearCoreParams &params) {
     const constexpr char DB_NAME[] = "ZClipboardDB";
     const auto cachePath = zUtils::getCachePath() + "/" + DB_FILE;
 
-    QSqlDatabase database = QSqlDatabase::database(DB_NAME);
-    if (database.isOpen()) {
-        database.close();
-    }
-
     if (QFile(cachePath).exists()) {
         QFile(cachePath).remove();
     }
-    params.table->getZSQL().setupinitDB();
+
+    /* Flag for debug only.
+    * Usage with CMake flag:
+    * -DZ_DEBUG=1
+    */
+    // clang-format off
+    #if defined(Z_DEBUG)
+        params.table->getZSQL().resetConnection();
+        qDebug() << "Close database successfully";  
+                   
+    #else
+        params.table->getZSQL().resetConnection();
+    #endif
+    // clang-format on
+
+    QSqlDatabase::removeDatabase(DB_NAME);
+
+    // clang-format off
+    const auto function_initDB = [table = params.table]() { 
+        table->getZSQL().setupinitDB(); 
+    };
+    // clang-format on
+
+    QTimer::singleShot(500, function_initDB);
 
     // clang-format off
     const int LANGUAGE_TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
@@ -30,12 +48,10 @@ void ClearCore::clearCache(const ClearCoreParams &params) {
     // clang-format on
 
     params.button->setText(ACTION_BUTTON_TEXT);
-    params.table->getZModel()->clearData();
 
-    // clang-format off
-    QTimer::singleShot(1500, 
-                [clearButton = params.button, BUTTON_TEXT]() { 
-                      clearButton->setText(BUTTON_TEXT); 
-    });
-    // clang-format on
+    const auto function_setText = [clearButton = params.button, BUTTON_TEXT]() {
+        clearButton->setText(BUTTON_TEXT);
+    };
+
+    QTimer::singleShot(1500, function_setText);
 }
