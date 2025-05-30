@@ -147,4 +147,11 @@
         For security reasons, all data in the old temporary memory will be erased.
     </entry>
 
+    <!-- Set Password Button Widget -->
+    <entry key="SET_PASSWORD_VI">Thiết lập mật khẩu cho ứng dụng</entry>
+    <entry key="SET_PASSWORD_EN">Setup password for application</entry>
+
+    <!-- Set Password Dialog -->
+    <entry key="INPUT_PASSWORD_DIALOG_VI">Thiết lập mật khẩu cho ứng dụng</entry>
+    <entry key="INPUT_PASSWORD_DIALOG_EN">Setup password for application</entry>
 </language>
