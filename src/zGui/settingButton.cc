@@ -47,7 +47,7 @@ void SettingButton::showSettingDialog(QWidget *parent) {
 
     Translate::translatorWidget(dialog, TYPE, dialogValue);
 
-    dialog->setFixedSize(FIXED_WIDTH, FIXED_HEIGHT);
+    dialog->resize(FIXED_WIDTH, FIXED_HEIGHT);
     dialog->setWindowIcon(icon);
     dialog->setLayout(layout);
     addGui(layout, dialog);
@@ -61,6 +61,7 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
     themeBox = new QComboBox(dialog);
     languageDescription = new QLabel(dialog);
     themeDescription = new QLabel(dialog);
+    setPasswordButton = new QPushButton(dialog);
 
     const int LANGUAGE = settings->value(LANGUAGE_SETTING).toInt();
     const auto TYPE = zUtils::languageTypeCast(LANGUAGE);
@@ -78,6 +79,11 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
         .LANGUAGE_EN = NOTIFICATION_CHECKBOX_EN,
         .LANGUAGE_VI = NOTIFICATION_CHECKBOX_VI
     };
+
+    TransValue setPasswordValue {
+        .LANGUAGE_EN = SET_PASSWORD_EN,
+        .LANGUAGE_VI = SET_PASSWORD_VI
+    };
     // clang-format on
 
     autoHideCheckBox->setChecked(isHide);
@@ -86,9 +92,13 @@ void SettingButton::addGui(QGridLayout *layout, QDialog *dialog) {
     addSettingCheckboxAction();
     addLanguageSectionAction(dialog);
     addThemeSectionAction();
+    settingCore->onChangePassword(setPasswordButton, dialog);
 
     Translate::translatorWidget(autoHideCheckBox, TYPE, minimizeValue);
     Translate::translatorWidget(autoNotificatonCheckBox, TYPE, notifiValue);
+    Translate::translatorWidget(setPasswordButton, TYPE, setPasswordValue);
+
+    layout->addWidget(setPasswordButton, 3, 2);
 
     layout->addWidget(autoHideCheckBox, 0, 0);
     layout->addWidget(autoNotificatonCheckBox, 1, 0);
