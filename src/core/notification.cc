@@ -13,13 +13,14 @@ using zclipboard::core::NotificationCore;
 using zclipboard::language::Translate;
 
 void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard *clipboard) {
-    connect(clipboard, &QClipboard::dataChanged, [this, trayIcon, clipboard]() {
+    const auto functionNotification = [this, trayIcon, clipboard]() {
         const QMimeData *mimeData = clipboard->mimeData();
         const QSettings settings(AUTHOR_NAME, APP_NAME);
         const auto LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
 
         if (zUtils::hasSetting(AUTO_NOTIFICATION_SETTING)) {
             if (zUtils::hasContentType(mimeData) == ContentType::TEXT) {
+
                 // clang-format off
                 #if defined(Q_OS_LINUX)
                     if (zUtils::hasPlatform() == Platform::LINUX) {
@@ -32,7 +33,9 @@ void NotificationCore::onClipboardChanged(QSystemTrayIcon *trayIcon, QClipboard 
                 sendNotification(LANGUAGE_TYPE, trayIcon);
             }
         }
-    });
+    };
+
+    connect(clipboard, &QClipboard::dataChanged, functionNotification);
 }
 
 void NotificationCore::sendNotification(const int &TYPE, QSystemTrayIcon *trayIcon) {
