@@ -1,6 +1,6 @@
 #!/bin/bash
 os_type=$(uname -s)
-program_name="zclipboard"
+program_name="zClipboard"
 build_dir="../build"
 wall_flag="-Wall"
 
