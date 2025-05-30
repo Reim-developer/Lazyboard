@@ -16,17 +16,20 @@ using zclipboard::language::Translate;
 using zclipboard::language::TransValue;
 using zclipboard::zGui::SettingButton;
 
-void SettingButton::addSettingButton(QWidget *window, QGridLayout *layout) {
+void SettingButton::addSettingButton(QMainWindow *window, QGridLayout *layout) {
     settingButton = new QPushButton(window);
     settingCore = new SettingCore();
 
-    connect(settingButton, &QPushButton::clicked, this,
-            [this, window]() { showSettingDialog(window); });
+    const auto function = [this, window]() {
+        window->hide();
+        showSettingDialog(window);
+    };
+    connect(settingButton, &QPushButton::clicked, this, function);
 
     layout->addWidget(settingButton, 0, 3);
 }
 
-void SettingButton::showSettingDialog(QWidget *parent) {
+void SettingButton::showSettingDialog(QMainWindow *parent) {
     settings = new QSettings(AUTHOR_NAME, APP_NAME);
     QDialog *dialog = new QDialog(parent);
     layout = new QGridLayout(dialog);
@@ -46,6 +49,14 @@ void SettingButton::showSettingDialog(QWidget *parent) {
     const auto TYPE = zUtils::languageTypeCast(LANGUAGE);
 
     Translate::translatorWidget(dialog, TYPE, dialogValue);
+
+    // clang-format off
+    const auto function = [parent]() {
+        parent->show();
+    };
+    // clang-format on
+
+    connect(dialog, &QDialog::finished, this, function);
 
     dialog->resize(FIXED_WIDTH, FIXED_HEIGHT);
     dialog->setWindowIcon(icon);
