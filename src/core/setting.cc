@@ -17,17 +17,19 @@ using zclipboard::zGui::LanguageManager;
 using zclipboard::zGui::ThemeManager;
 
 void SettingCore::addHideSetting(const SettingCoreParams &params) {
-    connect(params.checkBox, &QCheckBox::toggled,
-            [this, settings = params.settings](bool isChecked) {
-                settings->setValue(AUTO_HIDE_SETTING, isChecked);
-            });
+    const auto function = [this, settings = params.settings](bool isChecked) {
+        settings->setValue(AUTO_HIDE_SETTING, isChecked);
+    };
+
+    connect(params.checkBox, &QCheckBox::toggled, function);
 }
 
 void SettingCore::addNotificationSetting(const SettingCoreParams &params) {
-    connect(params.checkBox, &QCheckBox::toggled,
-            [this, settings = params.settings](bool isChecked) {
-                settings->setValue(AUTO_NOTIFICATION_SETTING, isChecked);
-            });
+    const auto function = [this, settings = params.settings](bool isChecked) {
+        settings->setValue(AUTO_NOTIFICATION_SETTING, isChecked);
+    };
+
+    connect(params.checkBox, &QCheckBox::toggled, function);
 }
 
 void SettingCore::addLanguageSetting(const SettingCoreParams &params) {
@@ -52,7 +54,7 @@ void SettingCore::addLanguageSetting(const SettingCoreParams &params) {
 }
 
 void SettingCore::onLanguageSettingChanged(const SettingCoreParams &params) {
-    connect(params.languageBox, &QComboBox::currentIndexChanged, this, [params](int index) {
+    const auto function = [params](int index) {
         int selectedLanguage = params.languageBox->itemData(index).toInt();
         params.settings->setValue(LANGUAGE_SETTING, selectedLanguage);
 
@@ -84,20 +86,21 @@ void SettingCore::onLanguageSettingChanged(const SettingCoreParams &params) {
         params.themeBox->addItem(SYSTEM_MODE_SECTION_TEXT);
         params.themeBox->addItem(DARK_MODE_SECTION_TEXT);
         params.themeBox->addItem(LIGHT_MODE_SECTION_TEXT);
-    });
+    };
+
+    connect(params.languageBox, &QComboBox::currentIndexChanged, this, function);
 }
 
 void SettingCore::onThemeSettingChanged(const SettingCoreParams &params) {
-    // clang-format off
-    connect(params.themeBox, &QComboBox::currentIndexChanged, this, 
-        [themeBox = params.themeBox, settings = params.settings](const int BOX_INDEX) {
-
+    const auto function = [themeBox = params.themeBox,
+                           settings = params.settings](const int BOX_INDEX) {
         const int SELECTED_THEME = themeBox->itemData(BOX_INDEX).toInt();
         settings->setValue(THEME_SETTING, SELECTED_THEME);
 
         ThemeManager::instance().setTheme(SELECTED_THEME);
-    });
-    // clang-format on
+    };
+
+    connect(params.themeBox, &QComboBox::currentIndexChanged, this, function);
 }
 
 void SettingCore::addThemeSetting(const SettingCoreParams &params) {
