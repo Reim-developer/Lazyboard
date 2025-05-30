@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QComboBox>
 #include <QLabel>
+#include <QMainWindow>
 #include "../../core/include/setting.hpp"
 
 using zclipboard::core::SettingCore;
@@ -29,11 +30,11 @@ class SettingButton : public QObject {
     Q_OBJECT
 
    public:
-    void addSettingButton(QWidget *window, QGridLayout *layout);
+    void addSettingButton(QMainWindow *window, QGridLayout *layout);
     QPushButton *getSettingButton();
 
    private:
-    void showSettingDialog(QWidget *parent);
+    void showSettingDialog(QMainWindow *parent);
     void addGui(QGridLayout *layout, QDialog *dialog);
     void addSettingCheckboxAction();
     void addLanguageSectionAction(QDialog *dialog);
