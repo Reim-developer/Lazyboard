@@ -7,12 +7,9 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlDatabase>
-#include <memory>
 
 using zclipboard::zSQL::zManagerSQL;
 using namespace zclipboard;
-using std::make_unique;
-
 zManagerSQL::zManagerSQL() {
     zInitCache();
 }
@@ -27,7 +24,7 @@ void zManagerSQL::zInitCache() {
 }
 
 void zManagerSQL::setupinitDB() {
-    const QString DATABASE_PATH = zUtils::getCachePath() + "/" + DATABASE_FILE;
+    const QString DATABASE_PATH = zUtils::getCachePath() + '/' + DATABASE_FILE;
     QDir directory;
 
     if (!directory.exists(DATABASE_PATH)) {
@@ -38,24 +35,51 @@ void zManagerSQL::setupinitDB() {
     zDB.setDatabaseName(DATABASE_PATH);
 
     if (!zDB.isOpen()) {
-        if (!zDB.open()) {
-            qDebug() << "Error in class zManagerSQL: " << zDB.lastError().text();
-        }
+        // clang-format off
+        /*
+        * Debug flag only
+        * Use with CMake flag: -DZ_DEBUG=1
+        */
+        #if defined (Z_DEBUG)
+            if (!zDB.open()) {
+                qDebug() << "Error in class zManagerSQL: " << zDB.lastError().text();
+            }
+            qDebug() << "Successfully open database";
+        
+        #else
+            zDB.open();
+        #endif
+        // clang-format on    
     }
 
     QSqlQuery sqlQuery(zDB);
 
-    if (!sqlQuery.exec(QStringLiteral(R"(
-         CREATE TABLE IF NOT EXISTS clipboard (
-            time TEXT, content TEXT,
-            content_hash TEXT PRIMARY KEY,
-            length INTEGER,
-            image_data BLOB,
-            is_pinned INTEGER DEFAULT 0
-        )    
-    )"))) {
-        qDebug() << "Error in 'exec', function: 'setupinitDB'";
-    }
+    const auto CREATE_TABLE_QUERY = QStringLiteral(R"(
+        CREATE TABLE IF NOT EXISTS clipboard (
+           time TEXT, content TEXT,
+           content_hash TEXT PRIMARY KEY,
+           length INTEGER,
+           image_data BLOB,
+           is_pinned INTEGER DEFAULT 0
+       )    
+    )");
+    
+        /*
+        * Debug flag only
+        * Use with CMake flag: -DZ_DEBUG=1
+        */
+        // clang-format off
+        #if defined(Z_DEBUG)
+            if (!sqlQuery.exec(CREATE_TABLE_QUERY)) {
+                qDebug() << "Error when create clipboard history SQL table:";
+                qDebug() << sqlQuery.lastError().text();
+            }
+            qDebug() << "Successfully create SQLite table";
+            
+        #else
+            sqlQuery.exec(CREATE_TABLE_QUERY);
+        #endif
+    // clang-format on
 }
 
 void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) const {
@@ -66,18 +90,31 @@ void zManagerSQL::executeQuery(const QString &sql, const QVariantMap &params) co
         sqlQuery.bindValue(":" + it.key(), it.value());
     }
 
-    sqlQuery.exec();
+    /*
+    * Debug flag only
+    * Use with CMake flag: -DZ_DEBUG=1
+    */
+    // clang-format off
+    #if defined(Z_DEBUG)
+        if(!sqlQuery.exec()) {
+            qDebug() << "Could not exec SQL query with error:";
+            qDebug() << sqlQuery.lastError().text();
+        }
+
+    #else
+        sqlQuery.exec();
+    #endif 
 }
 
-unique_ptr<QSqlQuery> zManagerSQL::executeQueryResult(const QString &sql,
+QSqlQuery zManagerSQL::executeQueryResult(const QString &sql,
                                                       const QVariantMap &params) const {
-    auto sqlQuery = make_unique<QSqlQuery>(zDB);
-    sqlQuery->prepare(sql);
+    auto sqlQuery = QSqlQuery(zDB);
+    sqlQuery.prepare(sql);
 
     for (auto it = params.begin(); it != params.end(); it++)
-        sqlQuery->bindValue(":" + it.key(), it.value());
+        sqlQuery.bindValue(":" + it.key(), it.value());
 
-    sqlQuery->exec();
+    sqlQuery.exec();
     return sqlQuery;
 }
 
@@ -93,4 +130,8 @@ void zManagerSQL::updatePinStatus(const QString &contentHash, bool isPinned) {
     sqlQuery.bindValue(":is_pinned", isPinned ? 1 : 0);
 
     sqlQuery.exec();
+}
+
+void zManagerSQL::resetConnection() {
+    zDB = QSqlDatabase();
 }
