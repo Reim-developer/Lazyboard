@@ -102,13 +102,15 @@ void ZTable::onContentClicked(const QModelIndex &index) {
             )",
             {{"hash", contentHash}});
 
-        if (query->next()) {
-            QByteArray imageData = query->value(0).toByteArray();
+        if (query.next()) {
+            QByteArray imageData = query.value(0).toByteArray();
             QImage image;
             image.loadFromData(imageData, "PNG");
 
             if (!image.isNull()) {
-                if (!zDialog) zDialog = new ZDialog();
+                if (!zDialog) {
+                    zDialog = new ZDialog();
+                }
 
                 zDialog->showZImageDialog(image, zTableView);
                 return;
@@ -124,10 +126,12 @@ void ZTable::onContentClicked(const QModelIndex &index) {
         )",
             {{"hash", contentHash}});
 
-        query->exec();
-        if (query->next()) content = query->value(0).toString();
+        query.exec();
+        if (query.next()) content = query.value(0).toString();
 
-        if (!zDialog) zDialog = new ZDialog();
+        if (!zDialog) {
+            zDialog = new ZDialog();
+        }
 
         zDialog->showZContentDialog(content, zTableView);
     }
