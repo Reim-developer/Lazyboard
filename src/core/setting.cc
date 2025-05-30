@@ -5,9 +5,14 @@
 #include "../zUtils/include/settings.hpp"
 #include "../language/include/language.hpp"
 #include "include/enum.hpp"
+#include "../zGui/include/dialog.hpp"
+#include <memory>
 
+using std::make_unique;
+using std::unique_ptr;
 using zclipboard::core::SettingCore;
 using zclipboard::language::Translate;
+using zclipboard::zGui::GuiDialog;
 using zclipboard::zGui::LanguageManager;
 using zclipboard::zGui::ThemeManager;
 
@@ -126,4 +131,14 @@ void SettingCore::addThemeSetting(const SettingCoreParams &params) {
             break;
         }
     }
+}
+
+void SettingCore::onChangePassword(QPushButton *setPasswordButton, QWidget *parent) {
+    const auto function = [parent] {
+        unique_ptr<GuiDialog> guiDialog = make_unique<GuiDialog>();
+
+        guiDialog->showInputPassword(parent);
+    };
+
+    connect(setPasswordButton, &QPushButton::clicked, this, function);
 }
