@@ -6,6 +6,8 @@
 #include <QSettings>
 #include <QLabel>
 #include <QCheckBox>
+#include "../../zGui/include/dialog.hpp"
+using zclipboard::zGui::GuiDialog;
 
 namespace zclipboard::core {
 
@@ -32,9 +34,11 @@ class SettingCore : public QObject {
     void addLanguageSetting(const SettingCoreParams &params);
     void addHideSetting(const SettingCoreParams &params);
     void addNotificationSetting(const SettingCoreParams &params);
+    void addThemeSetting(const SettingCoreParams &params);
+
     void onLanguageSettingChanged(const SettingCoreParams &params);
     void onThemeSettingChanged(const SettingCoreParams &params);
-    void addThemeSetting(const SettingCoreParams &params);
+    void onChangePassword(QPushButton *setPasswordButton, QWidget *parent);
 };
 }  // namespace zclipboard::core
 
