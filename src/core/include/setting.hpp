@@ -38,7 +38,7 @@ class SettingCore : public QObject {
 
     void onLanguageSettingChanged(const SettingCoreParams &params);
     void onThemeSettingChanged(const SettingCoreParams &params);
-    void onChangePassword(QPushButton *setPasswordButton, QWidget *parent);
+    void onChangePassword(QPushButton *setPasswordButton, QDialog *parent);
 };
 }  // namespace zclipboard::core
 
