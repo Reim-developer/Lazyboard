@@ -154,4 +154,18 @@
     <!-- Set Password Dialog -->
     <entry key="INPUT_PASSWORD_DIALOG_VI">Thiết lập mật khẩu cho ứng dụng</entry>
     <entry key="INPUT_PASSWORD_DIALOG_EN">Setup password for application</entry>
+
+    <!-- Password Field Tooltip Widget -->
+    <entry key="PASSWORD_FIELD_TOOLTIP_VI">Nhập mật khẩu cho ứng dụng</entry>
+    <entry key="PASSWORD_FIELD_TOOLTIP_EN">Input password for application</entry>
+
+    <entry key="PASSWORD_SUBMIT_BUTTON_VI">Lưu mật khẩu</entry>
+    <entry key="PASSWORD_SUBMIT_BUTTON_EN">Save password</entry>
+
+    <!-- Password show/hide Widget-->
+    <entry key="PASSWORD_SHOW_BUTTON_VI">Hiển thị mật khẩu</entry>
+    <entry key="PASSWORD_SHOW_BUTTON_EN">Show password</entry>
+
+    <entry key="PASSWORD_HIDE_BUTTON_VI">Ẩn mật khẩu</entry>
+    <entry key="PASSWORD_HIDE_BUTTON_EN">Hide password</entry>
 </language>
