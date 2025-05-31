@@ -13,7 +13,7 @@
 
 using zclipboard::zGui::GuiDialog;
 
-void GuiDialog::showInputPassword(QWidget *parent) {
+void GuiDialog::showInputPassword(QDialog *parent) {
     QDialog *dialog = new QDialog(parent);
     QSettings settings(AUTHOR_NAME, APP_NAME);
 
@@ -29,7 +29,13 @@ void GuiDialog::showInputPassword(QWidget *parent) {
         qDebug() << "Current language setting: " << LANGUAGUE_TYPE;
         qDebug() << "Current dialog title: " << DIALOG_TITLE;
     #endif
+
+    const auto function = [parent]() {
+        parent->show();
+    };
     // clang-format on
+
+    connect(dialog, &QDialog::finished, this, function);
 
     dialog->setWindowTitle(DIALOG_TITLE);
     dialog->resize(DIALOG_WIDTH, DIALOG_HEIGHT);
