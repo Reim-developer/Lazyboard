@@ -12,13 +12,18 @@ typedef struct {
     QLineEdit *passwordInputField;
     QLineEdit *passwordInputField2;
     QSettings *settings;
-} changePasswordParameters;
+} ListenerDialogParameters;
 
 class ListenerDialog : public QObject {
     Q_OBJECT
 
+   private:
+    void showPasswordMismatchDialog(QSettings *settings, QDialog *parent);
+
    public:
-    void onChangePassword(const changePasswordParameters &params);
+    void onChangePassword(const ListenerDialogParameters &params);
+    void onSubmitPassword(const ListenerDialogParameters &params, QDialog *parent,
+                          QPushButton *submitButton);
 };
 }  // namespace zclipboard::listener
 
