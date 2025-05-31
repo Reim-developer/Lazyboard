@@ -15,8 +15,8 @@
 #endif
 // clang-format on
 
-using zclipboard::listener::changePasswordParameters;
 using zclipboard::listener::ListenerDialog;
+using zclipboard::listener::ListenerDialogParameters;
 using zclipboard::zGui::GuiDialog;
 
 void GuiDialog::showInputPassword(QDialog *parent) {
@@ -61,13 +61,14 @@ void GuiDialog::setupGui(QDialog *parent) {
     showPasswordButton = new QPushButton(parent);
 
     // clang-format off
-    changePasswordParameters listenerDialogParams {
+    ListenerDialogParameters listenerDialogParams {
         .showPasswordButton = showPasswordButton,
         .passwordInputField = passwordInputField,
         .passwordInputField2 = passwordInputField2,
         .settings = settings
     };
     listenerDialog->onChangePassword(listenerDialogParams);
+    listenerDialog->onSubmitPassword(listenerDialogParams, parent, submitButton);
 
     const int LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
     const auto TOOLTIP_TEXT = LANGUAGE_TYPE ? PASSWORD_FIELD_TOOLTIP_VI : PASSWORD_FIELD_TOOLTIP_EN;
