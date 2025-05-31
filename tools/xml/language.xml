@@ -168,4 +168,8 @@
 
     <entry key="PASSWORD_HIDE_BUTTON_VI">Ẩn mật khẩu</entry>
     <entry key="PASSWORD_HIDE_BUTTON_EN">Hide password</entry>
+
+    <!-- Dialog Password Widget-->
+    <entry key="PASSWORD_MISMATCH_VI">Mật khẩu không trùng khớp. Vui lòng thử lại</entry>
+    <entry key="PASSWORD_MISMATCH_EN">Password is mismatch. Please try again</entry> 
 </language>
