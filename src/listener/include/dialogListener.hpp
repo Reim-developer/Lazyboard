@@ -17,9 +17,6 @@ typedef struct {
 class ListenerDialog : public QObject {
     Q_OBJECT
 
-   private:
-    void showPasswordMismatchDialog(QSettings *settings, QDialog *parent);
-
    public:
     void onChangePassword(const ListenerDialogParameters &params);
     void onSubmitPassword(const ListenerDialogParameters &params, QDialog *parent,
