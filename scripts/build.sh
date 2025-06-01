@@ -25,7 +25,7 @@ cmake_detect() {
 debug_build() {
     clang_detect
     cmake_detect
-    
+
     cd "$build_dir" || exit 1
 
     unset CC CXX
@@ -62,7 +62,12 @@ invalid_args() {
 }
 
 match_build() {
-    case "$1" in "debug") debug_build ;;
+    if [ ! -d $build_dir ]; then
+        mkdir "$build_dir"
+    fi
+    
+    case "$1" in
+    "debug") debug_build ;;
     "") normal_build ;;
     *) invalid_args "$1" ;;
     esac
