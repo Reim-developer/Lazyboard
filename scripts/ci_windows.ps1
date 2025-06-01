@@ -4,6 +4,30 @@ function Get-VS2019 {
     -y --confirm --force `
 }
 
+function Get-Vcpkg {
+    param(
+        [string]$vcpkgDir = "$PSScriptRoot\vcpkg"
+    )
+
+    f (-Not (Test-Path -Path $vcpkgDir)) {
+        git clone https://github.com/microsoft/vcpkg.git  $vcpkgDir
+    }
+
+    Set-Location $vcpkgDir
+
+    .\bootstrap-vcpkg.bat
+    .\vcpkg integrate install
+}
+
+function Get-Dependency {
+    param(
+        [string]$vcpkgDir = "$PSScriptRoot\vcpkg"
+    )
+
+    Set-Location $vcpkgDir
+    .\vcpkg install libsodium:x64-windows
+}
+
 function Get-Dependency {
     choco install libsodium
 }
@@ -48,6 +72,7 @@ function deploy_qt {
 function main {
     switch ($args[0]) {
         "install-vs" {
+            Get-Vcpkg
             Get-Dependency
             Get-VS2019
             break
