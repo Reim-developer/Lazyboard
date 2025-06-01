@@ -175,4 +175,12 @@
     
     <entry key="PASSWORD_EMPTY_VI">Mật khẩu không được để trống. Vui lòng thử lại</entry>
     <entry key="PASSWORD_EMPTY_EN">Password is empty. Please try again</entry>
+
+    <!-- Memory error when hash with Argon2id-->
+    <entry key="HASH_OUTMEMORY_ERR_VI">Lỗi bộ nhớ khi hash. Vui lòng thử lại</entry>
+    <entry key="HASH_OUTMEMORY_ERR_EN">Memory error. Please try again</entry>
+
+    <!-- Hash successfully message-->
+    <entry key="HASH_SUCCESS_MSG_VI">Tạo mật khẩu thành công</entry>
+    <entry key="HASH_SUCCESS_MSG_EN">Create password successfully</entry>
 </language>
