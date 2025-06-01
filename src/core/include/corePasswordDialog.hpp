@@ -28,7 +28,15 @@ typedef struct {
 
 class CorePasswordDialog {
    private:
-    void showErrorDialog(C_STR title, C_STR msg, QDialog *parent);
+    static inline const constexpr char HASH_FILE_NAME[] = "zClipboard.bin";
+    static inline const constexpr char PATH_SLASH = '/';
+    static inline const constexpr char Z_ENCRYPT_FOLDER[] = "zEncryption";
+    static inline const constexpr bool PASSWORD_SET = true;
+
+   private:
+    void showDialog(C_STR title, C_STR msg, QDialog *parent);
+    void setPasswordHash(C_STR password, QSettings *settings, QDialog *parent);
+    void savePasswordHash(C_STR password, QSettings *settings);
 
    public:
     function<void()> addSubmitPasswordListener(const SubmitPasswordParams &params);
