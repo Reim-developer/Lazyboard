@@ -9,14 +9,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core Network)
+find_package(PkgConfig REQUIRED)
 
 if(LINUX)
-    find_package(PkgConfig REQUIRED)
     pkg_check_modules(LIBNOTIFY REQUIRED IMPORTED_TARGET libnotify)
 endif()
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
+if(NOT WIN32)
+    pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
+endif()
 
 set(CXX_SOURCE)
 set(CXX_HEADER)
@@ -36,10 +37,16 @@ target_link_libraries(
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::SODIUM)
-
 if(Z_DEBUG)
     add_compile_definitions(${PROJECT_NAME} PRIVATE Z_DEBUG)
+endif()
+
+if(NOT WIN32) 
+    target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::SODIUM)
+endif()
+
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE sodium::sodium)
 endif()
 
 if(LINUX)
