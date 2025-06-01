@@ -15,6 +15,9 @@ if(LINUX)
     pkg_check_modules(LIBNOTIFY REQUIRED IMPORTED_TARGET libnotify)
 endif()
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
+
 set(CXX_SOURCE)
 set(CXX_HEADER)
 set(ASSETS resources.qrc)
@@ -33,6 +36,7 @@ target_link_libraries(
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::SODIUM)
 
 if(Z_DEBUG)
     add_compile_definitions(${PROJECT_NAME} PRIVATE Z_DEBUG)
