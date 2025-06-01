@@ -15,7 +15,7 @@ setup_env() {
 }
 
 install_dependencies() {
-    brew install --formula cmake qt@6
+    brew install --formula cmake qt@6 libsodium
 
     export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
     export QT_DIR="/opt/homebrew/opt/qt@6"
