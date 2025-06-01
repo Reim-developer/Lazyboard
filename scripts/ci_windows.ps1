@@ -27,11 +27,6 @@ function Get-Dependency {
     Set-Location $vcpkgDir
     .\vcpkg install libsodium:x64-windows
 }
-
-function Get-Dependency {
-    choco install libsodium
-}
-
 function build {
     $vs_path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
     $build_dir = "build"
