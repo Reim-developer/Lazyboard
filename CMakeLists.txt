@@ -46,6 +46,7 @@ if(NOT WIN32)
 endif()
 
 if(WIN32)
+    find_package(libsodium REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE sodium::sodium)
 endif()
 
