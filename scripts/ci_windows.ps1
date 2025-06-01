@@ -9,7 +9,7 @@ function Get-Vcpkg {
         [string]$vcpkgDir = "$PSScriptRoot\vcpkg"
     )
 
-    f (-Not (Test-Path -Path $vcpkgDir)) {
+    if (-Not (Test-Path -Path $vcpkgDir)) {
         git clone https://github.com/microsoft/vcpkg.git  $vcpkgDir
     }
 
