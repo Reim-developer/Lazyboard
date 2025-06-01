@@ -36,7 +36,11 @@ function build {
     mkdir $build_dir
     Set-Location $build_dir
 
-    cmake -G "Visual Studio 16 2019" -T v142 ..
+    cmake -G `
+    "Visual Studio 16 2019" `
+    -T v142 `
+    -DCMAKE_TOOLCHAIN_FILE="D:/a/zClipboard/zClipboard/scripts/vcpkg/scripts/buildsystems/vcpkg.cmake" `
+    ..
     cmake --build . --config Release
 }
 
