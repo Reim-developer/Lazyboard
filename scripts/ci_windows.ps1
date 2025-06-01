@@ -1,7 +1,11 @@
 function Get-VS2019 {
     choco install visualstudio2019buildtools `
     --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.CMake.Project" `
-    -y --confirm --force
+    -y --confirm --force `
+}
+
+function Get-Dependency {
+    choco install libsodium
 }
 
 function build {
@@ -44,6 +48,7 @@ function deploy_qt {
 function main {
     switch ($args[0]) {
         "install-vs" {
+            Get-Dependency
             Get-VS2019
             break
         }
