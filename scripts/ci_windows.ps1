@@ -29,19 +29,18 @@ function Get-Dependency {
 }
 function build {
     $vs_path = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
+        $toolchain_path = "$PSScriptRoot\vcpkg\scripts\buildsystems\vcpkg.cmake"
     $build_dir = "build"
 
-    cmd /c call $vs_path x64
-
-    mkdir $build_dir
-    Set-Location $build_dir
-
-    cmake -G `
-    "Visual Studio 16 2019" `
-    -T v142 `
-    -DCMAKE_TOOLCHAIN_FILE="D:/a/zClipboard/zClipboard/scripts/vcpkg/scripts/buildsystems/vcpkg.cmake" `
-    ..
-    cmake --build . --config Release
+    $cmd = @"
+call `"$vs_path`" x64
+mkdir build
+cd "$build_dir"
+cmake -G "Visual Studio 16 2019" -T v142 -DCMAKE_TOOLCHAIN_FILE="$toolchain_path" ..
+cmake --build . --config Release
+"@
+    
+    cmd /k "$cmd"
 }
 
 function deploy_qt {
