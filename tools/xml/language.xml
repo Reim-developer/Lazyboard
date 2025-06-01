@@ -183,4 +183,13 @@
     <!-- Hash successfully message-->
     <entry key="HASH_SUCCESS_MSG_VI">Tạo mật khẩu thành công</entry>
     <entry key="HASH_SUCCESS_MSG_EN">Create password successfully</entry>
+
+    <!-- Login Form Widget -->
+    <entry key="LOGIN_FORM_DESCRIPTION_VI">Vui lòng nhập mật khẩu để mở khóa ứng dụng.</entry>
+    <entry key="LOGIN_FORM_DESCRIPTION_EN">Please input password for unlock the application.</entry>
+    <entry key="LOGIN_FORM_TITLE_VI">Đăng nhập vào ứng dụng</entry>
+    <entry key="LOGIN_FORM_TITLE_EN">Login</entry>
+
+    <entry key="SUBMIT_BUTTON_VI">Đăng nhập</entry>
+    <entry key="SUBMIT_BUTTON_EN">Login</entry>
 </language>
