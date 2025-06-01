@@ -11,7 +11,7 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y git cmake ninja-build desktop-file-utils \
-    qt6-base-dev clang libnotify-dev
+    qt6-base-dev clang libnotify-dev libsodium-dev
 }
 
 build_zclipboard() {
