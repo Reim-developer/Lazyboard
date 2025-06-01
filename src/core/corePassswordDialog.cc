@@ -7,12 +7,8 @@ using std::function;
 using zclipboard::core::CorePasswordDialog;
 using zclipboard::core::SubmitPasswordParams;
 
-void CorePasswordDialog::showPasswordMismatchDialog(QSettings *settings, QDialog *parent) {
-    const auto LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
-    const auto MSG_TITLE = LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
-    const auto MSG_TEXT = LANGUAGE_TYPE ? PASSWORD_MISMATCH_VI : PASSWORD_MISMATCH_EN;
-
-    QMessageBox::information(parent, MSG_TITLE, MSG_TEXT);
+void CorePasswordDialog::showErrorDialog(C_STR title, C_STR msg, QDialog *parent) {
+    QMessageBox::information(parent, title, msg);
 }
 
 function<void()> CorePasswordDialog::addShowPasswordListener(const ShowPasswordParams &params) {
@@ -46,8 +42,22 @@ function<void()> CorePasswordDialog::addSubmitPasswordListener(const SubmitPassw
         const auto passwordFieldValue1 = params.passwordInputField->text();
         const auto passswordFieldValue2 = params.passwordInputField2->text();
 
+        const auto LANGUAGE_TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
+        const auto MSG_TITLE = LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
+
         if (passwordFieldValue1 != passswordFieldValue2) {
-            showPasswordMismatchDialog(params.settings, params.parent);
+            const auto MSG_TEXT = LANGUAGE_TYPE ? PASSWORD_MISMATCH_VI : PASSWORD_MISMATCH_EN;
+
+            showErrorDialog(MSG_TITLE, MSG_TEXT, params.parent);
+            return;
+        }
+
+        if (passwordFieldValue1.isEmpty() || passswordFieldValue2.isEmpty()) {
+            const auto MSG_TEXT = LANGUAGE_TYPE ? PASSWORD_EMPTY_VI : PASSWORD_EMPTY_EN;
+
+            showErrorDialog(MSG_TITLE, MSG_TEXT, params.parent);
+
+            return;
         }
     };
 
