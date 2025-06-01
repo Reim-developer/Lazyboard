@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QDialog>
 #include <functional>
+#define C_STR const char *
 
 using std::function;
 
@@ -27,7 +28,7 @@ typedef struct {
 
 class CorePasswordDialog {
    private:
-    void showPasswordMismatchDialog(QSettings *settings, QDialog *parent);
+    void showErrorDialog(C_STR title, C_STR msg, QDialog *parent);
 
    public:
     function<void()> addSubmitPasswordListener(const SubmitPasswordParams &params);
