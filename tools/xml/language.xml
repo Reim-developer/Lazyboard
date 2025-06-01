@@ -171,5 +171,8 @@
 
     <!-- Dialog Password Widget-->
     <entry key="PASSWORD_MISMATCH_VI">Mật khẩu không trùng khớp. Vui lòng thử lại</entry>
-    <entry key="PASSWORD_MISMATCH_EN">Password is mismatch. Please try again</entry> 
+    <entry key="PASSWORD_MISMATCH_EN">Password is mismatch. Please try again</entry>
+    
+    <entry key="PASSWORD_EMPTY_VI">Mật khẩu không được để trống. Vui lòng thử lại</entry>
+    <entry key="PASSWORD_EMPTY_EN">Password is empty. Please try again</entry>
 </language>
