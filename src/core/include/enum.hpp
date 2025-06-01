@@ -28,6 +28,12 @@ namespace zclipboard::core {
         MODIFIED,
     };
 
+    enum class LoginState : int {
+        LOGIN_OK,
+        LOGIN_NOT_SET,
+        LOGIN_FAILED
+    };
+
 }  // namespace zclipboard::core
 
 #endif  // CORE_ENUM_HPP
