@@ -1,7 +1,7 @@
 #!/bin/bash
 
 change_work_dir() {
-    local test_folder="tests/encrypt"
+    local test_folder="tests"
     local trans_file="encrypt_t.py"
     local test_name="Encrypt Test"
 
