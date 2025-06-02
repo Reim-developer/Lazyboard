@@ -3,6 +3,7 @@
 #include "../zUtils/include/config.hpp"
 #include "../zUtils/include/zUtils.hpp"
 #include "../language/include/language.hpp"
+#include "../listener/include/passwordFormListener.hpp"
 #include <QSettings>
 #include <QDialog>
 #include <memory>
@@ -25,6 +26,7 @@
 
 using std::make_unique;
 using std::unique_ptr;
+using zclipboard::listener::PasswordFormListener;
 using zclipboard::preload::PreloadPassword;
 
 void PreloadPassword::setLoginFormGui(const QSettings &settings) {
@@ -33,6 +35,7 @@ void PreloadPassword::setLoginFormGui(const QSettings &settings) {
     unique_ptr<QPushButton> loginButton = make_unique<QPushButton>();
     unique_ptr<QLabel> loginDescription = make_unique<QLabel>();
     unique_ptr<QGridLayout> layout = make_unique<QGridLayout>();
+    unique_ptr<PasswordFormListener> passwordFormListener = make_unique<PasswordFormListener>();
 
     // clang-format off
     const auto LANGUAGE_TYPE = settings.value(LANGUAGE_SETTING).toInt();
@@ -44,6 +47,11 @@ void PreloadPassword::setLoginFormGui(const QSettings &settings) {
     loginButton->setText(LOGIN_BUTTON_TEXT);
     loginDescription->setText(LABEL_DESCRIPTION);
     passwordField->setEchoMode(QLineEdit::Password);
+
+    /*
+    * Connect event
+    */
+    passwordFormListener->onSubmitPassword(loginButton.get(), passwordField.get());
 
     layout->addWidget(loginDescription.get(), 0, 0);
     layout->addWidget(passwordField.get(), 1, 0);
