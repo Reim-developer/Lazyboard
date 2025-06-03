@@ -36,7 +36,7 @@ class CorePasswordDialog {
    private:
     void showDialog(C_STR title, C_STR msg, QDialog *parent);
     void setPasswordHash(C_STR password, QSettings *settings, QDialog *parent);
-    void savePasswordHash(C_STR password, QSettings *settings);
+    void savePasswordHash(C_STR password, QSettings *settings, QDialog *parent);
 
    public:
     function<void()> addSubmitPasswordListener(const SubmitPasswordParams &params);
