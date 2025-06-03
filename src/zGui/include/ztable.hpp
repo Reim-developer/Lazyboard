@@ -32,7 +32,6 @@ class ZTable : public QObject {
     Q_OBJECT
 
    public:
-    void setupDatabase(QWidget *parent);
     void addZtable(QWidget *zWindow, QGridLayout *zLayout);
     zTableModel *getZModel();
     zManagerSQL &getZSQL();
