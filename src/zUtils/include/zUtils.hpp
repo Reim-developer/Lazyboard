@@ -20,7 +20,6 @@ class zUtils : public QObject {
     static QString getCachePath();
     static Platform hasPlatform();
     static bool hasSetting(const char* SETTING_NAME);
-
     static ContentType hasContentType(const QMimeData* mimeData);
     static Translate::LanguageType languageTypeCast(int value);
 };
