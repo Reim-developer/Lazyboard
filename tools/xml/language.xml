@@ -180,9 +180,13 @@
     <entry key="HASH_OUTMEMORY_ERR_VI">Lỗi bộ nhớ khi hash. Vui lòng thử lại</entry>
     <entry key="HASH_OUTMEMORY_ERR_EN">Memory error. Please try again</entry>
 
-    <!-- Hash successfully message-->
+    <!-- Hash successfully message -->
     <entry key="HASH_SUCCESS_MSG_VI">Tạo mật khẩu thành công</entry>
     <entry key="HASH_SUCCESS_MSG_EN">Create password successfully</entry>
+
+    <!-- Create file hash failed message -->
+    <entry key="HASH_FAILED_MSG_VI">Tạo file hash thất bại. Vui lòng thử lại sau</entry>
+    <entry key="HASH_FAILED_MSG_EN">Create hash file failed. Please try again</entry>
 
     <!-- Login Form Widget -->
     <entry key="LOGIN_FORM_DESCRIPTION_VI">Vui lòng nhập mật khẩu để mở khóa ứng dụng.</entry>
