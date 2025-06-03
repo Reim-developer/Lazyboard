@@ -2,11 +2,12 @@
 #include "include/corePasswordDialog.hpp"
 #include "../language/include/language.hpp"
 #include "../zUtils/include/settings.hpp"
-#include "../zUtils/include/zUtils.hpp"
 #include "../encryption/c/include/argon2id.h"
+#include "../zUtils/include/config.hpp"
 #include <QMessageBox>
 #include <QDir>
 #include <QFile>
+#include <QStandardPaths>
 
 using std::function;
 using zclipboard::core::CorePasswordDialog;
@@ -16,63 +17,113 @@ void CorePasswordDialog::showDialog(C_STR title, C_STR msg, QDialog *parent) {
     QMessageBox::information(parent, title, msg);
 }
 
-void CorePasswordDialog::savePasswordHash(C_STR password, QSettings *settings) {
-    const auto CACHE_PATH = zUtils::getCachePath();
-    const auto HASH_FILE_LOCATION = CACHE_PATH + PATH_SLASH + Z_ENCRYPT_FOLDER;
-    const auto ENCRYPTION_FILE_PATH = HASH_FILE_LOCATION + PATH_SLASH + HASH_FILE_NAME;
+void CorePasswordDialog::savePasswordHash(C_STR password, QSettings *settings, QDialog *parent) {
+    /*
+    * Expands to:
+    * $HOME/.config on Linux.
+    */
+    auto const constexpr APP_CONFIG_FOLDER = APP_NAME;
+    auto const constexpr PATH_SLASH = '/';
+    const constexpr char HASH_FILE[] = "Hash.bin";
+    const auto CONFIG_DIRECTORY = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
 
-    QDir directory;
-    // clang-format off
-    #if defined(Z_DEBUG)
-        qDebug() << HASH_FILE_LOCATION;
-        qDebug() << ENCRYPTION_FILE_PATH;
-    #endif
-    // clang-format on
+    QDir directory(CONFIG_DIRECTORY + PATH_SLASH + APP_CONFIG_FOLDER);
+    QString hashPasswordLocation;
 
-    if (!directory.exists(HASH_FILE_LOCATION)) {
+    if (!directory.exists()) {
         // clang-format off
-        /*
-        * Debug macro, use with CMake flag:
-        * -DZ_DEBUG=1
-        */
-        QDir newDirectory;
         #if defined(Z_DEBUG)
-            const auto result = newDirectory.mkpath(HASH_FILE_LOCATION);
-            qDebug() << "Cache Path Directory: " << CACHE_PATH;
-            qDebug() << "Hash File Location: " << HASH_FILE_LOCATION;
-            
-            if(!result) {
-                qDebug() << "Could not create path directory";
+            qDebug() << directory.absolutePath() << " Is not exists.";
+
+            const auto STATUS_OK = directory.mkdir(directory.absolutePath());
+            if(!STATUS_OK) {
+                qDebug() << "Could not create directory";
+                const auto LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
+
+                const auto TITLE_DIALOG = LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
+                const auto TITLE_MSG = LANGUAGE_TYPE ? HASH_FAILED_MSG_VI : HASH_FAILED_MSG_EN;
+
+                showDialog(TITLE_DIALOG, TITLE_MSG, parent);
+
+                return;
             }
-            qDebug() << "Create directory successfully.";
-            
-            QFile encryptionFile(ENCRYPTION_FILE_PATH);
-            if(!encryptionFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-                qDebug() << "Could not open and write file.";
-                qDebug() << encryptionFile.errorString();
-            }
+            qDebug() << "Create directory successfully";
+            qDebug() << "Absolute path: " << directory.absolutePath();
 
-            qDebug() << "Created file successfully.";
-            encryptionFile.close();
 
-        #else
-            newDirectory.mkpath(HASH_FILE_LOCATION);
-            QFile encryptionFile(ENCRYPTION_FILE_PATH);
-
-            encryptionFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-
-            encryptionFile.write(password);
-            encryptionFile.close();
         #endif
         // clang-format on
     }
 
-    QFile encryptionFile(ENCRYPTION_FILE_PATH);
+    /*
+    * Linux:
+    * Expands to: $HOME/.config/$APP_NAME/$HASH_FILE
+    */
+    hashPasswordLocation = directory.absolutePath() + PATH_SLASH + HASH_FILE;
 
-    encryptionFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    QFile hashPasswordPath(hashPasswordLocation);
 
-    encryptionFile.write(password);
-    encryptionFile.close();
+    if (!hashPasswordPath.exists()) {
+        // clang-format off
+        /*
+        * Debug flag only.
+        * Use with CMake flag:
+        * -DZ_DEBUG=1
+        */
+        #if defined(Z_DEBUG)
+            qDebug() <<  hashPasswordLocation << "is not exists.";
+            qDebug() << hashPasswordLocation << "Generate now";
+
+            const auto STATUS_OK = hashPasswordPath.open(QIODevice::WriteOnly);
+            if(!STATUS_OK) {
+                qDebug() << "Write password hash failed:";
+                qDebug() << hashPasswordPath.errorString();
+                
+                const auto LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
+
+                const auto TITLE_DIALOG = LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
+                const auto TITLE_MSG = LANGUAGE_TYPE ? HASH_FAILED_MSG_VI : HASH_FAILED_MSG_EN;
+
+                showDialog(TITLE_DIALOG, TITLE_MSG, parent);
+                hashPasswordPath.close();
+
+                return;
+            }
+       
+            const auto BYTE = hashPasswordPath.write(password);
+            qDebug() << "Write successfully.";
+            qDebug() << "Length:" << BYTE;
+
+            hashPasswordPath.close();
+        #else
+
+            hashPasswordPath.open(QIODevice::WriteOnly);
+            hashPasswordPath.write(password);   
+            hashPasswordPath.close();
+        #endif
+
+    }
+
+    #if defined(Z_DEBUG)
+        hashPasswordPath.open(QIODevice::WriteOnly);
+        hashPasswordPath.write(password);
+        hashPasswordPath.close();
+
+        qDebug() << "Write password successfully";
+        qDebug() << "Password Hash:";
+        qDebug() << password;
+
+    #else
+
+        hashPasswordPath.open(QIODevice::WriteOnly);
+        hashPasswordPath.write(password);
+        hashPasswordPath.close();
+
+        qDebug() << "Write password successfully";
+    
+    #endif
+
+    // clang-format on
 }
 
 void CorePasswordDialog::setPasswordHash(C_STR password, QSettings *settings, QDialog *parent) {
@@ -120,8 +171,8 @@ void CorePasswordDialog::setPasswordHash(C_STR password, QSettings *settings, QD
         showDialog(MSG_TITLE, MSG_TEXT, parent);
     }
 
-    settings->setValue(PASSWORD_SETTING, PASSWORD_SET);
-    savePasswordHash(hashed, settings);
+    //settings->setValue(PASSWORD_SETTING, PASSWORD_SET);
+    savePasswordHash(hashed, settings, parent);
 }
 
 function<void()> CorePasswordDialog::addShowPasswordListener(const ShowPasswordParams &params) {
@@ -172,8 +223,8 @@ function<void()> CorePasswordDialog::addSubmitPasswordListener(const SubmitPassw
 
             return;
         }
-        const auto PASSWORD = passwordFieldValue1.toUtf8().constData();
 
+        const auto PASSWORD = passwordFieldValue1.toUtf8().constData();
         setPasswordHash(PASSWORD, params.settings, params.parent);
     };
 
