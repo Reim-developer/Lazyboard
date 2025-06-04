@@ -14,27 +14,18 @@ function build_tools_check() {
     if [ "$(uname)" == "Linux" ]; then
         if ! command -v "$clang" > /dev/null 2>&1; then
             echo "Could not find Clang in your operating system."
-            echo "Use GCC instead? [y/n]."
+            echo "Use GCC instead."
 
-            read -r option
-            if [ "${option,,}" == "y" ]; then
-                echo "Use GCC instead of Clang."
-                detect_requirements "$gcc"
-                detect_requirements "$cmake"
+            detect_requirements "$gcc"
+            detect_requirements "$cmake"
 
-                build "$gcc"
-
-            elif [ "${option,,}" == "n" ]; then
-                echo "Canceled."
-                exit 1
-            fi 
-
-            exit 1
+            build "$gcc"
+            
+        else
+            detect_requirements "$cmake"
+            build "$clang"
         fi
-
-    detect_requirements "$cmake"
-        build "$clang"
-
+      
     else 
         echo "$(uname) is not supported."
         exit 1
