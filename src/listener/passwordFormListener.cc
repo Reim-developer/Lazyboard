@@ -8,9 +8,10 @@ using std::unique_ptr;
 using zclipboard::core::CorePasswordForm;
 using zclipboard::listener::PasswordFormListener;
 
-void PasswordFormListener::onSubmitPassword(QPushButton *submitButton, QLineEdit *passwordLine) {
+void PasswordFormListener::onSubmitPassword(QPushButton *submitButton, QLineEdit *passwordLine,
+                                            QDialog *parent) {
     unique_ptr<CorePasswordForm> corePasswordForm = make_unique<CorePasswordForm>();
-    const auto function = corePasswordForm->addPasswordFormListener(passwordLine);
+    const auto function = corePasswordForm->addPasswordFormListener(passwordLine, parent);
 
     // clang-format off
     connect(submitButton, &QPushButton::clicked, this, function);
