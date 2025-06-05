@@ -7,7 +7,7 @@
 namespace zclipboard::listener {
 class PasswordFormListener : public QObject {
    public:
-    void onSubmitPassword(QPushButton *submitButton, QLineEdit *passwordLine);
+    void onSubmitPassword(QPushButton *submitButton, QLineEdit *passwordLine, QDialog *parent);
 };
 }  // namespace zclipboard::listener
 
