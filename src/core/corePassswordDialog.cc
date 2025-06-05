@@ -49,7 +49,17 @@ void CorePasswordDialog::savePasswordHash(C_STR password, QSettings *settings, Q
             }
             qDebug() << "Create directory successfully";
             qDebug() << "Absolute path: " << directory.absolutePath();
+        
+        #else
+            const auto STATUS_OK = directory.mkdir(directory.absolutePath());
 
+            if(!STATUS_OK) {
+                const auto LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
+                const auto TITLE_DIALOG = LANGUAGE_TYPE ? DIALOG_ERROR_TITLE_VI : DIALOG_ERROR_TITLE_EN;
+                const auto TITLE_MSG = LANGUAGE_TYPE ? HASH_FAILED_MSG_VI : HASH_FAILED_MSG_EN;
+
+                showDialog(TITLE_DIALOG, TITLE_MSG, parent);
+            }
 
         #endif
         // clang-format on
@@ -112,14 +122,13 @@ void CorePasswordDialog::savePasswordHash(C_STR password, QSettings *settings, Q
         qDebug() << "Write password successfully";
         qDebug() << "Password Hash:";
         qDebug() << password;
+        qDebug() << "Hash Password Path: " <<  hashPasswordLocation;
 
     #else
 
         hashPasswordPath.open(QIODevice::WriteOnly);
         hashPasswordPath.write(password);
         hashPasswordPath.close();
-
-        qDebug() << "Write password successfully";
     
     #endif
 
@@ -171,7 +180,7 @@ void CorePasswordDialog::setPasswordHash(C_STR password, QSettings *settings, QD
         showDialog(MSG_TITLE, MSG_TEXT, parent);
     }
 
-    //settings->setValue(PASSWORD_SETTING, PASSWORD_SET);
+    settings->setValue(PASSWORD_SETTING, PASSWORD_SET);
     savePasswordHash(hashed, settings, parent);
 }
 
