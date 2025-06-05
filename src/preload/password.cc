@@ -51,7 +51,7 @@ void PreloadPassword::setLoginFormGui(const QSettings &settings) {
     /*
     * Connect event
     */
-    passwordFormListener->onSubmitPassword(loginButton.get(), passwordField.get());
+    passwordFormListener->onSubmitPassword(loginButton.get(), passwordField.get(), dialog.get());
 
     layout->addWidget(loginDescription.get(), 0, 0);
     layout->addWidget(passwordField.get(), 1, 0);
