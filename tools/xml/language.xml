@@ -196,4 +196,11 @@
 
     <entry key="SUBMIT_BUTTON_VI">Đăng nhập</entry>
     <entry key="SUBMIT_BUTTON_EN">Login</entry>
+
+    <!-- Hash file error handling message-->
+    <entry key="HASH_FILE_NOT_FOUND_VI">Không thể tìm thấy hash file. Vui lòng thử lại sau</entry>
+    <entry key="HASH_FILE_NOT_FOUND_EN">Could not find hash file. Please try again later</entry>
+
+    <entry key="HASH_FILE_EMPTY_VI">Hash file rỗng, hoặc sai định dạng. Vui lòng thử lại sau</entry>
+    <entry key="HASH_FILE_EMPTY_EN">Hash file is empty. Please try again</entry>
 </language>
