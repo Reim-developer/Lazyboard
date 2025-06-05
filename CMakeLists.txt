@@ -6,7 +6,6 @@ set(CMAKE_C_STANDARD 99)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Gui Core Network)
 find_package(PkgConfig REQUIRED)
@@ -61,5 +60,8 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
 endif()
+
+message(STATUS "Current C Compiler: ${CMAKE_C_COMPILER}")
+message(STATUS "Current C++ Compiler: ${CMAKE_CXX_COMPILER}")
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
