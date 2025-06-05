@@ -28,13 +28,13 @@ debug_build() {
 
     cd "$build_dir" || exit 1
 
-    unset CC CXX
     cmake -DCMAKE_BUILD_TYPE=Debug \
-          ..
-
-    export CXX="ccache clang++"
-    export CC="ccache clang"
-    
+        -DCMAKE_C_COMPILER=clang \
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+        ..
+        
     make
     ./"$program_name"
 }
@@ -45,13 +45,13 @@ normal_build() {
 
     cd "$build_dir" || exit 1
 
-    unset CC CXX
     cmake "$wall_flag" \
+        -DCMAKE_C_COMPILER=clang \
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DZ_DEBUG=1 \
         ..
-    
-    export CXX="ccache clang++"
-    export CC="ccache clang"
     make
     ./"$program_name"
 }
