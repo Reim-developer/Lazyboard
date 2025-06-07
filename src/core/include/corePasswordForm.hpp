@@ -11,7 +11,7 @@ using zclipboard::core::HashState;
 namespace zclipboard::core {
 class CorePasswordForm {
    public:
-    function<void()> addPasswordFormListener(QLineEdit *passwordLine, QDialog *parent);
+    function<HashState()> addPasswordFormListener(QLineEdit *passwordLine, QDialog *parent);
 };
 }  // namespace zclipboard::core
 

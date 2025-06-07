@@ -24,8 +24,11 @@ namespace zclipboard::core {
 
     enum class HashState : int {
         HASH_OK,
+        HASH_MISMATCH,
         DELETED,
         MODIFIED,
+        HASH_FILE_NOT_FOUND,
+        HASH_FILE_EMPTY
     };
 
     enum class LoginState : int {
