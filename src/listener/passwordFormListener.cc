@@ -1,19 +1,13 @@
 #include "include/passwordFormListener.hpp"
 #include "../core/include/corePasswordForm.hpp"
-#include <QByteArray>
-#include <memory>
-
-using std::make_unique;
-using std::unique_ptr;
-using zclipboard::core::CorePasswordForm;
 using zclipboard::listener::PasswordFormListener;
 
 void PasswordFormListener::onSubmitPassword(QPushButton *submitButton, QLineEdit *passwordLine,
-                                            QDialog *parent) {
-    unique_ptr<CorePasswordForm> corePasswordForm = make_unique<CorePasswordForm>();
-    const auto function = corePasswordForm->addPasswordFormListener(passwordLine, parent);
+                                            QDialog *parent, function<HashState()> lambda) {
+    const auto function = [this, lambda]() {
+        const auto LOGIN_RESULT = lambda();
+        emit loginResult(LOGIN_RESULT);
+    };
 
-    // clang-format off
     connect(submitButton, &QPushButton::clicked, this, function);
-    // clang-format on
 }
