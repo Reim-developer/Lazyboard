@@ -3,6 +3,7 @@
 #include "../zUtils/include/settings.hpp"
 #include "../language/include/language.hpp"
 #include "../encryption/c/include/argon2id.h"
+#include "include/enum.hpp"
 
 // clang-format off
 //
@@ -23,10 +24,11 @@
 using std::function;
 using std::string;
 using zclipboard::core::CorePasswordForm;
+using zclipboard::core::HashState;
 
-function<void()> CorePasswordForm::addPasswordFormListener(QLineEdit *passwordLine,
-                                                           QDialog *parent) {
-    const auto function = [passwordLine, parent]() {
+function<HashState()> CorePasswordForm::addPasswordFormListener(QLineEdit *passwordLine,
+                                                                QDialog *parent) {
+    const auto function = [passwordLine, parent]() -> HashState {
         auto const constexpr APP_CONFIG_FOLDER = APP_NAME;
         const constexpr char PATH_SLASH = '/';
         const constexpr char HASH_FILE_NAME[] = "Hash.bin";
@@ -61,8 +63,9 @@ function<void()> CorePasswordForm::addPasswordFormListener(QLineEdit *passwordLi
             const auto DIALOG_MSG = LANGUAGE_TYPE ? HASH_FILE_NOT_FOUND_VI : HASH_FILE_NOT_FOUND_EN;
 
             QMessageBox::critical(parent, DIALOG_TITLE, DIALOG_MSG);
-            return;
+            return HashState::HASH_FILE_NOT_FOUND;
         }
+
         hashFile.open(QIODevice::ReadOnly);
         const auto HASH_FILE_CONTENT = hashFile.readAll().toStdString();
         hashFile.close();
@@ -71,18 +74,21 @@ function<void()> CorePasswordForm::addPasswordFormListener(QLineEdit *passwordLi
             const auto DIALOG_MSG = LANGUAGE_TYPE ? HASH_FILE_EMPTY_VI : HASH_FILE_EMPTY_EN;
 
             QMessageBox::critical(parent, DIALOG_TITLE, DIALOG_MSG);
-            return;
+            return HashState::HASH_FILE_EMPTY;
         }
 
         const auto PASSWORD = passwordLine->text().toStdString();
-
         const auto STATUS = is_hash_matches(HASH_FILE_CONTENT.c_str(), PASSWORD.c_str());
 
         if (STATUS == HASH_MISMATCH) {
             const auto DIALOG_MSG = LANGUAGE_TYPE ? PASSWORD_MISMATCH_VI : PASSWORD_MISMATCH_EN;
 
             QMessageBox::critical(parent, DIALOG_TITLE, DIALOG_MSG);
+
+            return HashState::HASH_MISMATCH;
         }
+
+        return HashState::HASH_OK;
     };
 
     return function;
