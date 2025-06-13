@@ -130,8 +130,8 @@ void zTableModel::addTextItem(const zClipboardItem &item) {
     clipboardItem.hash = item.hash;
     clipboardItem.isPinned = item.isPinned;
 
-    m_items.append(clipboardItem);
-    mData.append(clipboardItem);
+    m_items.prepend(clipboardItem);
+    mData.prepend(clipboardItem);
     m_existingHashes.insert(item.hash);
 
     endInsertRows();
@@ -153,8 +153,8 @@ void zTableModel::addImageItem(const zClipboardItem &item) {
     clipboardItem.hash = item.hash;
     clipboardItem.isPinned = item.isPinned;
 
-    m_items.append(clipboardItem);
-    mData.append(clipboardItem);
+    m_items.prepend(clipboardItem);
+    mData.prepend(clipboardItem);
     m_existingHashes.insert(item.hash);
     endInsertRows();
 }

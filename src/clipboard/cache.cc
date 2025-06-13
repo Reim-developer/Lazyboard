@@ -12,7 +12,7 @@ void zCacheManager::addClipboardHistoryFromDB(zTableModel* zModelTable, const zM
     auto sqlQuery = zSQL.executeQueryResult(R"(
         --sql
         SELECT time, content, length, image_data, content_hash, is_pinned FROM clipboard
-        ORDER BY is_pinned DESC, time DESC
+        ORDER BY is_pinned ASC, time ASC
     )");
 
     while (sqlQuery.next()) {
