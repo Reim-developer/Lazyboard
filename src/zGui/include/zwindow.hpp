@@ -16,6 +16,7 @@
 #include "systemTray.hpp"
 #include "../../core/include/notification.hpp"
 #include <QSettings>
+#include "../../lib_memory/include/memory.hpp"
 
 using zclipboard::core::NotificationCore;
 using zclipboard::zGui::ClearButton;
@@ -23,6 +24,7 @@ using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
 using zclipboard::zGui::SettingButton;
 using zclipboard::zGui::SystemTray;
+using zclipboard::lib_memory::PtrUnique;
 
 namespace zclipboard::zGui {
 
@@ -59,7 +61,7 @@ class ZWindow : public QMainWindow {
     QGridLayout *zLayout;
     SystemTray *systemTray;
 
-    ZTable *ztable;
+    PtrUnique<ZTable> ztable;
     SearchArea *zSearchArea;
 
     ClearButton *clearButton;
