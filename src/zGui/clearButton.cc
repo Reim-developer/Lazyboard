@@ -5,31 +5,33 @@
 #include <QTimer>
 #include "include/ztable.hpp"
 #include "../zUtils/include/config.hpp"
+#include "../lib_memory/include/memory.hpp"
+#include "../listener/include/clearCacheListener.hpp"
 #include <QSettings>
 #include "../core/include/clear.hpp"
 
-using zclipboard::core::ClearCore;
-using zclipboard::core::ClearCoreParams;
+using zclipboard::lib_memory::PtrUnique;
+using zclipboard::lib_memory::MakePtr;
 using zclipboard::zGui::ClearButton;
+using zclipboard::listener::ListenerCache;
 
-void ClearButton::addClearButton(QGridLayout *layout, ZTable *table) {
-    clearButton = new QPushButton();
-    settings = new QSettings(AUTHOR_NAME, APP_NAME);
-    ClearCore *clearCore = new ClearCore();
+void ClearButton::addClearButton(QGridLayout *layout, ZTable* table) {
+    clearButton = MakePtr<QPushButton>();
+    settings = MakePtr<QSettings>(AUTHOR_NAME, APP_NAME);
+    layout->addWidget(clearButton.get(), 0, 2);
 
-    layout->addWidget(clearButton, 0, 2);
+    const auto Function = BuilderFunc
+                .StartBuild()
+                    ->  WithAndThen(&ListenerCache::button, clearButton.get())
+                    ->  WithAndThen(&ListenerCache::settings, settings.get())
+                    ->  WithAndThen(&ListenerCache::table, table)
+                    ->  TryGetListener();
 
-    // clang-format off
-    connect(clearButton, &QPushButton::clicked, [this, table, clearCore]() {  
-        struct ClearCoreParams params {
-            .table = table,
-            .button = clearButton,
-            .settings = settings,
-        };
-        clearCore->clearCache(params);
-    });
+    BuilderCore
+        .StartBuild(clearButton.get())
+            ->  ThenAddListener(Function);
 }
 
 QPushButton *ClearButton::getClearButton() {
-    return clearButton;
+    return clearButton.get();
 }

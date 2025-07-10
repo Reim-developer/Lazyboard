@@ -8,3 +8,4 @@ zClipboard-1.0.1
 # AUR repo
 aur 
 __pycache__
+*.json

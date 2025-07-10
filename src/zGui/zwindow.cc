@@ -14,6 +14,7 @@
 #include "include/systemTray.hpp"
 #include <QStringLiteral>
 #include <QApplication>
+#include "../lib_memory/include/memory.hpp"
 #include <QSettings>
 
 using zclipboard::language::Translate;
@@ -27,6 +28,7 @@ using zclipboard::zGui::SystemTray;
 using zclipboard::zGui::SystemTrayWidget;
 using zclipboard::zGui::ZTable;
 using zclipboard::zGui::ZWindow;
+using zclipboard::lib_memory::MakePtr;
 
 ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     zIcon = QIcon(ICON_PATH);
@@ -49,7 +51,7 @@ ZWindow::ZWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 }
 
 void ZWindow::setupGui() {
-    ztable = new ZTable();
+    ztable = MakePtr<ZTable>();
     zSearchArea = new SearchArea();
     clearButton = new ClearButton();
     getButton = new GetButton();
@@ -62,7 +64,7 @@ void ZWindow::setupGui() {
     struct SearchPanelWidget searchPanelWidget {
         .zWindow = this,
         .zLayout = zLayout,
-        .table = ztable
+        .table = ztable.get()
     };
 
     struct DisconnectButtonWidget discButtonWidget {
@@ -78,7 +80,7 @@ void ZWindow::setupGui() {
     
     ztable->addZtable(this, zLayout);
     zSearchArea->addSearchPanel(searchPanelWidget);
-    clearButton->addClearButton(zLayout, ztable);
+    clearButton->addClearButton(zLayout, ztable.get());
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
     disconnectButton->addDisconnectButton(discButtonWidget);
@@ -90,7 +92,6 @@ void ZWindow::setupGui() {
     notificationCore->onClipboardChanged(trayIcon, clipboard);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &ZWindow::onTrayIconActivated);
-    // clang-format on
 }
 
 void ZWindow::closeEvent(QCloseEvent *event) {
