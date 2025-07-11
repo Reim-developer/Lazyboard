@@ -20,7 +20,6 @@
 using zclipboard::language::Translate;
 using zclipboard::language::TransValue;
 using zclipboard::zGui::DisconnectButton;
-using zclipboard::zGui::DisconnectButtonWidget;
 using zclipboard::zGui::GetButton;
 using zclipboard::zGui::SearchArea;
 using zclipboard::zGui::SearchPanelWidget;
@@ -67,11 +66,6 @@ void ZWindow::setupGui() {
         .table = ztable.get()
     };
 
-    struct DisconnectButtonWidget discButtonWidget {
-        .parent = this,
-        .layout = zLayout,
-        .getButton = getButton
-    };
 
     struct SystemTrayWidget systemTrayWidget {
         .window = this,
@@ -83,7 +77,7 @@ void ZWindow::setupGui() {
     clearButton->addClearButton(zLayout, ztable.get());
     getButton->addGetButton(this, zLayout);
     settingButton->addSettingButton(this, zLayout);
-    disconnectButton->addDisconnectButton(discButtonWidget);
+    disconnectButton->addDisconnectButton(this, getButton, zLayout);
     systemTray->addSystemTray(systemTrayWidget);
 
     const auto trayIcon = systemTray->getSystemTrayIcon();

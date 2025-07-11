@@ -28,8 +28,8 @@ void ClearButton::addClearButton(QGridLayout *layout, ZTable* table) {
                     ->  TryGetListener();
 
     BuilderCore
-        .StartBuild(clearButton.get())
-            ->  ThenAddListener(Function);
+        .   StartBuild(clearButton.get())
+        ->  ThenAddListener(Function);
 }
 
 QPushButton *ClearButton::getClearButton() {
