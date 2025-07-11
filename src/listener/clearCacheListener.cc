@@ -4,14 +4,70 @@
 #include "../zUtils/include/settings.hpp"
 #include <QTimer>
 #include <QFile>
+#include <functional>
+#define C_STR(var_name) const char var_name[]
 
 using zclipboard::listener::ClearCacheListener;
+using zclipboard::listener::ListenerCache;
 
 ClearCacheListener *ClearCacheListener::StartBuild() {
     cache = MakePtr<ListenerCache>();
 
     return this;
 }
+
+const auto LanguageTypeLambda = [](QSettings *settings) -> int {
+    const int LANGUAGE_TYPE = 
+        settings
+            ->  value(LANGUAGE_SETTING)
+            .   toInt();
+
+    return LANGUAGE_TYPE;
+};
+
+function<void(ZTable *table)> InitDatabaseFunc = [](ZTable *table) {
+    table
+        ->  getZSQL()
+        .   setupinitDB();
+};
+
+function<void(QPushButton *button, C_STR(str))> SetButtonTextFunc = [](QPushButton *button, C_STR(str)) {
+    button
+        ->  setText(str);
+};
+
+function<void(ListenerCache *cache)> ClearDatabaseFunc = [](ListenerCache *cache) -> void {
+      /* Flag for debug only.
+        * Usage with CMake flag:
+        * -DZ_DEBUG=1
+        */
+
+        #if defined(Z_DEBUG)
+                cache
+                ->  table
+                ->  getZModel()
+                ->  clearData();
+
+                cache
+                ->  table
+                ->  getZSQL()
+                .   resetConnection();
+
+            qDebug() << "Close database successfully";  
+                    
+        #else
+                cache
+                ->  table
+                ->  getZModel()
+                ->  clearData();
+
+                cache
+                ->  table
+                ->  getZSQL()
+                .   resetConnection();
+        #endif
+};
+
 
 function<void()> ClearCacheListener::TryGetListener() {
     const auto function = [this]() -> void {
@@ -22,60 +78,43 @@ function<void()> ClearCacheListener::TryGetListener() {
         if (QFile(cachePath).exists()) {
             QFile(cachePath).remove();
         }
-
-    /* Flag for debug only.
-    * Usage with CMake flag:
-    * -DZ_DEBUG=1
-    */
-
-    #if defined(Z_DEBUG)
-        this
-            ->cache
-            ->table
-            ->getZSQL().resetConnection();
-        qDebug() << "Close database successfully";  
-                   
-    #else
-        this
-            ->cache
-            ->table
-            ->getZSQL().resetConnection();
-    #endif
-
-    QSqlDatabase::removeDatabase(DB_NAME);
-
-    const auto function_initDB = [this]() { 
-        this
-            ->cache
-            ->table
-            ->getZSQL().setupinitDB(); 
-    };
-
-
-    QTimer::singleShot(500, function_initDB);
-
-    const int LANGUAGE_TYPE = this
-        ->cache
-        ->settings
-        ->value(LANGUAGE_SETTING).toInt();
-
-    const auto BUTTON_TEXT = LANGUAGE_TYPE ? CLEAR_HISTORY_VI : CLEAR_HISTORY_EN;
-    const auto ACTION_BUTTON_TEXT = LANGUAGE_TYPE ? CLEAR_HISTORY_ACTION_VI : CLEAR_HISTORY_ACTION_EN;
-
-    this
-        ->cache
-        ->button
-        ->setText(ACTION_BUTTON_TEXT);
-
-    const auto function_setText = [this, BUTTON_TEXT]() {
+  
+        ClearDatabaseFunc(
             this
-                ->cache
-                ->button
-                ->setText(BUTTON_TEXT);
-    };
+                ->  cache
+                .   get()
+        );
+        QSqlDatabase::removeDatabase(DB_NAME);  
+        QTimer::singleShot(500,[this]() {
+            InitDatabaseFunc(
+                this
+                    ->  cache
+                    ->  table
+            );
+        });
 
-        QTimer::singleShot(1500, function_setText);
-    };
+        const int LANGUAGE_TYPE = LanguageTypeLambda(
+            this 
+                ->  cache
+                ->  settings   
+        );
+
+        const auto BUTTON_TEXT = LANGUAGE_TYPE ? CLEAR_HISTORY_VI : CLEAR_HISTORY_EN;
+        const auto ACTION_BUTTON_TEXT = LANGUAGE_TYPE ? CLEAR_HISTORY_ACTION_VI : CLEAR_HISTORY_ACTION_EN;
+
+        this
+            ->  cache
+            ->  button
+            ->  setText(ACTION_BUTTON_TEXT);
+
+            QTimer::singleShot(1500, [this, BUTTON_TEXT]() {
+                auto button = this
+                    ->  cache
+                    ->  button;
+
+                SetButtonTextFunc(button, BUTTON_TEXT);
+            });
+        };
 
     return function;
 }
