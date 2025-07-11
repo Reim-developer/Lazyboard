@@ -10,7 +10,11 @@ using zclipboard::core::ClearCoreBuilder;
 
 ClearCoreBuilder *ClearCoreBuilder::StartBuild(QPushButton *button) {
     params = MakePtr<ParamImpl>();
-    this->params->button = button;
+    
+    this
+        ->  params
+        ->  button 
+        =   button;
     
     return this;
 }
