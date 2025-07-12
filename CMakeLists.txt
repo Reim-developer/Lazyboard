@@ -22,9 +22,9 @@ set(CXX_SOURCE)
 set(CXX_HEADER)
 set(ASSETS resources.qrc)
 
-file(GLOB_RECURSE SOURCES_CXX "src/*.cc")
-file(GLOB_RECURSE SOURCES_C "src/*.c")
-file(GLOB_RECURSE HEADER_SOURCES "src/*.h" "src/*.hpp")
+file(GLOB_RECURSE SOURCES_CXX "Source/*.cc")
+file(GLOB_RECURSE SOURCES_C "Source/*.c")
+file(GLOB_RECURSE HEADER_SOURCES "Source/*.h" "Source/*.hpp")
 
 qt_add_executable(${PROJECT_NAME} ${SOURCES_CXX} ${SOURCES_C} ${HEADER_SOURCES} ${ASSETS})
 
