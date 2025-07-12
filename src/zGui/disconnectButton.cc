@@ -1,6 +1,5 @@
 #include "include/disconnectButton.hpp"
 #include "../listener/include/ListenerDisconnect.hpp"
-#include "../lib_memory/include/memory.hpp"
 #include <QPushButton>
 #include <QMessageBox>
 #include <QStringLiteral>
@@ -9,12 +8,11 @@
 
 using zclipboard::zGui::DisconnectButton;
 using zclipboard::listener::DisconnectImpl;
-using zclipboard::lib_memory::MakePtr;
 
 void DisconnectButton::addDisconnectButton(QMainWindow *parent, GetButton *getButton, QGridLayout *layout) {
-    disconnectButton = MakePtr<QPushButton>();
-    settings = MakePtr<QSettings>(AUTHOR_NAME, APP_NAME);
-    layout->addWidget(disconnectButton.get(), 0, 4);
+    MAKE_SMART_PTR(QPushButton, disconnectButton);
+    MAKE_SMART_PTR(QSettings, settings, (AUTHOR_NAME, APP_NAME));
+    ADD_LAYOUT_TO(layout, disconnectButton.get(), 0, 4);
 
     const auto Function = BuilderFunc
         .   StartBuild()
