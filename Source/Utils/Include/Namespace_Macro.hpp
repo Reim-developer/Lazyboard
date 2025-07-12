@@ -1,0 +1,36 @@
+#ifndef NAMESPACE_MACRO_HPP
+#define NAMESPACE_MACRO_HPP
+
+#define LISTENER_NAMESPACE \
+        namespace ZClipboard::Listener { 
+
+#define GUI_NAMESPACE \
+        namespace ZClipboard::GUI {
+
+#define LIB_MEMORY_NAMESPACE \
+        namespace ZClipboard::Lib_Memory {
+
+#define CORE_NAMESPACE \
+        namespace ZClipboard::Core {
+
+#define UTILS_NAMESPACE \
+        namespace ZClipboard::AppUtils {
+
+#define CLIPBOARD_NAMESPACE \
+        namespace ZClipboard::Clipboard {
+
+#define DATABASE_NAMESPACE \
+        namespace ZClipboard::Database {
+
+#define NETWORK_NAMESPACE \
+        namespace ZClipboard::Network {
+
+#define PRELOAD_NAMESPACE  \
+        namespace ZClipboard::Preload {
+
+#define LANGUAGE_NAMESPACE \
+        namespace ZClipboard::Language {
+
+#define END_NAMESPACE } 
+
+#endif // NAMESPACE_MACRO_HPP
