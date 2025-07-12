@@ -5,15 +5,13 @@
 #include "../../zGui/include/getButton.hpp"
 #include "clearCacheListener.hpp"
 #include <QMainWindow>
-#define BUILD_CLASS(T, V) template<typename T, typename V>
-#define FORWARD(T, value) std::forward<T>(value)
-#define VOID_FUNC std::function<void()>
+#include "../../zUtils/include/macro.hpp"
 
 using zclipboard::lib_memory::PtrUnique;
 using zclipboard::zGui::GetButton;
 using zclipboard::lib_memory::MakePtr;
 
-namespace zclipboard::listener {
+LISTENER_NAMESPACE
     struct DisconnectImpl {
         QSettings *setting;
         GetButton *getButton;
@@ -31,7 +29,7 @@ namespace zclipboard::listener {
                 return this;
             }
 
-            BUILD_CLASS(T, V)
+            CLASS_BUILD(T, V)
             ListenerDisconnect *WithAndThen(T DisconnectImpl::*member, V &&value) {
                 Impl.get()->*member = FORWARD(V, value);
 
@@ -44,6 +42,6 @@ namespace zclipboard::listener {
 
             VOID_FUNC TryGetListener();
     };
-} // namespace zclipboard::listener
+END_NAMESPACE
 
 #endif // LISTENER_DISCONNECT_HPP
