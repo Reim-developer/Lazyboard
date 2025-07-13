@@ -16,12 +16,12 @@ void DisconnectButton::addDisconnectButton(QMainWindow *parent, GetButton *getBu
         MAKE_SMART_PTR(QPushButton, disconnectButton);
         MAKE_SMART_PTR(QSettings, settings, (AUTHOR_NAME, APP_NAME));
         ADD_LAYOUT_TO(layout, disconnectButton.get(), 0, 4);
-    #endif
 
-    disconnectButton = MakePtr<QPushButton>();
-    settings = MakePtr<QSettings>(AUTHOR_NAME, APP_NAME);
-    layout->addWidget(disconnectButton.get(), 0, 4);
-     
+    #else
+        disconnectButton = MakePtr<QPushButton>();
+        settings = MakePtr<QSettings>(AUTHOR_NAME, APP_NAME);
+        layout->addWidget(disconnectButton.get(), 0, 4);
+    #endif
 
     const auto Function = BuilderFunc
         .   StartBuild()
