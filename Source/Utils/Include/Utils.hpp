@@ -24,6 +24,19 @@ UTILS_NAMESPACE
         static bool hasSetting(const char* SETTING_NAME);
         static ContentType hasContentType(const QMimeData* mimeData);
         static Translate::LanguageType languageTypeCast(int value);
+        
+        /*
+        * Only for debug mode is enabled.
+        */
+        template<typename... Args>
+        static void LogDebug(Args&&... args) {
+            #if defined (Z_DEBUG)
+                auto debugStream = qDebug();
+                debugStream << "[DEBUG_MODE]";
+
+                (debugStream << ... << args);
+            #endif
+        }
     };
 
 END_NAMESPACE
