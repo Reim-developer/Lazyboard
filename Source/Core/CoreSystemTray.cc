@@ -16,10 +16,9 @@ using ZClipboard::AppUtils::Utils;
 void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params) {
     QMenu *menu = params.trayMenu;
     QMainWindow *window = params.window;
-
-    // clang-format off
-    connect(&LanguageManager::instance(), 
-            &LanguageManager::languageChanged, this, 
+   
+    connect(&LanguageManager::GetLanguageManager(), 
+            &LanguageManager::OnLanguageChanged, this, 
               [this, menu, window](int newLanguage) {
 
         struct SystemTrayParams params {
@@ -30,7 +29,6 @@ void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params
         loadTranslator(params); 
     });
 
-    // clang-format on
 }
 
 void SystemTrayCore::translatorDectect(const SystemTrayParams &params) {
