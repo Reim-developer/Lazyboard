@@ -9,6 +9,7 @@
 #include <QStringLiteral>
 #include <QMenu>
 #include "DisconnectButton.hpp"
+#include "LanguageManager.hpp"
 #include "SearchPanel.hpp"
 #include "ClearButton.hpp"
 #include "GetConnectButton.hpp"
@@ -18,6 +19,7 @@
 #include <QSettings>
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../Hot_Reload/Include/HotReload_Language.hpp"
 #include "TableView.hpp"
 
 using ZClipboard::Core::NotificationCore;
@@ -29,6 +31,8 @@ using ZClipboard::GUI::SearchArea;
 using ZClipboard::GUI::SettingButton;
 using ZClipboard::GUI::SystemTray;
 using ZClipboard::Lib_Memory::PtrUnique;
+using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
+using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
 
 GUI_NAMESPACE
 
@@ -42,11 +46,11 @@ GUI_NAMESPACE
 
     public:
         explicit AppMainWindow(QWidget *zWindow = nullptr);
-        void loadTranslator();
+        void Translator();
 
     private:
-        void setupGui();
-        void createSystemTray();
+        void SetupApplicationGUI();
+        void SetupSystemTray();
         void addTrayMenuActions(QSystemTrayIcon *trayIcon);
         void translatorDectect();
 
@@ -57,6 +61,7 @@ GUI_NAMESPACE
         void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
     private:
+        PtrUnique<HotReloadLanguage> hotReloadLanguage;
         NotificationCore *notificationCore;
 
         QSettings *settings;
