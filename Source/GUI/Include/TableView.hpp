@@ -19,6 +19,8 @@
 #include "../../Clipboard/Include/ClipboardImage.hpp"
 #include "../../Clipboard/Include/ClipboardText.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../../Lib_Memory/Include/Memory.hpp"
 #include "TableModel.hpp"
 
 using std::unique_ptr;
@@ -27,37 +29,40 @@ using ZClipboard::Clipboard::ClipboardText;
 using ZClipboard::GUI::TableModel;
 using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::ClipboardDialog;
+using ZClipboard::Lib_Memory::PtrUnique;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
 
     class TableView : public QObject {
         Q_OBJECT
 
-    public:
-            void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
-            TableModel *GetTableModel();
-            DatabaseManager &GetDatabase();
-            QClipboard *GetClipboard();
+        public:
+                void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
+                TableModel *GetTableModel();
+                DatabaseManager &GetDatabase();
+                QClipboard *GetClipboard();
 
-    private:
-            static const constexpr int CONTENT_COLUMN = 1;
+        private:
+                static const constexpr int CONTENT_COLUMN = 1;
 
-    private:
-            QClipboard *clipboard;
-            QTableView *tableView;
-            TableModel *tableModel;
+        private:
+                PtrUnique<ComponentsToolkit> toolkit;
+                QClipboard *clipboard;
+                QTableView *tableView;
+                TableModel *tableModel;
 
-            unique_ptr<ClipboardImage> imageClipboard;
-            unique_ptr<ClipboardText> textClipboard;
+                unique_ptr<ClipboardImage> imageClipboard;
+                unique_ptr<ClipboardText> textClipboard;
 
-            QSet<QString> existingContents;
-            QSet<QString> existingImages;
+                QSet<QString> existingContents;
+                QSet<QString> existingImages;
 
-            DatabaseManager databaseManager;
-            ClipboardDialog *clipboardDialog;
+                DatabaseManager databaseManager;
+                ClipboardDialog *clipboardDialog;
 
-    public slots:
-            void onContentClicked(const QModelIndex &current);
+        public slots:
+                void onContentClicked(const QModelIndex &current);
     };
 
 END_NAMESPACE
