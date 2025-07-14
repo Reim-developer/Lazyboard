@@ -23,8 +23,8 @@ using ZClipboard::Lib_Memory::PtrUnique;
 
 #define CLASS_BUILD(T, V) template<typename T, typename V>
 
-#define FORWARD(T, value) \
-        std::forward<T>(value)
+#define FORWARD(V, value) \
+        std::forward<V>(value)
 
 #define VOID_FUNC \
         std::function<void()>
