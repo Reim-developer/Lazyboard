@@ -32,8 +32,7 @@ GUI_NAMESPACE
             ColumnCount = 4 
         };
 
-        explicit TableModel(DatabaseManager &database, QObject *parent = nullptr);
-        ~TableModel();
+        void SetupTableAbstract(DatabaseManager *database);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -52,8 +51,7 @@ GUI_NAMESPACE
         QList<zClipboardItem> m_items;
         QList<zClipboardItem> mData;
         QSet<QString> m_existingHashes;
-
-        DatabaseManager &databaseManager;
+        DatabaseManager *databaseManager;
     };
 
 END_NAMESPACE

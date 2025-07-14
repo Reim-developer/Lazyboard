@@ -10,6 +10,9 @@
 #define GUI_HOT_RELOAD_NAMESPACE \
         namespace ZClipboard::GUI::Hot_Reload {
 
+#define GUI_TOOLKIT_NAMESPACE \
+        namespace ZClipboard::GUI::Toolkit {
+
 #define LIB_MEMORY_NAMESPACE \
         namespace ZClipboard::Lib_Memory {
 

@@ -13,10 +13,9 @@ using ZClipboard::GUI::TableModel;
 using ZClipboard::Database::DatabaseManager;
 using ZClipboard::AppUtils::Utils;
 
-TableModel::TableModel(DatabaseManager &database, QObject *parent)
-    : QAbstractTableModel(parent), databaseManager(database) {}
-
-TableModel::~TableModel() {}
+void TableModel::SetupTableAbstract(DatabaseManager *database) {
+    this->databaseManager = database;
+}
 
 int TableModel::rowCount(const QModelIndex &) const {
     return mData.size();
@@ -227,7 +226,7 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     const QString hashToUpdate = itemToModify.hash;
     if (!hashToUpdate.isEmpty()) {
-        databaseManager.updatePinStatus(hashToUpdate, itemToModify.isPinned);
+        databaseManager->updatePinStatus(hashToUpdate, itemToModify.isPinned);
     }
 
     if (oldRow != targetRow) {
