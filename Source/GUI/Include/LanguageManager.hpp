@@ -3,22 +3,25 @@
 #include <QObject>
 #include <QSettings>
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../../Lib_Memory/Include/Memory.hpp"
+
+using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_NAMESPACE
 
     class LanguageManager : public QObject {
         Q_OBJECT
 
-    public:
-        static LanguageManager &instance();
-        void setLanguage(int language);
+        public:
+            LanguageManager();
+            static LanguageManager &GetLanguageManager();
+            void SetLanguage(int languageType);
 
-    signals:
-        void languageChanged(int language);
+        signals:
+            void OnLanguageChanged(int languageType);
 
-    private:
-        explicit LanguageManager(QObject *parent = nullptr);
-        QSettings *settings;
+        private:
+            PtrUnique<QSettings> settings;
     };
 
 END_NAMESPACE
