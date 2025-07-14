@@ -4,36 +4,44 @@
 #include <QObject>
 #include <QGridLayout>
 #include <QPushButton>
-#include <QSharedPointer>
 #include <QtNetwork/QTcpServer>
 #include <QSettings>
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../../Network/Include/NetworkDiscovery.hpp"
 #include "../../Language/Include/Translate.hpp"
+#include "../../Core/Include/CoreConnect.hpp"
+#include "../../Lib_Memory/Include/Memory.hpp"
+#include "../../Listener/Include/ListenerConnect.hpp"
 
 using ZClipboard::Language::Translate;
 using ZClipboard::Network::PeerDiscovery;
+using ZClipboard::Core::CoreConnect;
+using ZClipboard::Lib_Memory::PtrUnique;
+using ZClipboard::Listener::ListenerConnect;
+using ZClipboard::Network::NetworkState;
 
 GUI_NAMESPACE
-    class GetButton : public QObject {
-        Q_OBJECT
+    class GetButton {
+        public:
+            void SetupConnectButton(QMainWindow *window, QGridLayout *layout);
+            void ResetServer();
+            QPushButton *GetConnectButton();
+            NetworkState *GetNetworkState();
 
-    public:
-        void addGetButton(QWidget *window, QGridLayout *layout);
-        void createReceiverServer(QWidget *window);
-        void resetServer();
-        QPushButton *getConnectButton() const;
-        QTcpServer *getServer();
+        private:
+            CoreConnect BuilderCore;
+            ListenerConnect BuilderFn;
 
-    private:
-        int type;
-        Translate::LanguageType languageType;
+        private:
+            int type;
+            Translate::LanguageType languageType;
 
-    private:
-        QPushButton *getButton;
-        QSettings *settings;
-        QTcpServer *server = nullptr;
-        PeerDiscovery *peer;
+        private:
+            PtrUnique<QPushButton> getButton;
+            PtrUnique<QSettings> settings;
+            PtrUnique<PeerDiscovery> peerDiscovery;
+            PtrUnique<NetworkState> networkState;
+
     };
 END_NAMESPACE
 
