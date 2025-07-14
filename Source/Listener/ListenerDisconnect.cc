@@ -8,18 +8,20 @@ using ZClipboard::Listener::ListenerDisconnect;
 VOID_FUNC ListenerDisconnect::TryGetListener() {
     const auto Function = [this]() -> void {
         auto settings = this 
-        ->  Impl
-        ->  setting;
+            ->  Impl
+            ->  setting;
 
         auto getButton = this
-        ->  Impl
-        ->  getButton;
+            ->  Impl
+            ->  getButton;
     
-        auto server = getButton->getServer();
-
+        auto server = getButton
+            ->  GetNetworkState()
+            ->  GetServer();
+            
         auto parent = this
-        ->  Impl
-        ->  windowParent;
+            ->  Impl
+            ->  windowParent;
 
         const int LANGUAGE_TYPE = settings->value(LANGUAGE_SETTING).toInt();
 
@@ -29,22 +31,22 @@ VOID_FUNC ListenerDisconnect::TryGetListener() {
 
             QMessageBox::information(parent, DIALOG_ERR_TITLE, DIALOG_ERR_MSG);
             return;
+        } else {
+            server->close();
+            server->deleteLater();
+
+            const auto DIALOG_TITLE = LANGUAGE_TYPE ? DIALOG_INFO_TITLE_VI : DIALOG_INFO_TITLE_EN;
+            const auto DIALOG_MSG = LANGUAGE_TYPE ? DISCONNECT_SUCCESS_MSG_VI : DISCONNECT_SUCCESS_MSG_EN;
+
+            QMessageBox::information(parent, DIALOG_TITLE, DIALOG_MSG);
         }
 
-        server->close();
-        server->deleteLater();
-        getButton->resetServer();
-
-        const auto DIALOG_TITLE = LANGUAGE_TYPE ? DIALOG_INFO_TITLE_VI : DIALOG_INFO_TITLE_EN;
-        const auto DIALOG_MSG = LANGUAGE_TYPE ? DISCONNECT_SUCCESS_MSG_VI : DISCONNECT_SUCCESS_MSG_EN;
-
-        QMessageBox::information(parent, DIALOG_TITLE, DIALOG_MSG);
-
+        getButton->ResetServer();
         const auto BUTTON_TEXT = LANGUAGE_TYPE ? GET_CONTENT_BUTTON_VI : GET_CONTENT_BUTTON_EN;
 
         getButton
-        ->  getConnectButton()
-        ->  setText(BUTTON_TEXT);
+            ->  GetConnectButton()
+            ->  setText(BUTTON_TEXT);
 
     };
 
