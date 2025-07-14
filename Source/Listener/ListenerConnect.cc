@@ -137,11 +137,24 @@ VOID_FUNC ListenerConnect::TryGetListener() {
 
                 this->Connect();
                 
-                MAKE_SMART_PTR(PeerDiscovery, this->peerDiscovery,(45454, 
-             this
-                    ->  Impl
-                    ->  window
-                ));
+                #if !defined (_WIN32)
+
+                    MAKE_SMART_PTR(PeerDiscovery, this->peerDiscovery,(45454, 
+                this
+                        ->  Impl
+                        ->  window
+                    ));
+
+                #else 
+
+                    this->peerDiscovery = MakePtr<PeerDiscovery>(
+                        45454,
+                        this
+                            ->  Impl
+                            ->  window
+                    );
+
+                #endif
             }
         }
 
