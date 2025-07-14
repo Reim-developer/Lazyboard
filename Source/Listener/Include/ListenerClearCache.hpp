@@ -13,7 +13,7 @@ using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::TableView;
 
 LISTENER_NAMESPACE
-    struct ListenerCache {  
+    struct ListenerCacheImpl {  
         TableView *table;
         QSettings *settings;
         QPushButton *button;
@@ -21,19 +21,35 @@ LISTENER_NAMESPACE
 
     class ClearCacheListener {
         private:
-            PtrUnique<ListenerCache> cache;
+            PtrUnique<ListenerCacheImpl> Impl;
             
             public:
-            ClearCacheListener *StartBuild();
+                ClearCacheListener *StartBuild() {
+                    #if !defined (_WIN32)
 
-            CLASS_BUILD(T, V)
-            ClearCacheListener *WithAndThen(T ListenerCache::*member, V &&value) {
-                cache.get()->*member = FORWARD(T, value);
+                        MAKE_SMART_PTR(ListenerCacheImpl, Impl);
 
-                return this;
-            }
+                    #else
 
-            function<void()> TryGetListener();
+                        Impl = MakePtr<ListenerCacheImpl>();
+
+                    #endif
+
+                    return this;
+                }
+
+                CLASS_BUILD(T, V)
+                ClearCacheListener *WithAndThen(T ListenerCacheImpl::*member, V &&value) {
+                    Impl.get()->*member = FORWARD(T, value);
+
+                    return this;
+                }
+
+                ClearCacheListener *WhenDone() {
+                    return this;
+                }
+
+                VOID_FUNC TryGetListener();
     };
 
 
