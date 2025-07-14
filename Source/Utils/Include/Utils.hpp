@@ -4,14 +4,20 @@
 #include <QSystemTrayIcon>
 #include "../../Language/Include/Translate.hpp"
 #include "../../Core/Include/Enum.hpp"
+#include "Meta_Macro.hpp"
+#include "../../Lib_Memory/Include/Memory.hpp"
 #include "Namespace_Macro.hpp"
+#include "Meta_Macro.hpp"
 #include <QWidget>
 #include <QObject>
 #include <QMimeData>
+#include <utility>
 
 using ZClipboard::Core::ContentType;
 using ZClipboard::Core::Platform;
 using ZClipboard::Language::Translate;
+using ZClipboard::Lib_Memory::MakePtr;
+using std::forward;
 
 UTILS_NAMESPACE
 
@@ -35,6 +41,22 @@ UTILS_NAMESPACE
                 debugStream << "[DEBUG_MODE]";
 
                 (debugStream << ... << args);
+            #endif
+        }
+
+        /*
+        * Initiation a smart pointer.
+        */
+        template<typename T, typename V, typename... Args>
+        static void MakeSmartPtr(V &&value, Args&&... args) {
+            #if !defined (_WIN32)
+
+                MAKE_SMART_PTR(T, value, (forward<Args>(args)...));
+
+            #else
+
+                value = MakePtr<T>(forward<Args>(args)...);
+
             #endif
         }
     };
