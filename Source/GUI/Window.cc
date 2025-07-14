@@ -43,14 +43,30 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
     setWindowIcon(appIcon);
 
-    setupGui();
+    SetupApplicationGUI();
     translatorDectect();
 
-    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this,
-            &AppMainWindow::loadTranslator);
+    #if !defined (_WIN_32)
+
+        MAKE_SMART_PTR(HotReloadLanguage, hotReloadLanguage);
+
+    #else
+
+        hotReloadLanguage = MakePtr<HotReloadLanguage>();
+
+    #endif
+        Utils::LogDebug("HotReloadLanguage instance address:", &hotReloadLanguage);
+
+        hotReloadLanguage
+            ->  StartBuild()
+            ->  WithAndThen(&HotReloadImpl::windowContext, this)
+            ->  WhenDone()
+            ->  ThenAddListener([this] {
+                this->Translator();            
+    });
 }
 
-void AppMainWindow::setupGui() {
+void AppMainWindow::SetupApplicationGUI() {
     tableView = MakePtr<TableView>();
     searchArea = new SearchArea();
     clearButton = new ClearButton();
@@ -105,16 +121,16 @@ void AppMainWindow::translatorDectect() {
 
     switch (settings->value(LANGUAGE_SETTING).toInt()) {
         case Translate::ENGLISH:
-            loadTranslator();
+            Translator();
             break;
 
         case Translate::VIETNAMESE:
-            loadTranslator();
+            Translator();
             break;
     }
 }
 
-void AppMainWindow::loadTranslator() {
+void AppMainWindow::Translator() {
     const int TRANS_VALUE = settings->value(LANGUAGE_SETTING).toInt();
     const auto TRANS_TYPE = Utils::languageTypeCast(TRANS_VALUE);
 
