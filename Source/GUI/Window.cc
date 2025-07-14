@@ -76,7 +76,7 @@ void AppMainWindow::setupGui() {
     tableView->SetupTableView(this, windowLayout);
     searchArea->SetupSearchPanel(searchPanelWidget);
     clearButton->SetupClearButton(windowLayout, tableView.get());
-    getButton->addGetButton(this, windowLayout);
+    getButton->SetupConnectButton(this, windowLayout);
     settingButton->addSettingButton(this, windowLayout);
     disconnectButton->addDisconnectButton(this, getButton, windowLayout);
     systemTray->addSystemTray(systemTrayWidget);
@@ -119,7 +119,7 @@ void AppMainWindow::loadTranslator() {
     const auto TRANS_TYPE = Utils::languageTypeCast(TRANS_VALUE);
 
     auto clearButtonWidget = clearButton->getClearButton();
-    auto getButtonWidget = getButton->getConnectButton();
+    auto getButtonWidget = getButton->GetConnectButton();
     auto settingButtonWidget = settingButton->getSettingButton();
     auto discButtonWidget = disconnectButton->getDisconnectButton();
     auto searchPanel = searchArea->GetSearchPanel();
