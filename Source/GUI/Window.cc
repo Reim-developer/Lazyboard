@@ -46,23 +46,15 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     SetupApplicationGUI();
     translatorDectect();
 
-    #if !defined (_WIN_32)
+    Utils::MakeSmartPtr<HotReloadLanguage>(hotReloadLanguage);
+    Utils::LogDebug("HotReloadLanguage instance address:", &hotReloadLanguage);
 
-        MAKE_SMART_PTR(HotReloadLanguage, hotReloadLanguage);
-
-    #else
-
-        hotReloadLanguage = MakePtr<HotReloadLanguage>();
-
-    #endif
-        Utils::LogDebug("HotReloadLanguage instance address:", &hotReloadLanguage);
-
-        hotReloadLanguage
-            ->  StartBuild()
-            ->  WithAndThen(&HotReloadImpl::windowContext, this)
-            ->  WhenDone()
-            ->  ThenAddListener([this] {
-                this->Translator();            
+    hotReloadLanguage
+        ->  StartBuild()
+        ->  WithAndThen(&HotReloadImpl::windowContext, this)
+        ->  WhenDone()
+        ->  ThenAddListener([this] {
+            this->Translator();            
     });
 }
 
