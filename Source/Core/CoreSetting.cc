@@ -6,12 +6,16 @@
 #include "../Language/Include/Language.hpp"
 #include "Include/Enum.hpp"
 #include "../GUI/Include/InputPasswordDialog.hpp"
+#include "../Utils/Include/Meta_Macro.hpp"
+#include "../Lib_Memory/Include/Memory.hpp"
 
 using ZClipboard::Core::SettingCore;
 using ZClipboard::Language::Translate;
 using ZClipboard::GUI::InputPasswordDialog;
 using ZClipboard::GUI::LanguageManager;
 using ZClipboard::GUI::ThemeManager;
+using ZClipboard::Lib_Memory::PtrUnique;
+using ZClipboard::Lib_Memory::MakePtr;
 
 void SettingCore::addHideSetting(const SettingCoreParams &params) {
     const auto function = [this, settings = params.settings](bool isChecked) {
@@ -55,7 +59,9 @@ void SettingCore::onLanguageSettingChanged(const SettingCoreParams &params) {
         int selectedLanguage = params.languageBox->itemData(index).toInt();
         params.settings->setValue(LANGUAGE_SETTING, selectedLanguage);
 
-        LanguageManager::instance().setLanguage(selectedLanguage);
+        MakePtr<LanguageManager>()
+            ->  GetLanguageManager()
+            .   SetLanguage(selectedLanguage);
 
         const int TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
 
