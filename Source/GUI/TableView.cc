@@ -2,6 +2,8 @@
 #include "../Clipboard/Include/ClipboardImage.hpp"
 #include "../Clipboard/Include/ClipboardText.hpp"
 #include "../Clipboard/Include/ClipboardCache.hpp"
+#include "Toolkit/Include/Components_Toolkit.hpp"
+#include "Toolkit/Include/Layout_Tookit.hpp"
 #include "Include/ClipboardDialog.hpp"
 #include "Include/TableModel.hpp"
 #include <QTableWidget>
@@ -29,12 +31,17 @@ using ZClipboard::Clipboard::ClipboardText;
 using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::TableModel;
+using ZClipboard::GUI::Toolkit::GridLayoutAdd;
+using ZClipboard::GUI::Toolkit::WidgetProperty;
 
 void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
+    Utils::MakeSmartPtr<ComponentsToolkit>(toolkit);
     databaseManager.setupinitDB();
 
-    tableModel = new TableModel(databaseManager, this);
-    tableView = new QTableView(zWindow);
+    tableModel = toolkit->GetTableModel();
+    tableView = toolkit->GetTableView();
+    tableModel->SetupTableAbstract(&databaseManager);
+
     clipboard = QApplication::clipboard();
 
     tableView->setModel(tableModel);
@@ -50,7 +57,13 @@ void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
     tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     tableView->setWordWrap(false);
     tableView->setTextElideMode(Qt::ElideRight);
-    zLayout->addWidget(tableView, 1, 0, 1, 5);
+
+    using WidgetImpl = WidgetProperty;
+    GridLayoutAdd(zLayout, WidgetImpl {
+        .widget = tableView,
+        .row = 1, .column = 0,
+        .rowSpan = 1, .columnSpan = 5
+    });
 
     ClipboardCache clipboardCache;
     clipboardCache.addClipboardHistoryFromDB(tableModel, databaseManager);
