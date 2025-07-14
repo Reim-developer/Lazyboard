@@ -1,5 +1,6 @@
 #include "Include/NetworkState.hpp"
 #include "../Utils/Include/Meta_Macro.hpp"
+#include "qtcpsocket.h"
 
 using ZClipboard::Network::NetworkState;
 
@@ -41,7 +42,7 @@ QTcpSocket *NetworkState::GetSocket() {
 
         #else
 
-            socket = MakePtr<QTcpServer>();
+            socket = MakePtr<QTcpSocket>();
 
         #endif
     }
