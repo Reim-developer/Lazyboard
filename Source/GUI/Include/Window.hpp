@@ -23,6 +23,11 @@
 #include "../Toolkit/Include/Components_Toolkit.hpp"
 #include "TableView.hpp"
 
+#if defined (Z_DEBUG)
+    #include "../../Utils/Include/Logging.hpp"
+    using ZClipboard::AppUtils::LogContext;
+#endif 
+
 using ZClipboard::Core::NotificationCore;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::GUI::TableView;
@@ -36,6 +41,7 @@ using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 using ZClipboard::AppUtils::Utils;
+
 
 GUI_NAMESPACE
 
@@ -85,9 +91,9 @@ GUI_NAMESPACE
 
         #if defined (Z_DEBUG)
             private:
-                void __LOGGING_ALL_OBJECTS__() {
-                    using LogContext = ZClipboard::AppUtils::Utils::LogContext;
+                #define __LOG__ __LOGGING_ALL_OBJECTS__();
 
+                void __LOGGING_ALL_OBJECTS__() {
                     LogContext{}.LogDebug(&Components_Tookit);
                     LogContext{}.LogDebug(&tableView);
                     LogContext{}.LogDebug(&searchArea);
