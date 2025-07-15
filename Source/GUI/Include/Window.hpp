@@ -20,6 +20,7 @@
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../Hot_Reload/Include/HotReload_Language.hpp"
+#include "../Toolkit/Include/Components_Toolkit.hpp"
 #include "TableView.hpp"
 
 using ZClipboard::Core::NotificationCore;
@@ -33,12 +34,13 @@ using ZClipboard::GUI::SystemTray;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
 
     struct AppConfig {
-        inline static constexpr int Z_WINDOW_WIDTH = 800;
-        inline static constexpr int Z_WINDOW_HEIGHT = 600;
+        inline static constexpr int WINDOW_WIDTH = 800;
+        inline static constexpr int WINDOW_HEIGHT = 600;
     };
 
     class AppMainWindow : public QMainWindow {
@@ -49,6 +51,7 @@ GUI_NAMESPACE
         void Translator();
 
     private:
+        void InitiationObject();
         void SetupApplicationGUI();
         void SetupSystemTray();
         void addTrayMenuActions(QSystemTrayIcon *trayIcon);
@@ -61,6 +64,7 @@ GUI_NAMESPACE
         void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
     private:
+        PtrUnique<ComponentsToolkit> Components_Tookit;
         PtrUnique<HotReloadLanguage> hotReloadLanguage;
         NotificationCore *notificationCore;
 
@@ -71,7 +75,7 @@ GUI_NAMESPACE
         SystemTray *systemTray;
 
         PtrUnique<TableView> tableView;
-        SearchArea *searchArea;
+        PtrUnique<SearchArea> searchArea;
 
         ClearButton *clearButton;
         GetButton *getButton;
