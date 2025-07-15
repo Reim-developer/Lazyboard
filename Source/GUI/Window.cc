@@ -27,6 +27,7 @@ using ZClipboard::GUI::SystemTrayWidget;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
+using LogContext = ZClipboard::AppUtils::Utils::LogContext;
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     appIcon = QIcon(ICON_PATH);
@@ -46,7 +47,7 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     translatorDectect();
 
     Utils::MakeSmartPtr<HotReloadLanguage>(hotReloadLanguage);
-    Utils::LogDebug("HotReloadLanguage address:", &hotReloadLanguage);
+    LogContext{}.LogDebug(&hotReloadLanguage);
 
     hotReloadLanguage
         ->  StartBuild()
@@ -102,14 +103,14 @@ void AppMainWindow::SetupApplicationGUI() {
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
 
 
-    Utils::LogDebug("ComponentsTookit address:", &Components_Tookit);
-    Utils::LogDebug("TableView address:", &tableView);
-    Utils::LogDebug("SearchArea address:", &searchArea);
-    Utils::LogDebug("ClearButton address:", &clearButton);
-    Utils::LogDebug("GetButton address:", &getButton);
-    Utils::LogDebug("SettingButton address:", &settingButton);
-    Utils::LogDebug("DisconnectButton address:", &disconnectButton);
-    Utils::LogDebug("SystemTray address", &systemTray);
+    LogContext{}.LogDebug(&Components_Tookit);
+    LogContext{}.LogDebug(&tableView);
+    LogContext{}.LogDebug(&searchArea);
+    LogContext{}.LogDebug(&clearButton);
+    LogContext{}.LogDebug(&getButton);
+    LogContext{}.LogDebug(&settingButton);
+    LogContext{}.LogDebug(&disconnectButton);
+    LogContext{}.LogDebug(&systemTray);
 }
 
 void AppMainWindow::closeEvent(QCloseEvent *event) {
