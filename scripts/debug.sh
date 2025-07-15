@@ -28,23 +28,6 @@ debug_build() {
 
     cd "$build_dir" || exit 1
 
-    cmake -DCMAKE_BUILD_TYPE=Debug \
-        -DCMAKE_C_COMPILER=clang \
-        -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-        -DCMAKE_CXX_COMPILER=clang++ \
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-        ..
-        
-    make
-    ./"$program_name"
-}
-
-normal_build() {
-     clang_detect
-     cmake_detect
-
-    cd "$build_dir" || exit 1
-
     cmake "$wall_flag" \
         -DCMAKE_C_COMPILER=clang \
         -DCMAKE_C_COMPILER_LAUNCHER=ccache \
@@ -52,6 +35,7 @@ normal_build() {
         -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DZ_DEBUG=1 \
         ..
+        
     make
     ./"$program_name"
 }
@@ -66,11 +50,7 @@ match_build() {
         mkdir "$build_dir"
     fi
     
-    case "$1" in
-    "debug") debug_build ;;
-    "") normal_build ;;
-    *) invalid_args "$1" ;;
-    esac
+    debug_build
 }
 
 os_detect() {
