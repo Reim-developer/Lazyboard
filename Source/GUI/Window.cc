@@ -46,8 +46,6 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     translatorDectect();
 
     Utils::MakeSmartPtr<HotReloadLanguage>(hotReloadLanguage);
-    Utils::LogDebug("HotReloadLanguage address:", &hotReloadLanguage);
-
     hotReloadLanguage
         ->  StartBuild()
         ->  WithAndThen(&HotReloadImpl::windowContext, this)
@@ -55,6 +53,10 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
         ->  ThenAddListener([this] {
             this->Translator();            
     });
+
+    #if defined (Z_DEBUG)
+        __LOGGING_ALL_OBJECTS__();
+    #endif
 }
 
 void AppMainWindow::InitiationObject() {
@@ -100,16 +102,6 @@ void AppMainWindow::SetupApplicationGUI() {
     notificationCore->onClipboardChanged(trayIcon, clipboard);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
-
-
-    Utils::LogDebug("ComponentsTookit address:", &Components_Tookit);
-    Utils::LogDebug("TableView address:", &tableView);
-    Utils::LogDebug("SearchArea address:", &searchArea);
-    Utils::LogDebug("ClearButton address:", &clearButton);
-    Utils::LogDebug("GetButton address:", &getButton);
-    Utils::LogDebug("SettingButton address:", &settingButton);
-    Utils::LogDebug("DisconnectButton address:", &disconnectButton);
-    Utils::LogDebug("SystemTray address", &systemTray);
 }
 
 void AppMainWindow::closeEvent(QCloseEvent *event) {

@@ -35,6 +35,7 @@ using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::AppUtils::Utils;
 
 GUI_NAMESPACE
 
@@ -81,6 +82,23 @@ GUI_NAMESPACE
         GetButton *getButton;
         SettingButton *settingButton;
         DisconnectButton *disconnectButton;
+
+        #if defined (Z_DEBUG)
+            private:
+                void __LOGGING_ALL_OBJECTS__() {
+                    using LogContext = ZClipboard::AppUtils::Utils::LogContext;
+
+                    LogContext{}.LogDebug(&Components_Tookit);
+                    LogContext{}.LogDebug(&tableView);
+                    LogContext{}.LogDebug(&searchArea);
+                    LogContext{}.LogDebug(&clearButton);
+                    LogContext{}.LogDebug(&getButton);
+                    LogContext{}.LogDebug(&settingButton);
+                    LogContext{}.LogDebug(&disconnectButton);
+                    LogContext{}.LogDebug(&systemTray);
+                    LogContext{}.LogDebug(&hotReloadLanguage);
+                }
+        #endif
     };
 
 END_NAMESPACE

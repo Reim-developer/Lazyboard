@@ -13,11 +13,16 @@
 #include <QMimeData>
 #include <utility>
 
+#if defined(Z_DEBUG)
+    #include <source_location>
+#endif
+
 using ZClipboard::Core::ContentType;
 using ZClipboard::Core::Platform;
 using ZClipboard::Language::Translate;
 using ZClipboard::Lib_Memory::MakePtr;
 using std::forward;
+using std::string;
 
 UTILS_NAMESPACE
 
@@ -34,15 +39,23 @@ UTILS_NAMESPACE
         /*
         * Only for debug mode is enabled.
         */
-        template<typename... Args>
-        static void LogDebug(Args&&... args) {
-            #if defined (Z_DEBUG)
-                auto debugStream = qDebug();
-                debugStream << "[DEBUG_MODE]";
+        #if defined(Z_DEBUG)
+            struct LogContext {
+                const std::source_location &location = std::source_location::current();
 
-                (debugStream << ... << args);
-            #endif
-        }
+                template<typename... Args>
+                void LogDebug(Args&&... args) {
+                        auto debugStream = qDebug().noquote();
+
+                        debugStream << " [DEBUG_MODE] In File:" << location.file_name()<< "\n";
+                        debugStream << "[DEBUG_MODE] In Function:" << location.function_name() << "\n";
+                        debugStream << "[DEBUG_MODE] In Line:" << location.line() << "\n";
+                        debugStream << "[DEBUG_MODE] Address:";
+                        (debugStream << ... << args);
+                        debugStream << "\n";
+                }
+            };
+        #endif
 
         /*
         * Initiation a smart pointer.
@@ -51,14 +64,20 @@ UTILS_NAMESPACE
         static void MakeSmartPtr(V &&value, Args&&... args) {
             #if !defined (_WIN32)
 
-                MAKE_SMART_PTR(T, value, (std::forward<Args>(args)...));
-                
+                if(!value) {
+                    MAKE_SMART_PTR(T, value, (std::forward<Args>(args)...));
+                }
+
             #else
 
-                value = MakePtr<T>(std::forward<Args>(args)...);
+                if(!value) {
+                    value = MakePtr<T>(std::forward<Args>(args)...);
+                }
 
             #endif
         }
+
+        
     };
 
 END_NAMESPACE
