@@ -137,8 +137,12 @@ VOID_FUNC ListenerConnect::TryGetListener() {
                     ->  button
                     ->  setText(TYPE_TRANS);
 
+                auto window = this
+                    ->  Impl
+                    ->  window;
+
                 this->Connect();
-                Utils::MakeSmartPtr<PeerDiscovery>(peerDiscovery, 45454, this);
+                Utils::MakeSmartPtr<PeerDiscovery>(peerDiscovery, 45454, window);
             }
         }
 
