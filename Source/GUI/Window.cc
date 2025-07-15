@@ -55,7 +55,7 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     });
 
     #if defined (Z_DEBUG)
-        __LOGGING_ALL_OBJECTS__();
+        __LOG__
     #endif
 }
 
