@@ -9,16 +9,24 @@
 #include "Include/TableView.hpp"
 #include "../Utils/Include/Meta_Macro.hpp"
 #include "../Utils/Include/Utils.hpp"
+#include "Toolkit/Include/Layout_Tookit.hpp"
 
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::ClearButton;
 using ZClipboard::Listener::ListenerCacheImpl;
 using ZClipboard::AppUtils::Utils;
+using ZClipboard::GUI::Toolkit::WidgetProperty;
+using ZClipboard::GUI::Toolkit::GridLayoutAdd;
 
 void ClearButton::SetupClearButton(QGridLayout *layout, TableView* tableView) {
     Utils::MakeSmartPtr<QPushButton>(clearButton);
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
-    ADD_LAYOUT_TO(layout, clearButton.get(), 0, 2);
+    
+    using WgImpl = WidgetProperty;
+    GridLayoutAdd(layout, WgImpl{
+        .widget = clearButton.get(),
+        .row = 0, .column = 2
+    });
 
     SetupEventListener(tableView);
     #if defined (Z_DEBUG)
