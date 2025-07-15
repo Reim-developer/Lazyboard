@@ -5,6 +5,7 @@
 #include "../../../Utils/Include/Utils.hpp"
 #include "../../../GUI/Include/TableModel.hpp"
 #include <QTableView>
+#include <QLineEdit>
 
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::TableModel;
@@ -16,10 +17,12 @@ GUI_TOOLKIT_NAMESPACE
         private:
             PtrUnique<QTableView> ClipboardTableView;
             PtrUnique<TableModel> ModelTable;
+            PtrUnique<QLineEdit> SearchArea;
 
         public:
             QTableView *GetTableView();
             TableModel *GetTableModel();
+            QLineEdit *GetSearchArea();
 
     };
 
