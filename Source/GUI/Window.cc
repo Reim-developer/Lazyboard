@@ -27,7 +27,6 @@ using ZClipboard::GUI::SystemTrayWidget;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
-using LogContext = ZClipboard::AppUtils::Utils::LogContext;
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     appIcon = QIcon(ICON_PATH);
@@ -47,8 +46,6 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     translatorDectect();
 
     Utils::MakeSmartPtr<HotReloadLanguage>(hotReloadLanguage);
-    LogContext{}.LogDebug(&hotReloadLanguage);
-
     hotReloadLanguage
         ->  StartBuild()
         ->  WithAndThen(&HotReloadImpl::windowContext, this)
@@ -56,6 +53,10 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
         ->  ThenAddListener([this] {
             this->Translator();            
     });
+
+    #if defined (Z_DEBUG)
+        __LOGGING_ALL_OBJECTS__();
+    #endif
 }
 
 void AppMainWindow::InitiationObject() {
@@ -101,16 +102,6 @@ void AppMainWindow::SetupApplicationGUI() {
     notificationCore->onClipboardChanged(trayIcon, clipboard);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
-
-
-    LogContext{}.LogDebug(&Components_Tookit);
-    LogContext{}.LogDebug(&tableView);
-    LogContext{}.LogDebug(&searchArea);
-    LogContext{}.LogDebug(&clearButton);
-    LogContext{}.LogDebug(&getButton);
-    LogContext{}.LogDebug(&settingButton);
-    LogContext{}.LogDebug(&disconnectButton);
-    LogContext{}.LogDebug(&systemTray);
 }
 
 void AppMainWindow::closeEvent(QCloseEvent *event) {
