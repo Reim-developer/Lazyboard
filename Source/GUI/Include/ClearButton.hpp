@@ -11,6 +11,11 @@
 #include "../../Listener/Include/ListenerClearCache.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
 
+#if defined (Z_DEBUG)
+    #include "../../Utils/Include/Logging.hpp"
+    using ZClipboard::AppUtils::LogContext;
+#endif
+
 using ZClipboard::GUI::TableView;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Core::ClearCoreBuilder;
@@ -23,13 +28,29 @@ GUI_NAMESPACE
             ClearCoreBuilder BuilderCore;
             ClearCacheListener BuilderFunc;
 
-    public:
-        void SetupClearButton(QGridLayout *layout, TableView* tableView);
-        QPushButton *getClearButton();
+        public:
+            void SetupClearButton(QGridLayout *layout, TableView* tableView);
+            QPushButton *getClearButton();
 
-    private:
-        PtrUnique<QSettings> settings;
-        PtrUnique<QPushButton> clearButton;
+        private:
+            void SetupEventListener(TableView *tableView);
+        
+        private:
+            PtrUnique<QSettings> settings;
+            PtrUnique<QPushButton> clearButton;
+
+        #if defined (Z_DEBUG)
+            private:
+                #define __LOG__ __LOGGING_ALL_OBJECTS__();
+
+                void __LOGGING_ALL_OBJECTS__() {
+                    LogContext{}.LogDebug(&BuilderCore);
+                    LogContext{}.LogDebug(&BuilderFunc);
+                    LogContext{}.LogDebug(&settings);
+                    LogContext{}.LogDebug(&clearButton);
+                }
+
+        #endif
     };
 
 END_NAMESPACE

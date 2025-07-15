@@ -8,31 +8,36 @@
 #include "../Core/Include/CoreClearCache.hpp"
 #include "Include/TableView.hpp"
 #include "../Utils/Include/Meta_Macro.hpp"
+#include "../Utils/Include/Utils.hpp"
+#include "Toolkit/Include/Layout_Tookit.hpp"
 
 using ZClipboard::Lib_Memory::PtrUnique;
-using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::GUI::ClearButton;
 using ZClipboard::Listener::ListenerCacheImpl;
+using ZClipboard::AppUtils::Utils;
+using ZClipboard::GUI::Toolkit::WidgetProperty;
+using ZClipboard::GUI::Toolkit::GridLayoutAdd;
 
 void ClearButton::SetupClearButton(QGridLayout *layout, TableView* tableView) {
-    #if !defined(_WIN32)
+    Utils::MakeSmartPtr<QPushButton>(clearButton);
+    Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
+    
+    using WgImpl = WidgetProperty;
+    GridLayoutAdd(layout, WgImpl{
+        .widget = clearButton.get(),
+        .row = 0, .column = 2
+    });
 
-        MAKE_SMART_PTR(QPushButton, clearButton);
-        MAKE_SMART_PTR(QSettings, settings, (AUTHOR_NAME, APP_NAME));
-        ADD_LAYOUT_TO(layout, clearButton.get(), 0, 2);
+    SetupEventListener(tableView);
+    #if defined (Z_DEBUG)
+        __LOG__
+    #endif
+}
 
-    #else
-
-        clearButton = MakePtr<QPushButton>();
-        settings = MakePtr<QSettings>(AUTHOR_NAME, APP_NAME);
-        layout->addWidget(clearButton.get(), 0, 2);
-
-    #endif 
-
-   
+void ClearButton::SetupEventListener(TableView *tableView) {
     using Impl = ListenerCacheImpl;
     const auto Function = BuilderFunc
-                .StartBuild()
+                .   StartBuild()
                     ->  WithAndThen(&Impl::button, clearButton.get())
                     ->  WithAndThen(&Impl::settings, settings.get())
                     ->  WithAndThen(&Impl::table, tableView)
