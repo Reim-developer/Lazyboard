@@ -53,12 +53,18 @@ if(LINUX)
     target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::LIBNOTIFY)
 endif()
 
-if(NOT WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE -lstdc++)
-endif()
 
+# We suggest use Clang for compiler.
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CXX_COMPILER_ID:Clang>:-fno-direct-access-external-data>")
+    # Warning:
+    # Only enable when use
+    # -DZ_DEBUG=1.
+    # We will disable it in default, for ABI mismatch reason.
+    if(Z_DEBUG)
+        add_compile_options(-stdlib=libc++)
+        target_link_libraries(${PROJECT_NAME} PRIVATE -lc++ -lc++abi)
+    endif()
 endif()
 
 message(STATUS "Current C Compiler: ${CMAKE_C_COMPILER}")
