@@ -14,7 +14,7 @@
 #include "Include/SystemTray.hpp"
 #include <QStringLiteral>
 #include <QApplication>
-#include "../Lib_Memory/Include/Memory.hpp"
+#include "Toolkit/Include/Components_Toolkit.hpp"
 #include <QSettings>
 
 using ZClipboard::Language::Translate;
@@ -22,12 +22,10 @@ using ZClipboard::Language::TransValue;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::GUI::GetButton;
 using ZClipboard::GUI::SearchArea;
-using ZClipboard::GUI::SearchPanelWidget;
 using ZClipboard::GUI::SystemTray;
 using ZClipboard::GUI::SystemTrayWidget;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::AppMainWindow;
-using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::AppUtils::Utils;
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
@@ -40,14 +38,15 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     setCentralWidget(centralWidget);
     setWindowTitle(APP_NAME);
 
-    resize(AppConfig::Z_WINDOW_WIDTH, AppConfig::Z_WINDOW_HEIGHT);
+    resize(AppConfig::WINDOW_WIDTH, AppConfig::WINDOW_HEIGHT);
     setWindowIcon(appIcon);
 
+    InitiationObject();
     SetupApplicationGUI();
     translatorDectect();
 
     Utils::MakeSmartPtr<HotReloadLanguage>(hotReloadLanguage);
-    Utils::LogDebug("HotReloadLanguage instance address:", &hotReloadLanguage);
+    Utils::LogDebug("HotReloadLanguage address:", &hotReloadLanguage);
 
     hotReloadLanguage
         ->  StartBuild()
@@ -58,31 +57,37 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     });
 }
 
-void AppMainWindow::SetupApplicationGUI() {
-    tableView = MakePtr<TableView>();
-    searchArea = new SearchArea();
+void AppMainWindow::InitiationObject() {
+    Utils::MakeSmartPtr<ComponentsToolkit>(Components_Tookit);
+    Utils::MakeSmartPtr<TableView>(tableView);
+    Utils::MakeSmartPtr<SearchArea>(searchArea);
+    
     clearButton = new ClearButton();
     getButton = new GetButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
     systemTray = new SystemTray(this);
     notificationCore = new NotificationCore();
+}
 
-    // clang-format off
-    struct SearchPanelWidget searchPanelWidget {
-        .window = this,
-        .layout = windowLayout,
-        .tableView = tableView.get()
-    };
-
-
+void AppMainWindow::SetupApplicationGUI() {
     struct SystemTrayWidget systemTrayWidget {
         .window = this,
         .icon = appIcon
     };
-    
-    tableView->SetupTableView(this, windowLayout);
-    searchArea->SetupSearchPanel(searchPanelWidget);
+    tableView
+        ->  WithToolkit(Components_Tookit.get())
+        ->  SetupTableView(this, windowLayout);
+
+    searchArea
+        ->  StartBuild()
+        ->  WithAndThen(&SearchAreaImpl::layout, windowLayout)
+        ->  WithAndThen(&SearchAreaImpl::window, this)
+        ->  WithAndThen(&SearchAreaImpl::tableView, tableView.get())
+        ->  WithAndThen(&SearchAreaImpl::tookit, Components_Tookit.get())
+        ->  WhenDone()
+        ->  SetupSearchPanel();
+
     clearButton->SetupClearButton(windowLayout, tableView.get());
     getButton->SetupConnectButton(this, windowLayout);
     settingButton->addSettingButton(this, windowLayout);
@@ -95,6 +100,16 @@ void AppMainWindow::SetupApplicationGUI() {
     notificationCore->onClipboardChanged(trayIcon, clipboard);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
+
+
+    Utils::LogDebug("ComponentsTookit address:", &Components_Tookit);
+    Utils::LogDebug("TableView address:", &tableView);
+    Utils::LogDebug("SearchArea address:", &searchArea);
+    Utils::LogDebug("ClearButton address:", &clearButton);
+    Utils::LogDebug("GetButton address:", &getButton);
+    Utils::LogDebug("SettingButton address:", &settingButton);
+    Utils::LogDebug("DisconnectButton address:", &disconnectButton);
+    Utils::LogDebug("SystemTray address", &systemTray);
 }
 
 void AppMainWindow::closeEvent(QCloseEvent *event) {

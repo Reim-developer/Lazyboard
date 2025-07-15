@@ -34,29 +34,43 @@ using ZClipboard::GUI::TableModel;
 using ZClipboard::GUI::Toolkit::GridLayoutAdd;
 using ZClipboard::GUI::Toolkit::WidgetProperty;
 
+TableView *TableView::WithToolkit(ComponentsToolkit *Toolkit) {
+    this->toolkit = Toolkit;
+
+    return this;
+}
+
+void TableView::SetupTableProperty() {
+    tableView->setModel(tableModel);
+
+    tableView
+        ->  horizontalHeader()
+        ->  setSectionResizeMode(TableModel::Time, QHeaderView::ResizeToContents);
+    tableView
+        ->  horizontalHeader()
+        ->  setSectionResizeMode(TableModel::Content, QHeaderView::Stretch);
+    tableView
+        ->  horizontalHeader()
+        ->  setSectionResizeMode(TableModel::Pin, QHeaderView::ResizeToContents);
+    tableView
+        ->  horizontalHeader()
+        ->  setSectionResizeMode(TableModel::ContentLength, QHeaderView::ResizeToContents);
+
+
+    tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    tableView->setWordWrap(false);
+    tableView->setTextElideMode(Qt::ElideRight);
+
+}
+
 void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
-    Utils::MakeSmartPtr<ComponentsToolkit>(toolkit);
     databaseManager.setupinitDB();
 
     tableModel = toolkit->GetTableModel();
     tableView = toolkit->GetTableView();
     tableModel->SetupTableAbstract(&databaseManager);
-
     clipboard = QApplication::clipboard();
-
-    tableView->setModel(tableModel);
-    tableView->horizontalHeader()->setSectionResizeMode(TableModel::Time,
-                                                         QHeaderView::ResizeToContents);
-    tableView->horizontalHeader()->setSectionResizeMode(TableModel::Content,
-                                                         QHeaderView::Stretch);
-    tableView->horizontalHeader()->setSectionResizeMode(TableModel::Pin,
-                                                         QHeaderView::ResizeToContents);
-    tableView->horizontalHeader()->setSectionResizeMode(TableModel::ContentLength,
-                                                         QHeaderView::ResizeToContents);
-
-    tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    tableView->setWordWrap(false);
-    tableView->setTextElideMode(Qt::ElideRight);
+    SetupTableProperty();
 
     using WidgetImpl = WidgetProperty;
     GridLayoutAdd(zLayout, WidgetImpl {
@@ -85,7 +99,9 @@ void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
 }
 
 void TableView::onContentClicked(const QModelIndex &index) {
-    if (!index.isValid() || index.column() != TableModel::Content) return;
+    if (!index.isValid() || index.column() != TableModel::Content) {
+        return;
+    };
 
     QString content = index.data(Qt::DisplayRole).toString();
     QString contentHash = index.data(Qt::UserRole).toString();

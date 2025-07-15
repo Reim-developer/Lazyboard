@@ -17,3 +17,11 @@ TableModel *ComponentsToolkit::GetTableModel() {
 
     return ModelTable.get();
 }
+
+QLineEdit *ComponentsToolkit::GetSearchArea() {
+    if(!SearchArea) {
+        Utils::MakeSmartPtr<QLineEdit>(SearchArea);
+    }
+
+    return SearchArea.get();
+}

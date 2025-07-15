@@ -1,6 +1,7 @@
 #include "Include/ListenerConnect.hpp"
 #include "../Language/Include/Language.hpp"
 #include "../Utils/Include/Settings.hpp"
+#include "../Utils/Include/Utils.hpp"
 #include <QMessageBox>
 #include <QObject>
 #include <QTcpSocket>
@@ -9,6 +10,7 @@
 #include <QString>
 
 using ZClipboard::Listener::ListenerConnect;
+using ZClipboard::AppUtils::Utils;
 
 QSettings *ListenerConnect::GetSettings() {
     auto settings = this
@@ -135,26 +137,12 @@ VOID_FUNC ListenerConnect::TryGetListener() {
                     ->  button
                     ->  setText(TYPE_TRANS);
 
+                auto window = this
+                    ->  Impl
+                    ->  window;
+
                 this->Connect();
-                
-                #if !defined (_WIN32)
-
-                    MAKE_SMART_PTR(PeerDiscovery, this->peerDiscovery,(45454, 
-                this
-                        ->  Impl
-                        ->  window
-                    ));
-
-                #else 
-
-                    this->peerDiscovery = MakePtr<PeerDiscovery>(
-                        45454,
-                        this
-                            ->  Impl
-                            ->  window
-                    );
-
-                #endif
+                Utils::MakeSmartPtr<PeerDiscovery>(peerDiscovery, 45454, window);
             }
         }
 

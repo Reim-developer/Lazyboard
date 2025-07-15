@@ -51,11 +51,11 @@ UTILS_NAMESPACE
         static void MakeSmartPtr(V &&value, Args&&... args) {
             #if !defined (_WIN32)
 
-                MAKE_SMART_PTR(T, value, (forward<Args>(args)...));
-
+                MAKE_SMART_PTR(T, value, (std::forward<Args>(args)...));
+                
             #else
 
-                value = MakePtr<T>(forward<Args>(args)...);
+                value = MakePtr<T>(std::forward<Args>(args)...);
 
             #endif
         }

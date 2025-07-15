@@ -38,6 +38,7 @@ GUI_NAMESPACE
         Q_OBJECT
 
         public:
+                TableView *WithToolkit(ComponentsToolkit *Toolkit);
                 void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
                 TableModel *GetTableModel();
                 DatabaseManager &GetDatabase();
@@ -45,9 +46,12 @@ GUI_NAMESPACE
 
         private:
                 static const constexpr int CONTENT_COLUMN = 1;
+        
+        private:
+                void SetupTableProperty();
 
         private:
-                PtrUnique<ComponentsToolkit> toolkit;
+                ComponentsToolkit *toolkit;
                 QClipboard *clipboard;
                 QTableView *tableView;
                 TableModel *tableModel;
