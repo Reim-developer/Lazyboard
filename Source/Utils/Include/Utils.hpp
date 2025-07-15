@@ -13,10 +13,6 @@
 #include <QMimeData>
 #include <utility>
 
-#if defined(Z_DEBUG)
-    #include <source_location>
-#endif
-
 using ZClipboard::Core::ContentType;
 using ZClipboard::Core::Platform;
 using ZClipboard::Language::Translate;
@@ -35,27 +31,6 @@ UTILS_NAMESPACE
         static bool hasSetting(const char* SETTING_NAME);
         static ContentType hasContentType(const QMimeData* mimeData);
         static Translate::LanguageType languageTypeCast(int value);
-        
-        /*
-        * Only for debug mode is enabled.
-        */
-        #if defined(Z_DEBUG)
-            struct LogContext {
-                const std::source_location &location = std::source_location::current();
-
-                template<typename... Args>
-                void LogDebug(Args&&... args) {
-                        auto debugStream = qDebug().noquote();
-
-                        debugStream << " [DEBUG_MODE] In File:" << location.file_name()<< "\n";
-                        debugStream << "[DEBUG_MODE] In Function:" << location.function_name() << "\n";
-                        debugStream << "[DEBUG_MODE] In Line:" << location.line() << "\n";
-                        debugStream << "[DEBUG_MODE] Address:";
-                        (debugStream << ... << args);
-                        debugStream << "\n";
-                }
-            };
-        #endif
 
         /*
         * Initiation a smart pointer.
