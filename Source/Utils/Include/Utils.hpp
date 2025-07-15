@@ -39,23 +39,23 @@ UTILS_NAMESPACE
         /*
         * Only for debug mode is enabled.
         */
-        struct LogContext {
-            const std::source_location &location = std::source_location::current();
+        #if defined(Z_DEBUG)
+            struct LogContext {
+                const std::source_location &location = std::source_location::current();
 
-            template<typename... Args>
-            void LogDebug(Args&&... args) {
-                #if defined (Z_DEBUG)
-                    auto debugStream = qDebug().noquote();
+                template<typename... Args>
+                void LogDebug(Args&&... args) {
+                        auto debugStream = qDebug().noquote();
 
-                    debugStream << " [DEBUG_MODE] In File:" << location.file_name()<< "\n";
-                    debugStream << "[DEBUG_MODE] In Function:" << location.function_name() << "\n";
-                    debugStream << "[DEBUG_MODE] In Line:" << location.line() << "\n";
-                    debugStream << "[DEBUG_MODE] Address:";
-                    (debugStream << ... << args);
-                    debugStream << "\n";
-                #endif
-            }
-        };
+                        debugStream << " [DEBUG_MODE] In File:" << location.file_name()<< "\n";
+                        debugStream << "[DEBUG_MODE] In Function:" << location.function_name() << "\n";
+                        debugStream << "[DEBUG_MODE] In Line:" << location.line() << "\n";
+                        debugStream << "[DEBUG_MODE] Address:";
+                        (debugStream << ... << args);
+                        debugStream << "\n";
+                }
+            };
+        #endif
 
         /*
         * Initiation a smart pointer.
