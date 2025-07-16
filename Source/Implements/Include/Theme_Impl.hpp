@@ -1,4 +1,5 @@
-#ifndef ZCLIPBOARD_IMPL_HPP
+#ifndef THEME_IMPL_HPP
+#define THEME_IMPL_HPP
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../../Utils/Include/Utils.hpp"
 #include "../../Helper_Implements/Include/Theme_Impl_Helper.hpp"
@@ -20,8 +21,8 @@ IMPLEMENTS_NAMESPACE
     class Theme_Impl {
         private:
             using Self =  Theme_Impl;
-            using Z_Impl = Theme_Impl_Helper;
-            PtrUnique<Z_Impl> zClipboard_Impl;
+            using Impl = Theme_Impl_Helper;
+            PtrUnique<Impl> zClipboard_Impl;
             PtrUnique<PreloadTheme> preloadTheme;
 
         public:
@@ -39,4 +40,4 @@ IMPLEMENTS_NAMESPACE
 
 END_NAMESPACE
 
-#endif // ZCLIPBOARD_IMPL_HPP
+#endif // THEME_IMPL_HPP

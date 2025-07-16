@@ -1,13 +1,13 @@
 #include "Include/Theme_Impl.hpp"
 
 using ZClipboard::Implements::Theme_Impl;
-using ZClipboard::Helper_Implements::zClipboard_Helper;
+using ZClipboard::Helper_Implements::Theme_Impl_Data;
 
 #define __SELF__ Theme_Impl
 
 __SELF__ *__SELF__::StartBuild() {
     if(!zClipboard_Impl) {
-        Utils::MakeSmartPtr<Z_Impl>(zClipboard_Impl);
+        Utils::MakeSmartPtr<Impl>(zClipboard_Impl);
     }
 
     if(!preloadTheme) {
@@ -21,7 +21,7 @@ __SELF__ *__SELF__::StartBuild() {
 }
 
 void __SELF__::ThemeImplement(QApplication *application) {
-    #define __IMPL__ zClipboard_Helper
+    #define __IMPL__ Theme_Impl_Data
 
     zClipboard_Impl
         ->  StartBuild()
