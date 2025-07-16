@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QPalette>
 #include <QColor>
+#include <QStyle>
 #include "../Utils/Include/Utils.hpp"
 #include "../Utils/Include/Settings.hpp"
 #include "../Utils/Include/Config.hpp"
@@ -11,11 +12,11 @@
 #include "../GUI/Include/ThemeManager.hpp"
 
 using ZClipboard::Core::Theme;
-using ZClipboard::Preload::Application;
+using ZClipboard::Preload::PreloadTheme;
 using ZClipboard::GUI::ThemeManager;
 using ZClipboard::AppUtils::Utils;
 
-void Application::setDefaultTheme() {
+void PreloadTheme::SetupDefaultTheme() {
     QApplication::setPalette(QPalette());
 
     switch (Utils::hasPlatform()) {
@@ -36,7 +37,7 @@ void Application::setDefaultTheme() {
     }
 }
 
-void Application::setLightTheme(QApplication &application) {
+void PreloadTheme::SetupLightTheme(QApplication &application) {
     QPalette palette;
 
     /*
@@ -56,7 +57,7 @@ void Application::setLightTheme(QApplication &application) {
     application.setPalette(palette);
 }
 
-void Application::setDarkTheme(QApplication &application) {
+void PreloadTheme::SetupDarkTheme(QApplication &application) {
     QPalette palette;
 
     /*
@@ -76,24 +77,24 @@ void Application::setDarkTheme(QApplication &application) {
     application.setPalette(palette);
 }
 
-void Application::loadSettingTheme(QApplication &application) {
+void PreloadTheme::LoadSettingTheme(QApplication &application) {
     QSettings settings(AUTHOR_NAME, APP_NAME);
     const auto SETTING_THEME = settings.value(THEME_SETTING).toInt();
 
     switch (SETTING_THEME) {
         case THEME_DARK:
-            setDarkTheme(application);
+            SetupDarkTheme(application);
             break;
 
         case THEME_LIGHT:
-            setLightTheme(application);
+            SetupLightTheme(application);
             break;
     }
 }
 
-bool Application::loadDefaultTheme() {
+bool PreloadTheme::LoadDefaultTheme() {
     if (!Utils::hasSetting(THEME_SETTING)) {
-        setDefaultTheme();
+        SetupDefaultTheme();
         const auto DEFAULT_THEME = static_cast<int>(Theme::SYSTEM);
 
         QSettings settings(AUTHOR_NAME, APP_NAME);
@@ -105,24 +106,25 @@ bool Application::loadDefaultTheme() {
     return false;
 }
 
-void Application::reloadTheme(const int THEME) {
+void PreloadTheme::ReloadTheme(const int THEME) {
     const auto APPLICATION = static_cast<QApplication *>(QCoreApplication::instance());
-
+    
+    QApplication::setPalette(QPalette());
     switch (THEME) {
         case THEME_SYSTEM:
-            setDefaultTheme();
+            SetupDefaultTheme();
             break;
 
         case THEME_DARK:
-            setDarkTheme(*APPLICATION);
+            SetupDarkTheme(*APPLICATION);
             break;
 
         case THEME_LIGHT:
-            setLightTheme(*APPLICATION);
+            SetupLightTheme(*APPLICATION);
             break;
     }
 }
 
-void Application::onSettingThemeChanged(QApplication &application) {
-    connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &Application::reloadTheme);
+void PreloadTheme::OnSettingThemeChanged(QApplication &application) {
+    connect(&ThemeManager::instance(), &ThemeManager::OnThemeChanged, this, &PreloadTheme::ReloadTheme);
 }
