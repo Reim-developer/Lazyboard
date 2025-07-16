@@ -11,14 +11,14 @@ using ZClipboard::Preload::PreloadTheme;
 using ZClipboard::AppUtils::Utils;
 
 HELPER_IMPLEMENTS_NAMESPACE
-    struct zClipboard_Helper {
+    struct Theme_Impl_Data {
         PreloadTheme *preloadTheme;
         QApplication *application;
     };    
 
     class Theme_Impl_Helper {
         private:
-            PtrUnique<zClipboard_Helper> Impl;
+            PtrUnique<Theme_Impl_Data> Impl;
 
         private:
             PreloadTheme *GetPreloadTheme() {
@@ -34,20 +34,20 @@ HELPER_IMPLEMENTS_NAMESPACE
             }
 
         private:
-            using Implement = zClipboard_Helper;
+            using Implement = Theme_Impl_Data;
+            using Self = Theme_Impl_Helper;
 
         public:
-            Theme_Impl_Helper *StartBuild();
+            Self *StartBuild();
             
             CLASS_BUILD(T, V)
-            Theme_Impl_Helper *WithAndThen(T Implement::*member, V &&value) {
+            Self *WithAndThen(T Implement::*member, V &&value) {
                 Impl.get()->*member = FORWARD(T, value);
 
                 return this;
             }
 
-            Theme_Impl_Helper *WhenDone();
-
+            Self *WhenDone();
             void SetupTheme();
     };
 
