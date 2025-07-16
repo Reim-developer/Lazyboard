@@ -1,6 +1,12 @@
 #ifndef NAMESPACE_MACRO_HPP
 #define NAMESPACE_MACRO_HPP
 
+#define IMPLEMENTS_NAMESPACE \
+        namespace ZClipboard::Implements {
+
+#define HELPER_IMPLEMENTS_NAMESPACE \
+        namespace ZClipboard::Helper_Implements {
+
 #define LISTENER_NAMESPACE \
         namespace ZClipboard::Listener { 
 
