@@ -41,8 +41,6 @@ GUI_NAMESPACE
 
         #if defined (Z_DEBUG)
             private:
-                #define __LOG__ __LOGGING_ALL_OBJECTS__();
-
                 void __LOGGING_ALL_OBJECTS__() {
                     LogContext{}.LogDebug(&BuilderCore);
                     LogContext{}.LogDebug(&BuilderFunc);

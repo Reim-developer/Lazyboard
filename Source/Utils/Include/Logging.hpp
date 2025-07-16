@@ -1,9 +1,22 @@
 #ifndef LOGGING_HPP
 #define LOGGING_HPP
+    #if !defined (Z_DEBUG)
+        #error "Cannot include 'Logging' because debug mode is disabled."
+    #endif
+
     #if defined(Z_DEBUG)
         #include "Namespace_Macro.hpp"
         #include <source_location>
         #include <QDebug>
+
+        /* This macro is only working if you already
+        *  defined the logging function '__LOGGING_ALL_OBJECTS()'
+        *  in your header file.
+        *  For security reason, please use it 
+        *  in debugging mode only.
+        */
+        #define __LOG__ __LOGGING_ALL_OBJECTS__();
+        
 
         UTILS_NAMESPACE
 
