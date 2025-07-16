@@ -34,10 +34,17 @@ int __SELF__::LaunchWindow(QApplication *application) {
 
         window->show();
 
-        __LOG__
+        #if defined (Z_DEBUG)
+            __LOG__
+        #endif
+
         return application->exec();
     }
-    __LOG__
+    
+    #if defined (Z_DEBUG)
+        __LOG__
+    #endif
+        
 
     return static_cast<int>(LoginState::LOGIN_FAILED);
 }

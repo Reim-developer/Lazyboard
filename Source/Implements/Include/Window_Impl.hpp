@@ -15,7 +15,11 @@ using ZClipboard::Implements::Theme_Impl;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::Preload::PreloadPassword;
 using ZClipboard::Core::LoginState;
-using ZClipboard::AppUtils::LogContext;
+
+#if defined (Z_DEBUG)
+    #include "../../Utils/Include/Logging.hpp"
+    using ZClipboard::AppUtils::LogContext;
+#endif
 
 IMPLEMENTS_NAMESPACE
 
