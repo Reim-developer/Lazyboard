@@ -9,20 +9,24 @@ using ZClipboard::Core::Theme;
 
 PRELOAD_NAMESPACE
 
-    class Application : public QObject {
+    class PreloadTheme : public QObject {
         Q_OBJECT
 
     private:
-        void setDefaultTheme();
-        void setDarkTheme(QApplication &application);
+        void SetupDefaultTheme();
 
-        void setLightTheme(QApplication &application);
+        void SetupDarkTheme(QApplication &application);
+        void SetupLightTheme(QApplication &application);
 
+    private slots:
+        void ReloadTheme(const int THEME);
+        
     public:
-        bool loadDefaultTheme();
-        void loadSettingTheme(QApplication &application);
-        void reloadTheme(const int THEME);
-        void onSettingThemeChanged(QApplication &application);
+
+        bool LoadDefaultTheme();
+        void LoadSettingTheme(QApplication &application);
+    
+        void OnSettingThemeChanged(QApplication &application);
 
     private:
         static inline const QColor DARK_BG_COLOR {47, 49, 54};
