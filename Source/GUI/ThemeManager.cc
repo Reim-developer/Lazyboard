@@ -15,5 +15,5 @@ ThemeManager &ThemeManager::instance() {
 
 void ThemeManager::setTheme(const int THEME) {
     settings->setValue(THEME_SETTING, THEME);
-    emit themeChanged(THEME);
+    emit OnThemeChanged(THEME);
 }

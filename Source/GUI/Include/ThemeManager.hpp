@@ -1,5 +1,5 @@
-#ifndef THEME_MANAGER
-#define THEME_MANAGER
+#ifndef THEME_MANAGER_HPP
+#define THEME_MANAGER_HPP
 #include <QObject>
 #include <QSettings>
 #include "../../Utils/Include/Namespace_Macro.hpp"
@@ -14,7 +14,7 @@ GUI_NAMESPACE
         void setTheme(const int THEME);
 
     signals:
-        void themeChanged(const int THEME);
+        void OnThemeChanged(const int THEME);
 
     private:
         explicit ThemeManager(QObject *parent = nullptr);
@@ -23,4 +23,4 @@ GUI_NAMESPACE
 
 END_NAMESPACE
 
-#endif  // THEME_MANAGER
+#endif  // THEME_MANAGER_HPP
