@@ -38,7 +38,6 @@ GUI_NAMESPACE
         Q_OBJECT
 
         public:
-                TableView *WithToolkit(ComponentsToolkit *Toolkit);
                 void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
                 TableModel *GetTableModel();
                 DatabaseManager &GetDatabase();
