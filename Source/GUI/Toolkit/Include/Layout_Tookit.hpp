@@ -5,9 +5,12 @@
 #include <QGridLayout>
 #include <QWidget>
 #include <vector>
+#include <type_traits>
 
 using std::vector;
 using std::forward;
+using std::is_same_v;
+using std::decay_t;
 
 GUI_TOOLKIT_NAMESPACE
 
@@ -19,7 +22,10 @@ struct WidgetProperty {
     int columnSpan = 1;
 };
 
-template<typename ...Args>
+template<typename T>
+concept WgTypeTraits = is_same_v<decay_t<T>, WidgetProperty>;
+
+template<WgTypeTraits ...Args>
 void GridLayoutAdd(QGridLayout *widgetLayout, Args&&... args) {
     vector<WidgetProperty> widgetProperty = {
         std::forward<Args>(args)...
