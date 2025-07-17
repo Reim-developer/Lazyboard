@@ -81,7 +81,9 @@ void AppMainWindow::SetupApplicationGUI() {
         .window = this,
         .icon = appIcon
     };
-    tableView->SetupTableView(this, windowLayout);
+    tableView
+        ->  UseToolkit(__TOOLKIT__.get())
+        ->  SetupTableView(this, windowLayout);
 
     searchArea
         ->  StartBuild()
