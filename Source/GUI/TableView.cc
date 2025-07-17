@@ -3,7 +3,6 @@
 #include "../Clipboard/Include/ClipboardText.hpp"
 #include "../Clipboard/Include/ClipboardCache.hpp"
 #include "Toolkit/Include/Components_Toolkit.hpp"
-#include "Toolkit/Include/Layout_Tookit.hpp"
 #include "Include/ClipboardDialog.hpp"
 #include "Include/TableModel.hpp"
 #include <QTableWidget>
@@ -31,14 +30,6 @@ using ZClipboard::Clipboard::ClipboardText;
 using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::TableModel;
-using ZClipboard::GUI::Toolkit::GridLayoutAdd;
-using ZClipboard::GUI::Toolkit::WidgetProperty;
-
-TableView *TableView::WithToolkit(ComponentsToolkit *Toolkit) {
-    this->toolkit = Toolkit;
-
-    return this;
-}
 
 void TableView::SetupTableProperty() {
     tableView->setModel(tableModel);
@@ -71,13 +62,6 @@ void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
     tableModel->SetupTableAbstract(&databaseManager);
     clipboard = QApplication::clipboard();
     SetupTableProperty();
-
-    using WidgetImpl = WidgetProperty;
-    GridLayoutAdd(zLayout, WidgetImpl {
-        .widget = tableView,
-        .row = 1, .column = 0,
-        .rowSpan = 1, .columnSpan = 5
-    });
 
     ClipboardCache clipboardCache;
     clipboardCache.addClipboardHistoryFromDB(tableModel, databaseManager);
