@@ -37,7 +37,11 @@ GUI_NAMESPACE
     class TableView : public QObject {
         Q_OBJECT
 
+        private:
+                using Self = TableView;
+
         public:
+                Self *UseToolkit(ComponentsToolkit *toolkit);
                 void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
                 TableModel *GetTableModel();
                 DatabaseManager &GetDatabase();
