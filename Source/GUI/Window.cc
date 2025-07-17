@@ -15,6 +15,7 @@
 #include <QStringLiteral>
 #include <QApplication>
 #include "Toolkit/Include/Components_Toolkit.hpp"
+#include "../Helper_Implements/Include/LayoutManager_Impl_Helper.hpp"
 #include <QSettings>
 
 using ZClipboard::Language::Translate;
@@ -27,6 +28,8 @@ using ZClipboard::GUI::SystemTrayWidget;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
+
+#define __TOOLKIT__ Components_Tookit
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     appIcon = QIcon(ICON_PATH);
@@ -54,13 +57,14 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
             this->Translator();            
     });
 
+    SetupAppLayout(__TOOLKIT__.get(), windowLayout);
     #if defined (Z_DEBUG)
         __LOG__
     #endif
 }
 
 void AppMainWindow::InitiationObject() {
-    Utils::MakeSmartPtr<ComponentsToolkit>(Components_Tookit);
+    Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
     Utils::MakeSmartPtr<TableView>(tableView);
     Utils::MakeSmartPtr<SearchArea>(searchArea);
     
@@ -77,9 +81,7 @@ void AppMainWindow::SetupApplicationGUI() {
         .window = this,
         .icon = appIcon
     };
-    tableView
-        ->  WithToolkit(Components_Tookit.get())
-        ->  SetupTableView(this, windowLayout);
+    tableView->SetupTableView(this, windowLayout);
 
     searchArea
         ->  StartBuild()
