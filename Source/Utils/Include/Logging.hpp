@@ -5,6 +5,11 @@
     #endif
 
     #if defined(Z_DEBUG)
+        #define MIN_CPP_VERSION 20200L
+        #if __cplusplus < MIN_CPP_VERSION
+            #error "Cannot use the feature 'Logging because current C++ version is lower than 20.'"
+        #endif
+
         #include "Namespace_Macro.hpp"
         #include <source_location>
         #include <QDebug>
