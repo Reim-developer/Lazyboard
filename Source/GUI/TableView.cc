@@ -31,6 +31,8 @@ using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::TableModel;
 
+#define __SELF__ TableView
+
 void TableView::SetupTableProperty() {
     tableView->setModel(tableModel);
 
@@ -52,6 +54,11 @@ void TableView::SetupTableProperty() {
     tableView->setWordWrap(false);
     tableView->setTextElideMode(Qt::ElideRight);
 
+}
+
+__SELF__ *__SELF__::UseToolkit(ComponentsToolkit *toolkit) {
+    this->toolkit = toolkit;
+    return this;
 }
 
 void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
