@@ -85,7 +85,7 @@ GUI_NAMESPACE
         PtrUnique<SearchArea> searchArea;
 
         ClearButton *clearButton;
-        GetButton *getButton;
+        PtrUnique<GetButton> getButton;
         SettingButton *settingButton;
         DisconnectButton *disconnectButton;
 
