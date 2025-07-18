@@ -43,10 +43,12 @@
                     .location = location
                 }.Fatal("Could not check the value: ", ptr, " because it is not a pointer!");
             }
-
-            LogContext{
-                .location = location
-            }.Fatal("Null-pointer detect, in address: ", ptr);
+            
+            if(ptr == nullptr) {
+                LogContext{
+                    .location = location
+                }.Fatal("Null-pointer detect, in address: ", ptr);
+            }
         }
     };
 
