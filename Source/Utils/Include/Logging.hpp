@@ -12,7 +12,14 @@
 
         #include "Namespace_Macro.hpp"
         #include <source_location>
-        #include <QDebug>
+        #include <cstdlib>
+        #include <iostream>
+    
+        using std::cout;
+        using std::cerr;
+
+        #define DEBUG cout
+        #define ERROR cerr
 
         /* This macro is only working if you already
         *  defined the logging function '__LOGGING_ALL_OBJECTS()'
@@ -24,6 +31,10 @@
         
 
         UTILS_NAMESPACE
+            static inline const constexpr char RED[] = "\e[0;31m";
+            static inline const constexpr char GREEN[] = "\e[0;32m";
+            static inline const constexpr char WHITE[] = "\e[0;37m";
+            static inline const constexpr char YELLOW[] = "\e[0;33m";
 
             /*
             * Only for debug mode is enabled.
@@ -31,23 +42,48 @@
             struct LogContext {
                 const std::source_location &location = std::source_location::current();
 
+                /*
+                * Logging for debug & stdout all pointer address.
+                * Required C++ 20 or above.
+                */
                 template<typename... Args>
                 void LogDebug(Args&&... args) {
-                    auto debugStream = qDebug().noquote();
-
-                    debugStream << " [DEBUG_MODE] In File:" 
+                    DEBUG << " [DEBUG_MODE] In File:" 
                                 << location.file_name()<< "\n";
 
-                    debugStream << "[DEBUG_MODE] In Function:" 
+                    DEBUG << "[DEBUG_MODE] In Function:" 
                                 << location.function_name() << "\n";
 
-                    debugStream << "[DEBUG_MODE] In Line:" 
+                    DEBUG << "[DEBUG_MODE] In Line:" 
                                 << location.line() << "\n";
 
-                    debugStream << "[DEBUG_MODE] Address:";
+                    DEBUG << "[DEBUG_MODE] Address:";
 
-                    (debugStream << ... << args);
-                    debugStream << "\n";
+                    (DEBUG << ... << args);
+                    DEBUG << "\n";
+                }
+
+                /*
+                * Logging for case critical error
+                * & quit the program now.
+                * Required for C++ 20 or above.
+                */
+                template<typename... Args>
+                void Fatal(Args&&... args) {
+                    ERROR << RED << "[CRITICAL] In Function: "
+                                 << GREEN << location.function_name() << "\n";
+
+                    ERROR << RED << "[CRITICAL] In Line: "
+                                 << GREEN << location.line() << "\n";
+
+                    ERROR << RED << "[CRITICAL] In File: "
+                                 << GREEN << location.file_name() << "\n";
+                    
+                    ERROR << RED << "[CRITICAL] ";
+                    (ERROR << ... << (ERROR << YELLOW, args));
+                    ERROR << "\n";
+                    ERROR << WHITE; /* Reset to white, default of terminal. */
+                    std::abort();
                 }
             };
 
