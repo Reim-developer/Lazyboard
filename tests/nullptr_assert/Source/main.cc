@@ -2,7 +2,7 @@
 
 int main() {
 
-    int *myPtr;
+    int *myPtr = nullptr;
     int notPtrValue;
     /*
     * Will failed.
