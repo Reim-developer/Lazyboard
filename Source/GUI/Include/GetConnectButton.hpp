@@ -12,6 +12,7 @@
 #include "../../Core/Include/CoreConnect.hpp"
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Listener/Include/ListenerConnect.hpp"
+#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
 
 using ZClipboard::Language::Translate;
 using ZClipboard::Network::PeerDiscovery;
@@ -19,14 +20,24 @@ using ZClipboard::Core::CoreConnect;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Listener::ListenerConnect;
 using ZClipboard::Network::NetworkState;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
     class GetButton {
+        private:
+            using Toolkit = ComponentsToolkit;
+            using FnConnect = ListenerConnect;
+            using LanguageType = Translate::LanguageType;
+            using Window = QMainWindow;
+            using Button = QPushButton;
+
         public:
-            void SetupConnectButton(QMainWindow *window, QGridLayout *layout);
+            void SetupConnectButton(Window *window, Toolkit *toolkit);
             void ResetServer();
-            QPushButton *GetConnectButton();
             NetworkState *GetNetworkState();
+
+        private:
+            void SetupEventListener(Window *window, Button *connectButton);
 
         private:
             CoreConnect BuilderCore;
@@ -34,10 +45,9 @@ GUI_NAMESPACE
 
         private:
             int type;
-            Translate::LanguageType languageType;
+            LanguageType languageType;
 
         private:
-            PtrUnique<QPushButton> getButton;
             PtrUnique<QSettings> settings;
             PtrUnique<PeerDiscovery> peerDiscovery;
             PtrUnique<NetworkState> networkState;

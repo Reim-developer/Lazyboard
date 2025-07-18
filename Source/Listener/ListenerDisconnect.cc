@@ -11,11 +11,14 @@ VOID_FUNC ListenerDisconnect::TryGetListener() {
             ->  Impl
             ->  setting;
 
-        auto getButton = this
+        auto connectButton = this
             ->  Impl
-            ->  getButton;
+            ->  toolkit
+            ->  GetConnectButton();
     
-        auto server = getButton
+        auto server = this
+            ->  Impl
+            ->  getButton
             ->  GetNetworkState()
             ->  GetServer();
             
@@ -41,12 +44,13 @@ VOID_FUNC ListenerDisconnect::TryGetListener() {
             QMessageBox::information(parent, DIALOG_TITLE, DIALOG_MSG);
         }
 
-        getButton->ResetServer();
+        this
+            ->  Impl
+            ->  getButton
+            ->  ResetServer();
         const auto BUTTON_TEXT = LANGUAGE_TYPE ? GET_CONTENT_BUTTON_VI : GET_CONTENT_BUTTON_EN;
 
-        getButton
-            ->  GetConnectButton()
-            ->  setText(BUTTON_TEXT);
+        connectButton->setText(BUTTON_TEXT);
 
     };
 

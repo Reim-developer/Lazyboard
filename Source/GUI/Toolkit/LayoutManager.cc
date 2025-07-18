@@ -9,6 +9,7 @@ using ZClipboard::GUI::Toolkit::WidgetProperty;
 #define __SELF__ LayoutMangerTookit
 #define __TOOKIT__ ComponentsToolkit
 #define __WIDGET__ WidgetProperty
+#define __LAYOUT__ QGridLayout
 
 __SELF__ *__SELF__::StartBuild() {
     if(!Impl) {
@@ -28,14 +29,14 @@ __TOOKIT__ *__SELF__::GetTookit() {
         ->  tookit;
 }
 
-QGridLayout *__SELF__::GetGridLayout() {
+__LAYOUT__ *__SELF__::GetGridLayout() {
     return this
         ->  Impl
         ->  layout;
 }
 
-__WIDGET__ __SELF__::GetTableViewLayout(__TOOKIT__ *tookit) {
-    auto tableView = tookit->GetTableView();
+__WIDGET__ __SELF__::GetTableViewLayout(__TOOKIT__ *toolkit) {
+    auto tableView = toolkit->GetTableView();
 
     auto widgetLayout = Widget {
         .widget = tableView,
@@ -46,14 +47,56 @@ __WIDGET__ __SELF__::GetTableViewLayout(__TOOKIT__ *tookit) {
     return widgetLayout;
 }
 
-void __SELF__::SetupAppGridLayout() {
-    auto tookit = this->GetTookit();
-    auto layout = this->GetGridLayout();
-    auto tableViewLayout = this->GetTableViewLayout(tookit);
+__WIDGET__ __SELF__::GetSearchAreaLayout(__TOOKIT__ *toolkit) {
+    auto searchArea = toolkit->GetSearchArea();
 
+    auto widgetLayout = Widget {
+        .widget = searchArea,
+        .row = 0, .column = 0
+    };
+
+    return widgetLayout;
+}
+
+__WIDGET__ __SELF__::GetConnectButtonLayout(__TOOKIT__ *toolkit) {
+    auto connectButton = toolkit->GetConnectButton();
+
+    auto widgetLayout = __WIDGET__ {
+        .widget = connectButton,
+        .row = 0, .column = 1
+    };
+
+    return widgetLayout;
+}
+
+__WIDGET__ __SELF__::GetDisconnectButtonLayout(__TOOKIT__ *toolkit) {
+    auto disconnectButton = toolkit->GetDisconnectButton();
+
+    auto widgetLayout = __WIDGET__ {
+        .widget = disconnectButton,
+        .row = 0, .column = 4
+    };
+
+    return widgetLayout;
+}
+
+void __SELF__::SetupAppGridLayout() {
+    auto toolkit = this->GetTookit();
+    auto layout = this->GetGridLayout();
+
+    /*
+    * Widget layout information
+    */
+    auto tableViewLayout = this->GetTableViewLayout(toolkit);
+    auto searchAreaLayout = this->GetSearchAreaLayout(toolkit);
+    auto connectButtonLayout = this->GetConnectButtonLayout(toolkit);
+    auto disconnectButtonLayout = this->GetDisconnectButtonLayout(toolkit);
 
     using Widget = WidgetProperty;
-    GridLayoutAdd(layout, tableViewLayout);
+    GridLayoutAdd(layout, 
+        tableViewLayout, searchAreaLayout,
+        connectButtonLayout, disconnectButtonLayout
+    );
 
     #if defined (Z_DEBUG)
         __LOG__

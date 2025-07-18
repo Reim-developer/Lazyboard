@@ -34,8 +34,14 @@ GUI_TOOLKIT_NAMESPACE
             QGridLayout *GetGridLayout();
             Toolkit *GetTookit();
 
+        /*
+        * Application widget layout data.
+        */
         private:
             Widget GetTableViewLayout(Toolkit *tookit); 
+            Widget GetSearchAreaLayout(Toolkit *tookit);
+            Widget GetConnectButtonLayout(Toolkit *toolkit);
+            Widget GetDisconnectButtonLayout(Toolkit *toolkit);
 
         public:
             Self *StartBuild();

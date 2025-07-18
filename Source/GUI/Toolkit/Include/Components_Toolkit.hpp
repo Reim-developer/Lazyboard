@@ -6,6 +6,7 @@
 #include "../../../GUI/Include/TableModel.hpp"
 #include <QTableView>
 #include <QLineEdit>
+#include <QPushButton>
 
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::TableModel;
@@ -18,12 +19,17 @@ GUI_TOOLKIT_NAMESPACE
             PtrUnique<QTableView> ClipboardTableView;
             PtrUnique<TableModel> ModelTable;
             PtrUnique<QLineEdit> SearchArea;
+            PtrUnique<QPushButton> ClearButton;
+            PtrUnique<QPushButton> ConnectButton;
+            PtrUnique<QPushButton> DisconnectButton;
 
         public:
             QTableView *GetTableView();
             TableModel *GetTableModel();
             QLineEdit *GetSearchArea();
-
+            QPushButton *GetClearButton();
+            QPushButton *GetConnectButton();
+            QPushButton *GetDisconnectButton();
     };
 
 END_NAMESPACE

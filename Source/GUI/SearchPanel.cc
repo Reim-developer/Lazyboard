@@ -19,7 +19,7 @@ SearchArea *SearchArea::WhenDone() {
 QLineEdit *SearchArea::GetSearchPanel() {
     auto searchLine = this
         ->  Impl
-        ->  tookit
+        ->  toolkit
         ->  GetSearchArea();
 
     return searchLine;
@@ -27,18 +27,11 @@ QLineEdit *SearchArea::GetSearchPanel() {
 
 void SearchArea::SetupSearchPanel() {
     auto searchLine = this->GetSearchPanel();
-
-    auto windowLayout = this
-        ->  Impl
-        ->  layout;
-
     auto tableView = this
         ->  Impl
         ->  tableView;
 
     searchLine->setPlaceholderText("Search...");
-    windowLayout->addWidget(searchLine, 0, 0);
-
     auto modelTable = tableView->GetTableModel();
     
     QObject::connect(searchLine, &QLineEdit::textChanged, [modelTable](const QString &text) {

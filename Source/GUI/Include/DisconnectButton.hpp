@@ -8,11 +8,13 @@
 #include "../../Core/Include/CoreDisconnect.hpp"
 #include "../../Listener/Include/ListenerDisconnect.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
 
 using ZClipboard::GUI::GetButton;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Core::CoreDisconnect;
 using ZClipboard::Listener::ListenerDisconnect;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
 
@@ -21,11 +23,15 @@ GUI_NAMESPACE
             PtrUnique<QSettings> settings;
             CoreDisconnect Builder;
             ListenerDisconnect BuilderFunc;
-            PtrUnique<QPushButton> disconnectButton;
+            GetButton *getButton;
+
+        private:
+            using Toolkit = ComponentsToolkit;
+            using Self = DisconnectButton;
 
         public:
-            void addDisconnectButton(QMainWindow *parent, GetButton *getButton, QGridLayout *layout);
-            QPushButton *getDisconnectButton();
+            Self *UseConnectButton(GetButton *button);
+            void SetupDisconnectButton(Toolkit *toolkit, QMainWindow *window);
         };
 
 END_NAMESPACE

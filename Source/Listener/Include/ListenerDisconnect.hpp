@@ -5,16 +5,19 @@
 #include "../../GUI/Include/GetConnectButton.hpp"
 #include "ListenerClearCache.hpp"
 #include "../../Utils/Include/Meta_Macro.hpp"
+#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
 #include <QMainWindow>
 
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::GUI::GetButton;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 LISTENER_NAMESPACE
 
     struct DisconnectImpl {
         QSettings *setting;
+        ComponentsToolkit *toolkit;
         GetButton *getButton;
         QMainWindow *windowParent;
     };

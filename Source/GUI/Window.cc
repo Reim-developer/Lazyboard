@@ -30,6 +30,7 @@ using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
 #define __TOOLKIT__ Components_Tookit
+#define __TOOLKIT_RAW__ Components_Tookit.get()
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     appIcon = QIcon(ICON_PATH);
@@ -57,7 +58,7 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
             this->Translator();            
     });
 
-    SetupAppLayout(__TOOLKIT__.get(), windowLayout);
+    SetupAppLayout(__TOOLKIT_RAW__, windowLayout);
     #if defined (Z_DEBUG)
         __LOG__
     #endif
@@ -67,9 +68,9 @@ void AppMainWindow::InitiationObject() {
     Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
     Utils::MakeSmartPtr<TableView>(tableView);
     Utils::MakeSmartPtr<SearchArea>(searchArea);
+    Utils::MakeSmartPtr<GetButton>(getButton);
     
     clearButton = new ClearButton();
-    getButton = new GetButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
     systemTray = new SystemTray(this);
@@ -87,17 +88,18 @@ void AppMainWindow::SetupApplicationGUI() {
 
     searchArea
         ->  StartBuild()
-        ->  WithAndThen(&SearchAreaImpl::layout, windowLayout)
         ->  WithAndThen(&SearchAreaImpl::window, this)
         ->  WithAndThen(&SearchAreaImpl::tableView, tableView.get())
-        ->  WithAndThen(&SearchAreaImpl::tookit, Components_Tookit.get())
+        ->  WithAndThen(&SearchAreaImpl::toolkit, __TOOLKIT_RAW__)
         ->  WhenDone()
         ->  SetupSearchPanel();
 
-    clearButton->SetupClearButton(windowLayout, tableView.get());
-    getButton->SetupConnectButton(this, windowLayout);
+    clearButton->SetupClearButton(windowLayout, __TOOLKIT_RAW__, tableView.get());
+    getButton->SetupConnectButton(this, __TOOLKIT_RAW__);
     settingButton->addSettingButton(this, windowLayout);
-    disconnectButton->addDisconnectButton(this, getButton, windowLayout);
+    disconnectButton
+        ->  UseConnectButton(getButton.get())
+        ->  SetupDisconnectButton(__TOOLKIT_RAW__, this);
     systemTray->addSystemTray(systemTrayWidget);
 
     const auto trayIcon = systemTray->getSystemTrayIcon();
@@ -137,11 +139,11 @@ void AppMainWindow::Translator() {
     const int TRANS_VALUE = settings->value(LANGUAGE_SETTING).toInt();
     const auto TRANS_TYPE = Utils::languageTypeCast(TRANS_VALUE);
 
-    auto clearButtonWidget = clearButton->getClearButton();
-    auto getButtonWidget = getButton->GetConnectButton();
+    auto clearButtonWidget = __TOOLKIT__->GetClearButton();
+    auto getButtonWidget = __TOOLKIT__->GetConnectButton();
     auto settingButtonWidget = settingButton->getSettingButton();
-    auto discButtonWidget = disconnectButton->getDisconnectButton();
-    auto searchPanel = searchArea->GetSearchPanel();
+    auto disconnectButtonWidget = __TOOLKIT__->GetDisconnectButton();
+    auto searchPanel = __TOOLKIT__->GetSearchArea();
 
     // clang-format off
     TransValue clearButtonTrans {
@@ -174,7 +176,7 @@ void AppMainWindow::Translator() {
     Translate::translatorWidget(clearButtonWidget, TRANS_TYPE, clearButtonTrans);
     Translate::translatorWidget(getButtonWidget, TRANS_TYPE, getButtonTrans);
     Translate::translatorWidget(settingButtonWidget, TRANS_TYPE, settingButtonTrans);
-    Translate::translatorWidget(discButtonWidget, TRANS_TYPE, discButtonTrans);
+    Translate::translatorWidget(disconnectButtonWidget, TRANS_TYPE, discButtonTrans);
     Translate::translatorWidget(searchPanel, TRANS_TYPE, searchPanelTrans);
 }
 
