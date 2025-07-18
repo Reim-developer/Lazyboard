@@ -20,9 +20,8 @@ using ZClipboard::AppUtils::Utils;
 GUI_NAMESPACE
     struct SearchAreaImpl {
         QMainWindow *window;
-        QGridLayout *layout;
         TableView *tableView;
-        ComponentsToolkit *tookit;
+        ComponentsToolkit *toolkit;
     };
 
     class SearchArea {
