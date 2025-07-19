@@ -21,6 +21,8 @@
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../Hot_Reload/Include/HotReload_Language.hpp"
 #include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../../Lib_Memory/Include/MainWindow_ObjectManager.hpp"
+#include "../../Implements/GUI_Components/Include/Manager_MainWindow_Component_Impl.hpp"
 #include "TableView.hpp"
 
 #if defined (Z_DEBUG)
@@ -41,6 +43,8 @@ using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 using ZClipboard::AppUtils::Utils;
+using ZClipboard::Lib_Memory::MainWindowObjectManager;
+using ZClipboard::Implements::MainWindowComponentsManager;
 
 
 GUI_NAMESPACE
@@ -52,6 +56,10 @@ GUI_NAMESPACE
 
     class AppMainWindow : public QMainWindow {
         Q_OBJECT
+
+    private:
+        using Object = MainWindowObjectManager;
+        using GUI_Manager = MainWindowComponentsManager;
 
     public:
         explicit AppMainWindow(QWidget *zWindow = nullptr);
@@ -71,8 +79,11 @@ GUI_NAMESPACE
         void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
     private:
+        PtrUnique<Object> objectManager;
         PtrUnique<ComponentsToolkit> Components_Tookit;
         PtrUnique<HotReloadLanguage> hotReloadLanguage;
+        PtrUnique<GUI_Manager> manager_GUI;
+        
         NotificationCore *notificationCore;
 
         QSettings *settings;
@@ -81,8 +92,6 @@ GUI_NAMESPACE
         QGridLayout *windowLayout;
         SystemTray *systemTray;
 
-        PtrUnique<TableView> tableView;
-        PtrUnique<SearchArea> searchArea;
 
         ClearButton *clearButton;
         PtrUnique<GetButton> getButton;
@@ -93,8 +102,8 @@ GUI_NAMESPACE
             private:
                 void __LOGGING_ALL_OBJECTS__() {
                     LogContext{}.LogDebug(&Components_Tookit);
-                    LogContext{}.LogDebug(&tableView);
-                    LogContext{}.LogDebug(&searchArea);
+                    LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->tableView_Component);
+                    LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->searchArea_Component);
                     LogContext{}.LogDebug(&clearButton);
                     LogContext{}.LogDebug(&getButton);
                     LogContext{}.LogDebug(&settingButton);
