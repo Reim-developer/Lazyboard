@@ -52,4 +52,6 @@ void Self::Render_MainWindow_GUI() {
     SearchAreaComponentImpl(object, toolkit);
     NotificationComponentImpl(object, toolkit);
     SystemTrayComponentImpl(window, object, toolkit, *appIcon);
+    ConnectButtonComponentImpl(window, object, toolkit);
+    DisconnectButtonComponentImpl(window, object, toolkit);
 }
