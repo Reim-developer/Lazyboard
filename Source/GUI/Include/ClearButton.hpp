@@ -34,7 +34,7 @@ GUI_NAMESPACE
             using Toolkit = ComponentsToolkit;
 
         public:
-            void SetupClearButton(QGridLayout *layout, Toolkit *toolkit, TableView *tableView);
+            void SetupClearButton(Toolkit *toolkit, TableView *tableView);
             
         private:
             void SetupEventListener(QPushButton *clearButton, TableView *tableView);
