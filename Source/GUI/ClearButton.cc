@@ -10,6 +10,10 @@ using ZClipboard::GUI::ClearButton;
 using ZClipboard::Listener::ListenerCacheImpl;
 using ZClipboard::AppUtils::Utils;
 
+#if defined (Z_DEBUG)
+    #include "../Utils/Include/AssertNullPtr.hpp"
+#endif
+
 void ClearButton::SetupClearButton(Toolkit *toolkit, TableView *tableView) {
     auto clearButton = toolkit->GetClearButton();
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
@@ -22,6 +26,14 @@ void ClearButton::SetupClearButton(Toolkit *toolkit, TableView *tableView) {
 
 void ClearButton::SetupEventListener(QPushButton *clearButton, TableView *tableView) {
     using Impl = ListenerCacheImpl;
+
+    #if defined (Z_DEBUG)
+
+        AssertContext{}.RequireNonNullPtr(clearButton);
+        AssertContext{}.RequireNonNullPtr(settings.get());
+        AssertContext{}.RequireNonNullPtr(tableView);
+
+    #endif
 
     const auto Function = BuilderFunc
                 .   StartBuild()
