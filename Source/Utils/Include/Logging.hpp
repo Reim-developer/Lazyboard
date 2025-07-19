@@ -48,7 +48,7 @@
                 */
                 template<typename... Args>
                 void LogDebug(Args&&... args) {
-                    DEBUG << " [DEBUG_MODE] In File:" 
+                    DEBUG << "[DEBUG_MODE] In File:" 
                                 << location.file_name()<< "\n";
 
                     DEBUG << "[DEBUG_MODE] In Function:" 
