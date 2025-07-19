@@ -18,7 +18,7 @@ using Toolkit = ComponentsToolkit;
 using Window = QMainWindow;
 using Impl = DisconnectImpl;
 
-Self *Self::UseConnectButton(GetButton *button) {
+Self *Self::UseConnectButton(ConnectButton *button) {
     this->getButton = button;
 
     return this;
