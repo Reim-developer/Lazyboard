@@ -13,10 +13,27 @@ using ZClipboard::GUI::LanguageManager;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
-void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params) {
-    QMenu *menu = params.trayMenu;
-    QMainWindow *window = params.window;
-   
+#if defined (Z_DEBUG)
+    #include "../Utils/Include/AssertNullPtr.hpp"
+    #include "../Utils/Include/Logging.hpp"
+    
+    using ZClipboard::AppUtils::LogContext;
+#endif
+
+void SystemTrayCore::UpdateSwitchLanguage(const SystemTrayParams &params) {
+    auto menu = params.trayMenu;
+    auto window = params.window;
+    
+    #if defined (Z_DEBUG)
+        AssertContext{}.RequireNonNullPtr(menu);
+        AssertContext{}.RequireNonNullPtr(params.settings);
+        AssertContext{}.RequireNonNullPtr(window);
+
+        LogContext{}.LogDebug(&menu);
+        LogContext{}.LogDebug(&window);
+        LogContext{}.LogDebug(&params.settings);
+    #endif
+
     connect(&LanguageManager::GetLanguageManager(), 
             &LanguageManager::OnLanguageChanged, this, 
               [this, menu, window](int newLanguage) {
@@ -26,30 +43,29 @@ void SystemTrayCore::updateSwitchLanguageInstance(const SystemTrayParams &params
             .trayMenu = menu,
             .TYPE = newLanguage
         };
-        loadTranslator(params); 
+
+        LoadTranslator(params); 
     });
 
 }
 
-void SystemTrayCore::translatorDectect(const SystemTrayParams &params) {
+void SystemTrayCore::SetupTranslator(const SystemTrayParams &params) {
     if (!Utils::hasSetting(LANGUAGE_SETTING)) {
         params.settings->setValue(LANGUAGE_SETTING, Translate::ENGLISH);
     }
 
     const int TYPE = params.settings->value(LANGUAGE_SETTING).toInt();
 
-    // clang-format off
     struct SystemTrayParams systemTrayParams {
         .window = params.window,
         .trayMenu = params.trayMenu,
         .TYPE = TYPE
     };
-    // clang-format on
 
-    loadTranslator(systemTrayParams);
+    LoadTranslator(systemTrayParams);
 }
 
-void SystemTrayCore::loadTranslator(const SystemTrayParams &params) {
+void SystemTrayCore::LoadTranslator(const SystemTrayParams &params) {
     params.trayMenu->clear();
 
     switch (params.TYPE) {
