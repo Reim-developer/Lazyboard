@@ -10,7 +10,7 @@
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
 
-using ZClipboard::GUI::GetButton;
+using ZClipboard::GUI::ConnectButton;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Core::CoreDisconnect;
 using ZClipboard::Listener::ListenerDisconnect;
@@ -23,14 +23,14 @@ GUI_NAMESPACE
             PtrUnique<QSettings> settings;
             CoreDisconnect Builder;
             ListenerDisconnect BuilderFunc;
-            GetButton *getButton;
+            ConnectButton *getButton;
 
         private:
             using Toolkit = ComponentsToolkit;
             using Self = DisconnectButton;
 
         public:
-            Self *UseConnectButton(GetButton *button);
+            Self *UseConnectButton(ConnectButton *button);
             void SetupDisconnectButton(Toolkit *toolkit, QMainWindow *window);
         };
 

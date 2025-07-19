@@ -23,7 +23,7 @@ using ZClipboard::Network::NetworkState;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
-    class GetButton {
+    class ConnectButton {
         private:
             using Toolkit = ComponentsToolkit;
             using FnConnect = ListenerConnect;

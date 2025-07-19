@@ -10,7 +10,7 @@
 
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Lib_Memory::MakePtr;
-using ZClipboard::GUI::GetButton;
+using ZClipboard::GUI::ConnectButton;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 LISTENER_NAMESPACE
@@ -18,7 +18,7 @@ LISTENER_NAMESPACE
     struct DisconnectImpl {
         QSettings *setting;
         ComponentsToolkit *toolkit;
-        GetButton *getButton;
+        ConnectButton *getButton;
         QMainWindow *windowParent;
     };
 

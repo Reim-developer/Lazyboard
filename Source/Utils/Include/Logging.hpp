@@ -29,17 +29,26 @@
         */
         #define __LOG__ __LOGGING_ALL_OBJECTS__();
         
-
         UTILS_NAMESPACE
-            static inline const constexpr char RED[] = "\e[0;31m";
-            static inline const constexpr char GREEN[] = "\e[0;32m";
-            static inline const constexpr char WHITE[] = "\e[0;37m";
-            static inline const constexpr char YELLOW[] = "\e[0;33m";
+
+            /*
+            * Ascii terminal color list.
+            */
+            struct Ascii_Color {
+                static inline const constexpr char RED[] = "\e[0;31m";
+                static inline const constexpr char GREEN[] = "\e[0;32m";
+                static inline const constexpr char WHITE[] = "\e[0;37m";
+                static inline const constexpr char YELLOW[] = "\e[0;33m";
+            };
 
             /*
             * Only for debug mode is enabled.
             */
             struct LogContext {
+                /*
+                * If you wish wrapper, use the field `location` in this struct.
+                * Otherwise, it's optional.
+                */
                 const std::source_location &location = std::source_location::current();
 
                 /*
@@ -47,20 +56,21 @@
                 * Required C++ 20 or above.
                 */
                 template<typename... Args>
-                void LogDebug(Args&&... args) {
-                    DEBUG << "[DEBUG_MODE] In File:" 
-                                << location.file_name()<< "\n";
+                inline void LogDebug(Args&&... args) noexcept {
+                    DEBUG << Ascii_Color::GREEN << "[DEBUG_MODE] In File: " 
+                                  << Ascii_Color::YELLOW << location.file_name() << "\n";
 
-                    DEBUG << "[DEBUG_MODE] In Function:" 
-                                << location.function_name() << "\n";
+                    DEBUG << Ascii_Color::GREEN << "[DEBUG_MODE] In Function: " 
+                                  << Ascii_Color::YELLOW << location.function_name() << "\n";
 
-                    DEBUG << "[DEBUG_MODE] In Line:" 
-                                << location.line() << "\n";
+                    DEBUG << Ascii_Color::GREEN << "[DEBUG_MODE] In Line: " 
+                                  << Ascii_Color::YELLOW << location.line() << "\n";
 
-                    DEBUG << "[DEBUG_MODE] Address:";
+                    DEBUG << Ascii_Color::GREEN << "[DEBUG_MODE] Address: ";
 
-                    (DEBUG << ... << args);
+                    (DEBUG << ... << (DEBUG << Ascii_Color::YELLOW, args));
                     DEBUG << "\n";
+                    DEBUG << Ascii_Color::WHITE; /* Reset to white, default of terminal. */
                 }
 
                 /*
@@ -69,20 +79,21 @@
                 * Required for C++ 20 or above.
                 */
                 template<typename... Args>
-                void Fatal(Args&&... args) {
-                    ERROR << RED << "[CRITICAL] In Function: "
-                                 << GREEN << location.function_name() << "\n";
+                inline void Fatal(Args&&... args) noexcept {
+                    ERROR << Ascii_Color::RED << "[CRITICAL] In Function: "
+                                 << Ascii_Color::GREEN << location.function_name() << "\n";
 
-                    ERROR << RED << "[CRITICAL] In Line: "
-                                 << GREEN << location.line() << "\n";
+                    ERROR << Ascii_Color::RED << "[CRITICAL] In Line: "
+                                 << Ascii_Color::GREEN << location.line() << "\n";
 
-                    ERROR << RED << "[CRITICAL] In File: "
-                                 << GREEN << location.file_name() << "\n";
+                    ERROR << Ascii_Color::RED << "[CRITICAL] In File: "
+                                 << Ascii_Color::GREEN << location.file_name() << "\n";
                     
-                    ERROR << RED << "[CRITICAL] ";
-                    (ERROR << ... << (ERROR << YELLOW, args));
+                    ERROR << Ascii_Color::RED << "[CRITICAL] ";
+                    (ERROR << ... << (ERROR << Ascii_Color::YELLOW, args));
                     ERROR << "\n";
-                    ERROR << WHITE; /* Reset to white, default of terminal. */
+                    ERROR << Ascii_Color::WHITE; /* Reset to white, default of terminal. */
+
                     std::abort();
                 }
             };

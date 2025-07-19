@@ -14,7 +14,6 @@
 #include "DisconnectButton.hpp"
 #include "GetConnectButton.hpp"
 #include "SettingDialog.hpp"
-#include "SystemTray.hpp"
 #include "../../Core/Include/CoreNotification.hpp"
 #include <QSettings>
 #include "../../Lib_Memory/Include/Memory.hpp"
@@ -34,7 +33,7 @@ using ZClipboard::Core::NotificationCore;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::ClearButton;
-using ZClipboard::GUI::GetButton;
+using ZClipboard::GUI::ConnectButton;
 using ZClipboard::GUI::SearchArea;
 using ZClipboard::GUI::SettingButton;
 using ZClipboard::GUI::SystemTray;
@@ -83,15 +82,13 @@ GUI_NAMESPACE
         PtrUnique<ComponentsToolkit> Components_Tookit;
         PtrUnique<HotReloadLanguage> hotReloadLanguage;
         PtrUnique<GUI_Manager> manager_GUI;
-        
-        NotificationCore *notificationCore;
 
         QSettings *settings;
         QIcon appIcon;
         QWidget *centralWidget;
         QGridLayout *windowLayout;
 
-        PtrUnique<GetButton> getButton;
+        PtrUnique<ConnectButton> getButton;
         SettingButton *settingButton;
         DisconnectButton *disconnectButton;
 

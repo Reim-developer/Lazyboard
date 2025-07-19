@@ -1,27 +1,19 @@
 #include "Include/Window.hpp"
 #include "Include/LanguageManager.hpp"
-#include "Include/ClearButton.hpp"
-#include "Include/GetConnectButton.hpp"
 #include "Include/SettingDialog.hpp"
-#include "Include/SearchPanel.hpp"
 #include "../Utils/Include/Utils.hpp"
 #include "../Utils/Include/Settings.hpp"
 #include "../Language/Include/Translate.hpp"
-#include "Include/DisconnectButton.hpp"
 #include "../Utils/Include/Config.hpp"
 #include "../Language/Include/Language.hpp"
 #include "Include/SystemTray.hpp"
-#include <QStringLiteral>
 #include <QApplication>
 #include "Toolkit/Include/Components_Toolkit.hpp"
 #include "../Helper_Implements/Include/LayoutManager_Impl_Helper.hpp"
-#include <QSettings>
 
 using ZClipboard::Language::Translate;
 using ZClipboard::Language::TransValue;
 using ZClipboard::Implements::MainWindowComponentsManagerData;
-using ZClipboard::GUI::DisconnectButton;
-using ZClipboard::GUI::GetButton;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
@@ -65,17 +57,17 @@ void AppMainWindow::InitiationObject() {
     
     Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
     Utils::MakeSmartPtr<Object>(objectManager);
-    Utils::MakeSmartPtr<GetButton>(getButton);
+    Utils::MakeSmartPtr<ConnectButton>(getButton);
     Utils::MakeSmartPtr<GUI_Manager>(manager_GUI);
     
     objectManager->InitiationObjects();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
-    notificationCore = new NotificationCore();
 }
 
 void AppMainWindow::SetupApplicationGUI() {
     using DataImpl = MainWindowComponentsManagerData;
+    
     manager_GUI
         ->  StartBuild()
         ->  WithAndThen(&DataImpl::appIcon, &appIcon)
@@ -85,11 +77,7 @@ void AppMainWindow::SetupApplicationGUI() {
         ->  WhenDone()
         ->  Render_MainWindow_GUI();
 
-    getButton->SetupConnectButton(this, __TOOLKIT_RAW__);
-    settingButton->addSettingButton(this, windowLayout);
-    disconnectButton
-        ->  UseConnectButton(getButton.get())
-        ->  SetupDisconnectButton(__TOOLKIT_RAW__, this);
+    settingButton->SetupSettingButton(this, windowLayout);
 
     const auto trayIcon = __TOOLKIT__->GetSystemTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);

@@ -31,7 +31,7 @@ GUI_NAMESPACE
         Q_OBJECT
 
     public:
-        void addSettingButton(QMainWindow *window, QGridLayout *layout);
+        void SetupSettingButton(QMainWindow *window, QGridLayout *layout);
         QPushButton *getSettingButton();
 
     private:
