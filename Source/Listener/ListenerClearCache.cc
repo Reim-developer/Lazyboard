@@ -11,6 +11,10 @@ using ZClipboard::Listener::ClearCacheListener;
 using ZClipboard::Listener::ListenerCacheImpl;
 using ZClipboard::AppUtils::Utils;
 
+#if defined (Z_DEBUG)
+    #include "../Utils/Include/AssertNullPtr.hpp"
+#endif
+
 const auto LanguageTypeLambda = [](QSettings *settings) -> int {
     const int LANGUAGE_TYPE = 
         settings
@@ -36,6 +40,14 @@ function<void(ListenerCacheImpl *Impl)> ClearDatabaseFunc = [](ListenerCacheImpl
         * Usage with CMake flag:
         * -DZ_DEBUG=1
         */
+        #if defined (Z_DEBUG)
+
+            AssertContext{}.RequireNonNullPtr(Impl->table);
+            AssertContext{}.RequireNonNullPtr(Impl->button);
+            AssertContext{}.RequireNonNullPtr(Impl->settings);
+
+        #endif 
+
 
         #if defined(Z_DEBUG)
                 Impl
