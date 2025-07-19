@@ -17,5 +17,7 @@ void SearchAreaComponentImpl(Object *object, Toolkit *toolkit);
 void TableViewComponentImpl(Object *object, Toolkit *toolkit);
 void NotificationComponentImpl(Object *object, Toolkit *toolkit);
 void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, QIcon appIcon);
+void ConnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit);
+void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit);
 
 #endif // MAIN_WINDOW_GUI_IMPL_HELPER_HPP
