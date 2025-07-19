@@ -16,17 +16,13 @@ GUI_NAMESPACE
 
     private:
         using Toolkit = ComponentsToolkit;
-        
+        using Window = QMainWindow;
 
     public:
-        void SetupSystemTray(QIcon *icon, Toolkit *toolkit);
+        void SetupSystemTray(Window *window, QIcon *icon, Toolkit *toolkit);
 
     private:
-        QMainWindow *window;
         SystemTrayCore *systemTrayCore;
-        // QAction *showGui;
-        // QAction *hideGui;
-        // QAction *quitGui;
     };
 
 END_NAMESPACE
