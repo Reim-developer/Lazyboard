@@ -60,3 +60,22 @@ void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, Q
         ->  systemTray_Component
         ->  SetupSystemTray(window, &appIcon, toolkit);
 }
+
+void ConnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+    object
+        ->  GetMainWindowObjects()
+        ->  connectButton_Component
+        ->  SetupConnectButton(window, toolkit);
+}
+
+void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+    auto connectButton = object
+        ->  GetMainWindowObjects()
+        ->  connectButton_Component;
+
+    object 
+        ->  GetMainWindowObjects()
+        ->  disconnectButton_Component
+        ->  UseConnectButton(connectButton)
+        ->  SetupDisconnectButton(toolkit, window);
+}
