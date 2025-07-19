@@ -1,9 +1,9 @@
 #include "Include/Components_Toolkit.hpp"
 
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
-#define __SELF__ ComponentsToolkit
+using Self = ComponentsToolkit;
 
-QTableView *__SELF__::GetTableView() {
+QTableView *Self::GetTableView() {
     if(!ClipboardTableView) {
         Utils::MakeSmartPtr<QTableView>(ClipboardTableView);
     }
@@ -11,7 +11,7 @@ QTableView *__SELF__::GetTableView() {
     return ClipboardTableView.get();
 }
 
-TableModel *__SELF__::GetTableModel() {
+TableModel *Self::GetTableModel() {
     if(!ModelTable) {
         Utils::MakeSmartPtr<TableModel>(ModelTable);
     }
@@ -19,7 +19,7 @@ TableModel *__SELF__::GetTableModel() {
     return ModelTable.get();
 }
 
-QLineEdit *__SELF__::GetSearchArea() {
+QLineEdit *Self::GetSearchArea() {
     if(!SearchArea) {
         Utils::MakeSmartPtr<QLineEdit>(SearchArea);
     }
@@ -27,7 +27,7 @@ QLineEdit *__SELF__::GetSearchArea() {
     return SearchArea.get();
 }
 
-QPushButton *__SELF__::GetClearButton() {
+QPushButton *Self::GetClearButton() {
     if(!ClearButton) {
         Utils::MakeSmartPtr<QPushButton>(ClearButton);
     }
@@ -35,7 +35,7 @@ QPushButton *__SELF__::GetClearButton() {
     return ClearButton.get();
 }
 
-QPushButton *__SELF__::GetDisconnectButton() {
+QPushButton *Self::GetDisconnectButton() {
     if(!DisconnectButton) {
         Utils::MakeSmartPtr<QPushButton>(DisconnectButton);
     }
@@ -43,10 +43,26 @@ QPushButton *__SELF__::GetDisconnectButton() {
     return DisconnectButton.get();
 }
 
-QPushButton *__SELF__::GetConnectButton() {
+QPushButton *Self::GetConnectButton() {
     if(!ConnectButton) {
         Utils::MakeSmartPtr<QPushButton>(ConnectButton);
     }
 
     return ConnectButton.get();
+}
+
+QSystemTrayIcon *Self::GetSystemTrayIcon() {
+    if(!SystemTrayIcon) {
+        Utils::MakeSmartPtr<QSystemTrayIcon>(SystemTrayIcon);
+    }
+
+    return SystemTrayIcon.get();
+}
+
+QMenu *Self::GetSystemTrayMenu() {
+    if(!SystemTrayMenu) {
+        Utils::MakeSmartPtr<QMenu>(SystemTrayMenu);
+    }
+
+    return SystemTrayMenu.get();
 }
