@@ -61,7 +61,7 @@ __SELF__ *__SELF__::UseToolkit(ComponentsToolkit *toolkit) {
     return this;
 }
 
-void TableView::SetupTableView(QWidget *zWindow, QGridLayout *zLayout) {
+void TableView::SetupTableView() {
     databaseManager.setupinitDB();
 
     tableModel = toolkit->GetTableModel();
