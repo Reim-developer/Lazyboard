@@ -10,7 +10,7 @@ using ZClipboard::GUI::ClearButton;
 using ZClipboard::Listener::ListenerCacheImpl;
 using ZClipboard::AppUtils::Utils;
 
-void ClearButton::SetupClearButton(QGridLayout *layout, Toolkit *toolkit, TableView *tableView) {
+void ClearButton::SetupClearButton(Toolkit *toolkit, TableView *tableView) {
     auto clearButton = toolkit->GetClearButton();
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
     

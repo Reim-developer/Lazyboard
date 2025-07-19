@@ -19,7 +19,6 @@ using ZClipboard::AppUtils::Utils;
 
 GUI_NAMESPACE
     struct SearchAreaImpl {
-        QMainWindow *window;
         TableView *tableView;
         ComponentsToolkit *toolkit;
     };

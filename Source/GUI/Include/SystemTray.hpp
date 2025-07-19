@@ -6,33 +6,27 @@
 #include <QMainWindow>
 #include "../../Core/Include/CoreSystemTray.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../Toolkit/Include/Components_Toolkit.hpp"
 
 using ZClipboard::Core::SystemTrayCore;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 GUI_NAMESPACE
+    class SystemTray {
 
-    struct SystemTrayWidget {
-        QMainWindow *window;
-        QIcon icon;
-    };
+    private:
+        using Toolkit = ComponentsToolkit;
+        
 
-    class SystemTray : public QMainWindow {
-        Q_OBJECT
     public:
-        explicit SystemTray(QMainWindow *window);
-
-        void addSystemTray(const SystemTrayWidget &widget);
-        QSystemTrayIcon *getSystemTrayIcon();
+        void SetupSystemTray(QIcon *icon, Toolkit *toolkit);
 
     private:
         QMainWindow *window;
         SystemTrayCore *systemTrayCore;
-
-        QSystemTrayIcon *trayIcon;
-        QMenu *trayMenu;
-        QAction *showGui;
-        QAction *hideGui;
-        QAction *quitGui;
+        // QAction *showGui;
+        // QAction *hideGui;
+        // QAction *quitGui;
     };
 
 END_NAMESPACE

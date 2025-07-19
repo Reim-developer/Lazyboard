@@ -3,7 +3,6 @@
 #include "Include/ClearButton.hpp"
 #include "Include/GetConnectButton.hpp"
 #include "Include/SettingDialog.hpp"
-#include "Include/TableView.hpp"
 #include "Include/SearchPanel.hpp"
 #include "../Utils/Include/Utils.hpp"
 #include "../Utils/Include/Settings.hpp"
@@ -22,10 +21,7 @@ using ZClipboard::Language::Translate;
 using ZClipboard::Language::TransValue;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::GUI::GetButton;
-using ZClipboard::GUI::SearchArea;
 using ZClipboard::GUI::SystemTray;
-using ZClipboard::GUI::SystemTrayWidget;
-using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
@@ -65,48 +61,32 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 }
 
 void AppMainWindow::InitiationObject() {
-    Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
-    Utils::MakeSmartPtr<TableView>(tableView);
-    Utils::MakeSmartPtr<SearchArea>(searchArea);
-    Utils::MakeSmartPtr<GetButton>(getButton);
+    using Object = MainWindowObjectManager;
     
+    Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
+    Utils::MakeSmartPtr<Object>(objectManager);
+    Utils::MakeSmartPtr<GetButton>(getButton);
+    Utils::MakeSmartPtr<GUI_Manager>(manager_GUI);
+    
+    objectManager->InitiationObjects();
+
     clearButton = new ClearButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
-    systemTray = new SystemTray(this);
+    systemTray = new SystemTray();
     notificationCore = new NotificationCore();
 }
 
-void AppMainWindow::SetupApplicationGUI() {
-    struct SystemTrayWidget systemTrayWidget {
-        .window = this,
-        .icon = appIcon
-    };
-    tableView
-        ->  UseToolkit(__TOOLKIT__.get())
-        ->  SetupTableView(this, windowLayout);
+void AppMainWindow::SetupApplicationGUI() {   
+    manager_GUI->Render_MainWindow_GUI(objectManager.get(), __TOOLKIT_RAW__, appIcon);
 
-    searchArea
-        ->  StartBuild()
-        ->  WithAndThen(&SearchAreaImpl::window, this)
-        ->  WithAndThen(&SearchAreaImpl::tableView, tableView.get())
-        ->  WithAndThen(&SearchAreaImpl::toolkit, __TOOLKIT_RAW__)
-        ->  WhenDone()
-        ->  SetupSearchPanel();
-
-    clearButton->SetupClearButton(windowLayout, __TOOLKIT_RAW__, tableView.get());
     getButton->SetupConnectButton(this, __TOOLKIT_RAW__);
     settingButton->addSettingButton(this, windowLayout);
     disconnectButton
         ->  UseConnectButton(getButton.get())
         ->  SetupDisconnectButton(__TOOLKIT_RAW__, this);
-    systemTray->addSystemTray(systemTrayWidget);
 
-    const auto trayIcon = systemTray->getSystemTrayIcon();
-    const auto clipboard = tableView->GetClipboard();
-
-    notificationCore->onClipboardChanged(trayIcon, clipboard);
-
+    const auto trayIcon = __TOOLKIT__->GetSystemTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
 }
 

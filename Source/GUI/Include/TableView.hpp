@@ -42,7 +42,7 @@ GUI_NAMESPACE
 
         public:
                 Self *UseToolkit(ComponentsToolkit *toolkit);
-                void SetupTableView(QWidget *zWindow, QGridLayout *zLayout);
+                void SetupTableView();
                 TableModel *GetTableModel();
                 DatabaseManager &GetDatabase();
                 QClipboard *GetClipboard();
