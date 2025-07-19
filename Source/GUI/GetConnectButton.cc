@@ -3,16 +3,16 @@
 #include "../Utils/Include/Utils.hpp"
 #include <QSettings>
 
-using ZClipboard::GUI::GetButton;
+using ZClipboard::GUI::ConnectButton;
 using ZClipboard::Core::CoreConnectImpl;
 using ZClipboard::Listener::ListenerConnectImpl;
 using ZClipboard::AppUtils::Utils;
 
-#define __SELF__ GetButton
-#define __WINDOW__ QMainWindow
-#define __BUTTON__ QPushButton
+using Self = ConnectButton;
+using Window = QMainWindow;
+using Button = QPushButton;
 
-void __SELF__::SetupConnectButton(QMainWindow *window, Toolkit *toolkit) {
+void Self::SetupConnectButton(Window *window, Toolkit *toolkit) {
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
     Utils::MakeSmartPtr<NetworkState>(networkState);
 
@@ -20,7 +20,7 @@ void __SELF__::SetupConnectButton(QMainWindow *window, Toolkit *toolkit) {
     this->SetupEventListener(window, connectButton);
 }
 
-void __SELF__::SetupEventListener(__WINDOW__ *window, __BUTTON__ *button) {
+void Self::SetupEventListener(Window *window, Button *button) {
     using FnImpl = ListenerConnectImpl;
     auto Function = BuilderFn
         .   StartBuild()
@@ -40,11 +40,11 @@ void __SELF__::SetupEventListener(__WINDOW__ *window, __BUTTON__ *button) {
         ->  ThenAddListener(Function);
 }
 
-void GetButton::ResetServer() {
+void Self::ResetServer() {
     networkState->ResetServer();
     networkState->ResetSocket();
 }
 
-NetworkState *GetButton::GetNetworkState() {
+NetworkState *Self::GetNetworkState() {
     return networkState.get();
 }
