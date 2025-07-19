@@ -6,11 +6,13 @@
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Utils/Include/Meta_Macro.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
+#include "../../Utils/Include/Utils.hpp"
 
 using std::function;
 using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::TableView;
+using ZClipboard::AppUtils::Utils;
 
 LISTENER_NAMESPACE
     struct ListenerCacheImpl {  
@@ -21,35 +23,31 @@ LISTENER_NAMESPACE
 
     class ClearCacheListener {
         private:
+            using Self = ClearCacheListener;
+
+        private:
             PtrUnique<ListenerCacheImpl> Impl;
             
-            public:
-                ClearCacheListener *StartBuild() {
-                    #if !defined (_WIN32)
+        public:
+            Self *StartBuild() {
+                Utils::MakeSmartPtr<ListenerCacheImpl>(Impl);
+                    
+                return this;
+            }
 
-                        MAKE_SMART_PTR(ListenerCacheImpl, Impl);
+            CLASS_BUILD(T, V)
+            ClearCacheListener *WithAndThen(T ListenerCacheImpl::*member, V &&value) {
+                Impl.get()->*member = FORWARD(T, value);
 
-                    #else
+                return this;
+            }
 
-                        Impl = MakePtr<ListenerCacheImpl>();
 
-                    #endif
+            Self *WhenDone() {
+                return this;
+            }
 
-                    return this;
-                }
-
-                CLASS_BUILD(T, V)
-                ClearCacheListener *WithAndThen(T ListenerCacheImpl::*member, V &&value) {
-                    Impl.get()->*member = FORWARD(T, value);
-
-                    return this;
-                }
-
-                ClearCacheListener *WhenDone() {
-                    return this;
-                }
-
-                VOID_FUNC TryGetListener();
+            VOID_FUNC TryGetListener();
     };
 
 
