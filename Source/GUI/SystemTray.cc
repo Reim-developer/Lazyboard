@@ -13,13 +13,11 @@
 using ZClipboard::Core::SystemTrayCore;
 using ZClipboard::Core::SystemTrayParams;
 using ZClipboard::GUI::SystemTray;
-using ZClipboard::GUI::SystemTrayWidget;
 
-SystemTray::SystemTray(QMainWindow *mainWindow) : window(mainWindow) {}
+void SystemTray::SetupSystemTray(QIcon *appIcon, Toolkit *toolkit) {
+    auto trayMenu = toolkit->GetSystemTrayMenu();
+    auto trayIcon = toolkit->GetSystemTrayIcon();
 
-void SystemTray::addSystemTray(const SystemTrayWidget &widget) {
-    trayIcon = new QSystemTrayIcon(widget.window);
-    trayMenu = new QMenu();
     systemTrayCore = new SystemTrayCore();
     QSettings *setting = new QSettings(AUTHOR_NAME, APP_NAME);
 
@@ -37,12 +35,8 @@ void SystemTray::addSystemTray(const SystemTrayWidget &widget) {
     systemTrayCore->translatorDectect(systemTrayParams);
     systemTrayCore->updateSwitchLanguageInstance(systemTrayParams);
 
-    trayIcon->setIcon(widget.icon);
+    trayIcon->setIcon(*appIcon);
     trayIcon->setToolTip(TOOL_TIP_TEXT_EN);
     trayIcon->setContextMenu(trayMenu);
     trayIcon->show();
-}
-
-QSystemTrayIcon *SystemTray::getSystemTrayIcon() {
-    return trayIcon;
 }
