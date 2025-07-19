@@ -42,6 +42,7 @@ GUI_TOOLKIT_NAMESPACE
             Widget GetSearchAreaLayout(Toolkit *tookit);
             Widget GetConnectButtonLayout(Toolkit *toolkit);
             Widget GetDisconnectButtonLayout(Toolkit *toolkit);
+            Widget GetClearButtonLayout(Toolkit *toolkit);
 
         public:
             Self *StartBuild();
