@@ -51,6 +51,14 @@ QPushButton *Self::GetConnectButton() {
     return ConnectButton.get();
 }
 
+QPushButton *Self::GetSettingButton() {
+    if(!SettingButton) {
+        Utils::MakeSmartPtr<QPushButton>(SettingButton);
+    }
+
+    return SettingButton.get();
+}
+
 QSystemTrayIcon *Self::GetSystemTrayIcon() {
     if(!SystemTrayIcon) {
         Utils::MakeSmartPtr<QSystemTrayIcon>(SystemTrayIcon);
