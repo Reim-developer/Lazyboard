@@ -7,6 +7,8 @@
 #include <QTableView>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::TableModel;
@@ -22,6 +24,8 @@ GUI_TOOLKIT_NAMESPACE
             PtrUnique<QPushButton> ClearButton;
             PtrUnique<QPushButton> ConnectButton;
             PtrUnique<QPushButton> DisconnectButton;
+            PtrUnique<QSystemTrayIcon> SystemTrayIcon;
+            PtrUnique<QMenu> SystemTrayMenu;
 
         public:
             QTableView *GetTableView();
@@ -30,6 +34,8 @@ GUI_TOOLKIT_NAMESPACE
             QPushButton *GetClearButton();
             QPushButton *GetConnectButton();
             QPushButton *GetDisconnectButton();
+            QSystemTrayIcon *GetSystemTrayIcon();
+            QMenu *GetSystemTrayMenu();
     };
 
 END_NAMESPACE
