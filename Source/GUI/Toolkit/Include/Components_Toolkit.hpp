@@ -24,6 +24,7 @@ GUI_TOOLKIT_NAMESPACE
             PtrUnique<QPushButton> ClearButton;
             PtrUnique<QPushButton> ConnectButton;
             PtrUnique<QPushButton> DisconnectButton;
+            PtrUnique<QPushButton> SettingButton;
             PtrUnique<QSystemTrayIcon> SystemTrayIcon;
             PtrUnique<QMenu> SystemTrayMenu;
 
@@ -34,6 +35,7 @@ GUI_TOOLKIT_NAMESPACE
             QPushButton *GetClearButton();
             QPushButton *GetConnectButton();
             QPushButton *GetDisconnectButton();
+            QPushButton *GetSettingButton();
             QSystemTrayIcon *GetSystemTrayIcon();
             QMenu *GetSystemTrayMenu();
     };
