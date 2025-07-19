@@ -2,6 +2,7 @@
 
 using ZClipboard::GUI::SearchAreaImpl;
 using Impl = SearchAreaImpl;
+using Window = QMainWindow;
 
 void ClearButtonComponentImpl(Object *object, Toolkit *toolkit) {
     auto tableView = object
@@ -53,9 +54,9 @@ void NotificationComponentImpl(Object *object, Toolkit *toolkit) {
         ->  onClipboardChanged(systemTrayIcon, clipboard);
 }
 
-void SystemTrayComponentImpl(Object *object, Toolkit *toolkit, QIcon appIcon) {
+void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, QIcon appIcon) {
     object
         ->  GetMainWindowObjects()
         ->  systemTray_Component
-        ->  SetupSystemTray(&appIcon, toolkit);
+        ->  SetupSystemTray(window, &appIcon, toolkit);
 }
