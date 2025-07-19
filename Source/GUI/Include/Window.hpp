@@ -8,10 +8,10 @@
 #include <QSystemTrayIcon>
 #include <QStringLiteral>
 #include <QMenu>
-#include "DisconnectButton.hpp"
 #include "LanguageManager.hpp"
 #include "SearchPanel.hpp"
 #include "ClearButton.hpp"
+#include "DisconnectButton.hpp"
 #include "GetConnectButton.hpp"
 #include "SettingDialog.hpp"
 #include "SystemTray.hpp"
@@ -90,10 +90,7 @@ GUI_NAMESPACE
         QIcon appIcon;
         QWidget *centralWidget;
         QGridLayout *windowLayout;
-        SystemTray *systemTray;
 
-
-        ClearButton *clearButton;
         PtrUnique<GetButton> getButton;
         SettingButton *settingButton;
         DisconnectButton *disconnectButton;
@@ -104,11 +101,11 @@ GUI_NAMESPACE
                     LogContext{}.LogDebug(&Components_Tookit);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->tableView_Component);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->searchArea_Component);
-                    LogContext{}.LogDebug(&clearButton);
+                    LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->clearButton_Component);
                     LogContext{}.LogDebug(&getButton);
                     LogContext{}.LogDebug(&settingButton);
                     LogContext{}.LogDebug(&disconnectButton);
-                    LogContext{}.LogDebug(&systemTray);
+                    LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->systemTray_Component);
                     LogContext{}.LogDebug(&hotReloadLanguage);
                 }
         #endif
