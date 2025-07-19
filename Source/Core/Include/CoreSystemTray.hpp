@@ -18,11 +18,11 @@ CORE_NAMESPACE
         Q_OBJECT
 
     public:
-        void updateSwitchLanguageInstance(const SystemTrayParams &params);
-        void translatorDectect(const SystemTrayParams &params);
+        void UpdateSwitchLanguage(const SystemTrayParams &params);
+        void SetupTranslator(const SystemTrayParams &params);
 
     private:
-        void loadTranslator(const SystemTrayParams &params);
+        void LoadTranslator(const SystemTrayParams &params);
     };
 END_NAMESPACE
 

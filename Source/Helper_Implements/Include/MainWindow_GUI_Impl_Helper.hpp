@@ -10,11 +10,12 @@ using ZClipboard::GUI::Toolkit::ComponentsToolkit;
 
 using Object = MainWindowObjectManager;
 using Toolkit = ComponentsToolkit;
+using Window = QMainWindow;
 
 void ClearButtonComponentImpl(Object *object, Toolkit *toolkit);
 void SearchAreaComponentImpl(Object *object, Toolkit *toolkit);
 void TableViewComponentImpl(Object *object, Toolkit *toolkit);
 void NotificationComponentImpl(Object *object, Toolkit *toolkit);
-void SystemTrayComponentImpl(Object *object, Toolkit *toolkit, QIcon appIcon);
+void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, QIcon appIcon);
 
 #endif // MAIN_WINDOW_GUI_IMPL_HELPER_HPP

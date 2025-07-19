@@ -19,9 +19,9 @@
 
 using ZClipboard::Language::Translate;
 using ZClipboard::Language::TransValue;
+using ZClipboard::Implements::MainWindowComponentsManagerData;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::GUI::GetButton;
-using ZClipboard::GUI::SystemTray;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
@@ -69,16 +69,21 @@ void AppMainWindow::InitiationObject() {
     Utils::MakeSmartPtr<GUI_Manager>(manager_GUI);
     
     objectManager->InitiationObjects();
-
-    clearButton = new ClearButton();
     settingButton = new SettingButton();
     disconnectButton = new DisconnectButton();
-    systemTray = new SystemTray();
     notificationCore = new NotificationCore();
 }
 
-void AppMainWindow::SetupApplicationGUI() {   
-    manager_GUI->Render_MainWindow_GUI(objectManager.get(), __TOOLKIT_RAW__, appIcon);
+void AppMainWindow::SetupApplicationGUI() {
+    using DataImpl = MainWindowComponentsManagerData;
+    manager_GUI
+        ->  StartBuild()
+        ->  WithAndThen(&DataImpl::appIcon, &appIcon)
+        ->  WithAndThen(&DataImpl::object, objectManager.get())
+        ->  WithAndThen(&DataImpl::toolkit, __TOOLKIT_RAW__)
+        ->  WithAndThen(&DataImpl::window, this)
+        ->  WhenDone()
+        ->  Render_MainWindow_GUI();
 
     getButton->SetupConnectButton(this, __TOOLKIT_RAW__);
     settingButton->addSettingButton(this, windowLayout);

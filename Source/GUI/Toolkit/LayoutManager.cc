@@ -6,12 +6,12 @@ using ZClipboard::GUI::Toolkit::LayoutMangerTookit;
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::Toolkit::WidgetProperty;
 
-#define __SELF__ LayoutMangerTookit
-#define __TOOKIT__ ComponentsToolkit
-#define __WIDGET__ WidgetProperty
-#define __LAYOUT__ QGridLayout
+using Self = LayoutMangerTookit;
+using Toolkit = ComponentsToolkit;
+using Widget = WidgetProperty;
+using Layout = QGridLayout;
 
-__SELF__ *__SELF__::StartBuild() {
+Self *Self::StartBuild() {
     if(!Impl) {
         Utils::MakeSmartPtr<ImplData>(Impl);
     }
@@ -19,23 +19,23 @@ __SELF__ *__SELF__::StartBuild() {
     return this;
 }
 
-__SELF__ *__SELF__::WhenDone() {
+Self *Self::WhenDone() {
     return this;
 }
 
-__TOOKIT__ *__SELF__::GetTookit() {
+Toolkit *Self::GetTookit() {
     return this
         ->  Impl
         ->  tookit;
 }
 
-__LAYOUT__ *__SELF__::GetGridLayout() {
+Layout *Self::GetGridLayout() {
     return this
         ->  Impl
         ->  layout;
 }
 
-__WIDGET__ __SELF__::GetTableViewLayout(__TOOKIT__ *toolkit) {
+Widget Self::GetTableViewLayout(Toolkit *toolkit) {
     auto tableView = toolkit->GetTableView();
 
     auto widgetLayout = Widget {
@@ -47,7 +47,7 @@ __WIDGET__ __SELF__::GetTableViewLayout(__TOOKIT__ *toolkit) {
     return widgetLayout;
 }
 
-__WIDGET__ __SELF__::GetSearchAreaLayout(__TOOKIT__ *toolkit) {
+Widget Self::GetSearchAreaLayout(Toolkit *toolkit) {
     auto searchArea = toolkit->GetSearchArea();
 
     auto widgetLayout = Widget {
@@ -58,10 +58,10 @@ __WIDGET__ __SELF__::GetSearchAreaLayout(__TOOKIT__ *toolkit) {
     return widgetLayout;
 }
 
-__WIDGET__ __SELF__::GetConnectButtonLayout(__TOOKIT__ *toolkit) {
+Widget Self::GetConnectButtonLayout(Toolkit *toolkit) {
     auto connectButton = toolkit->GetConnectButton();
 
-    auto widgetLayout = __WIDGET__ {
+    auto widgetLayout = Widget {
         .widget = connectButton,
         .row = 0, .column = 1
     };
@@ -69,10 +69,10 @@ __WIDGET__ __SELF__::GetConnectButtonLayout(__TOOKIT__ *toolkit) {
     return widgetLayout;
 }
 
-__WIDGET__ __SELF__::GetDisconnectButtonLayout(__TOOKIT__ *toolkit) {
+Widget Self::GetDisconnectButtonLayout(Toolkit *toolkit) {
     auto disconnectButton = toolkit->GetDisconnectButton();
 
-    auto widgetLayout = __WIDGET__ {
+    auto widgetLayout = Widget {
         .widget = disconnectButton,
         .row = 0, .column = 4
     };
@@ -80,10 +80,21 @@ __WIDGET__ __SELF__::GetDisconnectButtonLayout(__TOOKIT__ *toolkit) {
     return widgetLayout;
 }
 
-void __SELF__::SetupAppGridLayout() {
+Widget Self::GetClearButtonLayout(Toolkit *toolkit) {
+    auto clearButton = toolkit->GetClearButton();
+
+    auto widgetLayout = Widget {
+        .widget = clearButton,
+        .row = 0, .column = 2
+    };
+
+    return widgetLayout;
+}
+
+void Self::SetupAppGridLayout() {
     auto toolkit = this->GetTookit();
     auto layout = this->GetGridLayout();
-
+    
     /*
     * Widget layout information
     */
@@ -91,11 +102,13 @@ void __SELF__::SetupAppGridLayout() {
     auto searchAreaLayout = this->GetSearchAreaLayout(toolkit);
     auto connectButtonLayout = this->GetConnectButtonLayout(toolkit);
     auto disconnectButtonLayout = this->GetDisconnectButtonLayout(toolkit);
+    auto clearButtonLayout = this->GetClearButtonLayout(toolkit);
 
     using Widget = WidgetProperty;
     GridLayoutAdd(layout, 
         tableViewLayout, searchAreaLayout,
-        connectButtonLayout, disconnectButtonLayout
+        connectButtonLayout, disconnectButtonLayout,
+        clearButtonLayout
     );
 
     #if defined (Z_DEBUG)

@@ -14,7 +14,7 @@ using ZClipboard::Core::SystemTrayCore;
 using ZClipboard::Core::SystemTrayParams;
 using ZClipboard::GUI::SystemTray;
 
-void SystemTray::SetupSystemTray(QIcon *appIcon, Toolkit *toolkit) {
+void SystemTray::SetupSystemTray(Window *window, QIcon *appIcon, Toolkit *toolkit) {
     auto trayMenu = toolkit->GetSystemTrayMenu();
     auto trayIcon = toolkit->GetSystemTrayIcon();
 
@@ -32,8 +32,8 @@ void SystemTray::SetupSystemTray(QIcon *appIcon, Toolkit *toolkit) {
     };
     // clang-format on
 
-    systemTrayCore->translatorDectect(systemTrayParams);
-    systemTrayCore->updateSwitchLanguageInstance(systemTrayParams);
+    systemTrayCore->SetupTranslator(systemTrayParams);
+    systemTrayCore->UpdateSwitchLanguage(systemTrayParams);
 
     trayIcon->setIcon(*appIcon);
     trayIcon->setToolTip(TOOL_TIP_TEXT_EN);
