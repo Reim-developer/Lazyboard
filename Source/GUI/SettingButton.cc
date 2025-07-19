@@ -17,7 +17,7 @@ using ZClipboard::Language::TransValue;
 using ZClipboard::GUI::SettingButton;
 using ZClipboard::AppUtils::Utils;
 
-void SettingButton::addSettingButton(QMainWindow *window, QGridLayout *layout) {
+void SettingButton::SetupSettingButton(QMainWindow *window, QGridLayout *layout) {
     settingButton = new QPushButton(window);
     settingCore = new SettingCore();
 
