@@ -5,6 +5,8 @@
 #include "../../GUI/Include/ClearButton.hpp"
 #include "../../GUI/Include/SearchPanel.hpp"
 #include "../../GUI/Include/SystemTray.hpp"
+#include "../../GUI/Include/DisconnectButton.hpp"
+#include "../../GUI/Include/GetConnectButton.hpp"
 #include "../../Core/Include/CoreNotification.hpp"
 #include "Memory.hpp"
 #include <utility>
@@ -15,6 +17,8 @@ using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::ClearButton;
 using ZClipboard::GUI::SearchArea;
 using ZClipboard::GUI::SystemTray;
+using ZClipboard::GUI::ConnectButton;
+using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::Core::NotificationCore;
 
 LIB_MEMORY_NAMESPACE
@@ -24,6 +28,8 @@ LIB_MEMORY_NAMESPACE
         SearchArea *searchArea_Component;
         NotificationCore *notificationCore_Component;
         SystemTray *systemTray_Component;
+        ConnectButton *connectButton_Component;
+        DisconnectButton *disconnectButton_Component;
     };
 
     class MainWindowObjectManager {
@@ -37,6 +43,8 @@ LIB_MEMORY_NAMESPACE
             PtrUnique<SearchArea> searchArea;
             PtrUnique<NotificationCore> notificationCore;
             PtrUnique<SystemTray> systemTray;
+            PtrUnique<DisconnectButton> disconnectButton;
+            PtrUnique<ConnectButton> connectButton;
 
         private:
             Object *SetupObjectData();
