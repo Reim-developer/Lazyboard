@@ -79,3 +79,10 @@ void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *tool
         ->  UseConnectButton(connectButton)
         ->  SetupDisconnectButton(toolkit, window);
 }
+
+void SettingButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+    object
+        ->  GetMainWindowObjects()
+        ->  settingButton_Component
+        ->  SetupSettingButton(window, toolkit);
+}
