@@ -16,8 +16,8 @@ using ZClipboard::Implements::MainWindowComponentsManagerData;
 using ZClipboard::GUI::AppMainWindow;
 using ZClipboard::AppUtils::Utils;
 
-#define __TOOLKIT__ Components_Tookit
-#define __TOOLKIT_RAW__ Components_Tookit.get()
+#define __TOOLKIT__ componentsManager
+#define __TOOLKIT_RAW__ componentsManager.get()
 
 AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
     appIcon = QIcon(ICON_PATH);
@@ -53,8 +53,9 @@ AppMainWindow::AppMainWindow(QWidget *zWindow) : QMainWindow(zWindow) {
 
 void AppMainWindow::InitiationObject() {
     using Object = MainWindowObjectManager;
+    using ComponentsManager = MainWindowComponentsManager;
     
-    Utils::MakeSmartPtr<ComponentsToolkit>(__TOOLKIT__);
+    Utils::MakeSmartPtr<ComponentsManager>(__TOOLKIT__);
     Utils::MakeSmartPtr<Object>(objectManager);
     Utils::MakeSmartPtr<ConnectButton>(getButton);
     Utils::MakeSmartPtr<GUI_Manager>(manager_GUI);
