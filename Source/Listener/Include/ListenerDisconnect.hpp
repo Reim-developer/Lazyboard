@@ -11,13 +11,13 @@
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::GUI::ConnectButton;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 LISTENER_NAMESPACE
 
     struct DisconnectImpl {
         QSettings *setting;
-        ComponentsToolkit *toolkit;
+        MainWindowComponentsManager *componentsManager;
         ConnectButton *getButton;
         QMainWindow *windowParent;
     };
