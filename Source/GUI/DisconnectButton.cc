@@ -14,7 +14,7 @@ using ZClipboard::Listener::DisconnectImpl;
 using ZClipboard::GUI::DisconnectButton;
 
 using Self = DisconnectButton;
-using Toolkit = ComponentsToolkit;
+using ComponentsManager = MainWindowComponentsManager;
 using Window = QMainWindow;
 using Impl = DisconnectImpl;
 
@@ -24,7 +24,7 @@ Self *Self::UseConnectButton(ConnectButton *button) {
     return this;
 }
 
-void Self::SetupDisconnectButton(Toolkit *toolkit, Window *window) {
+void Self::SetupDisconnectButton(ComponentsManager *toolkit, Window *window) {
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
     auto disconnectButton = toolkit->GetDisconnectButton();
 
@@ -40,7 +40,7 @@ void Self::SetupDisconnectButton(Toolkit *toolkit, Window *window) {
         .   StartBuild()
         ->  WithAndThen(&Impl::setting, settings.get())
         ->  WithAndThen(&Impl::getButton, getButton)
-        ->  WithAndThen(&Impl::toolkit, toolkit)
+        ->  WithAndThen(&Impl::componentsManager, toolkit)
         ->  WithAndThen(&Impl::windowParent, window)
         ->  WhenDone()
         ->  TryGetListener();
