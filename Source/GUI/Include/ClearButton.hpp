@@ -21,7 +21,7 @@ using ZClipboard::GUI::TableView;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Core::ClearCoreBuilder;
 using ZClipboard::Listener::ClearCacheListener;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
 
@@ -31,10 +31,10 @@ GUI_NAMESPACE
             ClearCacheListener BuilderFunc;
         
         private:
-            using Toolkit = ComponentsToolkit;
+            using ComponentsManager = MainWindowComponentsManager;
 
         public:
-            void SetupClearButton(Toolkit *toolkit, TableView *tableView);
+            void SetupClearButton(ComponentsManager *toolkit, TableView *tableView);
             
         private:
             void SetupEventListener(QPushButton *clearButton, TableView *tableView);
