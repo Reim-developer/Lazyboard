@@ -30,7 +30,7 @@ using ZClipboard::GUI::TableModel;
 using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::ClipboardDialog;
 using ZClipboard::Lib_Memory::PtrUnique;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
 
@@ -39,9 +39,10 @@ GUI_NAMESPACE
 
         private:
                 using Self = TableView;
+                using ComponentsManager = MainWindowComponentsManager;
 
         public:
-                Self *UseToolkit(ComponentsToolkit *toolkit);
+                Self *UseToolkit(ComponentsManager *componentsManager);
                 void SetupTableView();
                 TableModel *GetTableModel();
                 DatabaseManager &GetDatabase();
@@ -54,7 +55,7 @@ GUI_NAMESPACE
                 void SetupTableProperty();
 
         private:
-                ComponentsToolkit *toolkit;
+                ComponentsManager *componentsManager;
                 QClipboard *clipboard;
                 QTableView *tableView;
                 TableModel *tableModel;
