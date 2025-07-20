@@ -2,7 +2,7 @@
 #define MAIN_WINDOW_GUI_IMPL_HELPER_HPP
 
 #include "../../Lib_Memory/Include/MainWindow_ObjectManager.hpp"
-#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
+#include "../../GUI/Toolkit/Include/MainWindow_Components.hpp"
 #include <QIcon>
 
 using ZClipboard::Lib_Memory::MainWindowObjectManager;
@@ -19,5 +19,6 @@ void NotificationComponentImpl(Object *object, Toolkit *toolkit);
 void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, QIcon appIcon);
 void ConnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit);
 void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit);
+void SettingButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit);
 
 #endif // MAIN_WINDOW_GUI_IMPL_HELPER_HPP
