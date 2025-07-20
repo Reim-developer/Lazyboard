@@ -1,7 +1,7 @@
 #include "Include/LayoutManager_Impl_Helper.hpp"
 #include "../GUI/Toolkit/Include/MainWindow_LayoutManager.hpp"
-using ZClipboard::GUI::Toolkit::LayoutMangerTookit;
-using ZClipboard::GUI::Toolkit::LayoutMangerTookitData;
+using ZClipboard::GUI::Toolkit::MainWindowLayoutManager;
+using ZClipboard::GUI::Toolkit::LayoutMangerToolkitData;
 using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::Lib_Memory::PtrUnique;
 
