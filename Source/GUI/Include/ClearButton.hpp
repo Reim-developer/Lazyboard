@@ -10,7 +10,7 @@
 #include "../../Core/Include/CoreClearCache.hpp"
 #include "../../Listener/Include/ListenerClearCache.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
-#include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 
 #if defined (Z_DEBUG)
     #include "../../Utils/Include/Logging.hpp"
