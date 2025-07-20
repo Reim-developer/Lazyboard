@@ -20,19 +20,19 @@ using ZClipboard::Core::CoreConnect;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Listener::ListenerConnect;
 using ZClipboard::Network::NetworkState;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
     class ConnectButton {
         private:
-            using Toolkit = ComponentsToolkit;
+            using ComponentsManager = MainWindowComponentsManager;
             using FnConnect = ListenerConnect;
             using LanguageType = Translate::LanguageType;
             using Window = QMainWindow;
             using Button = QPushButton;
 
         public:
-            void SetupConnectButton(Window *window, Toolkit *toolkit);
+            void SetupConnectButton(Window *window, ComponentsManager *componentsManager);
             void ResetServer();
             NetworkState *GetNetworkState();
 
