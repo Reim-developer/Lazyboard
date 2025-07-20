@@ -7,7 +7,7 @@ using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::Toolkit::WidgetProperty;
 
 using Self = MainWindowLayoutManager;
-using Toolkit = ComponentsToolkit;
+using Toolkit = MainWindowComponentsManager;
 using Widget = WidgetProperty;
 using Layout = QGridLayout;
 
