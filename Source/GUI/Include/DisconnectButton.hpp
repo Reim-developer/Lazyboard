@@ -14,7 +14,7 @@ using ZClipboard::GUI::ConnectButton;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::Core::CoreDisconnect;
 using ZClipboard::Listener::ListenerDisconnect;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
 
@@ -26,12 +26,12 @@ GUI_NAMESPACE
             ConnectButton *getButton;
 
         private:
-            using Toolkit = ComponentsToolkit;
+            using ComponentsManager = MainWindowComponentsManager;
             using Self = DisconnectButton;
 
         public:
             Self *UseConnectButton(ConnectButton *button);
-            void SetupDisconnectButton(Toolkit *toolkit, QMainWindow *window);
+            void SetupDisconnectButton(ComponentsManager *componentsManager, QMainWindow *window);
         };
 
 END_NAMESPACE
