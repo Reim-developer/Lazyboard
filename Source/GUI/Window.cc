@@ -1,6 +1,5 @@
 #include "Include/Window.hpp"
 #include "Include/LanguageManager.hpp"
-#include "Include/SettingDialog.hpp"
 #include "../Utils/Include/Utils.hpp"
 #include "../Utils/Include/Settings.hpp"
 #include "../Language/Include/Translate.hpp"
@@ -8,7 +7,7 @@
 #include "../Language/Include/Language.hpp"
 #include "Include/SystemTray.hpp"
 #include <QApplication>
-#include "Toolkit/Include/Components_Toolkit.hpp"
+#include "Toolkit/Include/MainWindow_Components.hpp"
 #include "../Helper_Implements/Include/LayoutManager_Impl_Helper.hpp"
 
 using ZClipboard::Language::Translate;
@@ -77,8 +76,6 @@ void AppMainWindow::SetupApplicationGUI() {
         ->  WhenDone()
         ->  Render_MainWindow_GUI();
 
-    settingButton->SetupSettingButton(this, windowLayout);
-
     const auto trayIcon = __TOOLKIT__->GetSystemTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &AppMainWindow::onTrayIconActivated);
 }
@@ -114,7 +111,7 @@ void AppMainWindow::Translator() {
 
     auto clearButtonWidget = __TOOLKIT__->GetClearButton();
     auto getButtonWidget = __TOOLKIT__->GetConnectButton();
-    auto settingButtonWidget = settingButton->getSettingButton();
+    auto settingButtonWidget = __TOOLKIT__->GetSettingButton();
     auto disconnectButtonWidget = __TOOLKIT__->GetDisconnectButton();
     auto searchPanel = __TOOLKIT__->GetSearchArea();
 

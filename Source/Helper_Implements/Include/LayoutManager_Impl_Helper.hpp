@@ -1,6 +1,6 @@
 #ifndef LayoutManager_Impl_Helper
 #define LayoutManager_Impl_Helper
-#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
+#include "../../GUI/Toolkit/Include/MainWindow_Components.hpp"
 #include <QGridLayout>
 using Toolkit = ZClipboard::GUI::Toolkit::ComponentsToolkit;
 

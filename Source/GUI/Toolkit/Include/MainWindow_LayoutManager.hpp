@@ -3,7 +3,7 @@
 #include "../../../Utils/Include/Namespace_Macro.hpp"
 #include "../../../Lib_Memory/Include/Memory.hpp"
 #include "../../../Utils/Include/Meta_Macro.hpp"
-#include "Components_Toolkit.hpp"
+#include "MainWindow_Components.hpp"
 #include "Layout_Tookit.hpp"
 #include <QGridLayout>
 
@@ -43,6 +43,7 @@ GUI_TOOLKIT_NAMESPACE
             Widget GetConnectButtonLayout(Toolkit *toolkit);
             Widget GetDisconnectButtonLayout(Toolkit *toolkit);
             Widget GetClearButtonLayout(Toolkit *toolkit);
+            Widget GetSettingButtonLayout(Toolkit *toolkit);
 
         public:
             Self *StartBuild();

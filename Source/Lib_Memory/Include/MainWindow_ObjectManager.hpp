@@ -7,6 +7,7 @@
 #include "../../GUI/Include/SystemTray.hpp"
 #include "../../GUI/Include/DisconnectButton.hpp"
 #include "../../GUI/Include/GetConnectButton.hpp"
+#include "../../GUI/Include/SettingButton.hpp"
 #include "../../Core/Include/CoreNotification.hpp"
 #include "Memory.hpp"
 #include <utility>
@@ -20,6 +21,7 @@ using ZClipboard::GUI::SystemTray;
 using ZClipboard::GUI::ConnectButton;
 using ZClipboard::GUI::DisconnectButton;
 using ZClipboard::Core::NotificationCore;
+using ZClipboard::GUI::SettingButton;
 
 LIB_MEMORY_NAMESPACE
     struct MainWindowObjectData {
@@ -30,6 +32,7 @@ LIB_MEMORY_NAMESPACE
         SystemTray *systemTray_Component;
         ConnectButton *connectButton_Component;
         DisconnectButton *disconnectButton_Component;
+        SettingButton *settingButton_Component;
     };
 
     class MainWindowObjectManager {
@@ -45,6 +48,7 @@ LIB_MEMORY_NAMESPACE
             PtrUnique<SystemTray> systemTray;
             PtrUnique<DisconnectButton> disconnectButton;
             PtrUnique<ConnectButton> connectButton;
+            PtrUnique<SettingButton> settingButton;
 
         private:
             Object *SetupObjectData();

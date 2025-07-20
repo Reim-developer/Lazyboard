@@ -1,4 +1,4 @@
-#include "Include/LayoutManager_Tookit.hpp"
+#include "Include/MainWindow_LayoutManager.hpp"
 #include "../../Utils/Include/Utils.hpp"
 #include "Include/Layout_Tookit.hpp"
 
@@ -91,6 +91,17 @@ Widget Self::GetClearButtonLayout(Toolkit *toolkit) {
     return widgetLayout;
 }
 
+Widget Self::GetSettingButtonLayout(Toolkit *toolkit) {
+    auto settingButton = toolkit->GetSettingButton();
+
+    auto widgetLayout = Widget {
+        .widget = settingButton,
+        .row = 0, .column = 3
+    };
+
+    return widgetLayout;
+}
+
 void Self::SetupAppGridLayout() {
     auto toolkit = this->GetTookit();
     auto layout = this->GetGridLayout();
@@ -103,12 +114,13 @@ void Self::SetupAppGridLayout() {
     auto connectButtonLayout = this->GetConnectButtonLayout(toolkit);
     auto disconnectButtonLayout = this->GetDisconnectButtonLayout(toolkit);
     auto clearButtonLayout = this->GetClearButtonLayout(toolkit);
+    auto settingButtonLayout = this->GetSettingButtonLayout(toolkit);
 
     using Widget = WidgetProperty;
     GridLayoutAdd(layout, 
         tableViewLayout, searchAreaLayout,
         connectButtonLayout, disconnectButtonLayout,
-        clearButtonLayout
+        clearButtonLayout, settingButtonLayout
     );
 
     #if defined (Z_DEBUG)

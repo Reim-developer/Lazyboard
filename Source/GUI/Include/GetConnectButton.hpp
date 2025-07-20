@@ -12,7 +12,7 @@
 #include "../../Core/Include/CoreConnect.hpp"
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Listener/Include/ListenerConnect.hpp"
-#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 
 using ZClipboard::Language::Translate;
 using ZClipboard::Network::PeerDiscovery;

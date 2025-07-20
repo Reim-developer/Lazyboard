@@ -6,7 +6,7 @@
 #include "TableModel.hpp"
 #include "TableView.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
-#include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 #include "../../Utils/Include/Meta_Macro.hpp"
 #include "../../Utils/Include/Utils.hpp"
 #include "../../Lib_Memory/Include/Memory.hpp"

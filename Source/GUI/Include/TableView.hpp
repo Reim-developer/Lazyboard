@@ -19,7 +19,7 @@
 #include "../../Clipboard/Include/ClipboardImage.hpp"
 #include "../../Clipboard/Include/ClipboardText.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
-#include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "TableModel.hpp"
 

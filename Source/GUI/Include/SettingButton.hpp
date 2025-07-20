@@ -12,9 +12,13 @@
 #include <QLabel>
 #include <QMainWindow>
 #include "../../Core/Include/CoreSetting.hpp"
+#include "../../Lib_Memory/Include/Memory.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
 
 using ZClipboard::Core::SettingCore;
+using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_NAMESPACE
 
@@ -30,23 +34,24 @@ GUI_NAMESPACE
     class SettingButton : public QObject {
         Q_OBJECT
 
+    private:
+        using Window = QMainWindow;
+        using Toolkit = ComponentsToolkit;
+
     public:
-        void SetupSettingButton(QMainWindow *window, QGridLayout *layout);
+        void SetupSettingButton(Window *window, Toolkit *toolkit);
         QPushButton *getSettingButton();
 
     private:
-        void showSettingDialog(QMainWindow *parent);
-        void addGui(QGridLayout *layout, QDialog *dialog);
-        void addSettingCheckboxAction();
-        void addLanguageSectionAction(QDialog *dialog);
-        void addThemeSectionAction();
+        // void showSettingDialog(QMainWindow *parent);
+        // void addGui(QGridLayout *layout, QDialog *dialog);
+        // void addSettingCheckboxAction();
+        // void addLanguageSectionAction(QDialog *dialog);
+        // void addThemeSectionAction();
 
     private:
         SettingCore *settingCore;
-        QSettings *settings;
-        QPushButton *settingButton;
-        QGridLayout *layout;
-
+        PtrUnique<QSettings> settings;
         QPushButton *setPasswordButton;
 
         QLabel *languageDescription;
