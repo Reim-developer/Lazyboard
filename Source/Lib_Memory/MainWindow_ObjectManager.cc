@@ -26,6 +26,7 @@ Object *Self::SetupObjectData() {
     auto systemTray_Raw = this->SetupFieldData<SystemTray>(systemTray);
     auto disconnectButton_Raw = this->SetupFieldData<DisconnectButton>(disconnectButton);
     auto connectButton_Raw = this->SetupFieldData<ConnectButton>(connectButton);
+    auto settingButton_Raw = this->SetupFieldData<SettingButton>(settingButton);
 
     object->tableView_Component = tableView_Raw;
     object->clearButton_Component = clearButton_Raw;
@@ -34,6 +35,7 @@ Object *Self::SetupObjectData() {
     object->systemTray_Component = systemTray_Raw;
     object->disconnectButton_Component = disconnectButton_Raw;
     object->connectButton_Component = connectButton_Raw;
+    object->settingButton_Component = settingButton_Raw;
 
     #if defined(Z_DEBUG)
         AssertContext{}.RequireNonNullPtr(tableView_Raw);
@@ -43,6 +45,7 @@ Object *Self::SetupObjectData() {
         AssertContext{}.RequireNonNullPtr(object->systemTray_Component);
         AssertContext{}.RequireNonNullPtr(object->disconnectButton_Component);
         AssertContext{}.RequireNonNullPtr(object->connectButton_Component);
+        AssertContext{}.RequireNonNullPtr(object->settingButton_Component);
 
         LogContext{}.LogDebug(&tableView_Raw);
         LogContext{}.LogDebug(&object->tableView_Component);
@@ -51,6 +54,8 @@ Object *Self::SetupObjectData() {
         LogContext{}.LogDebug(&object->systemTray_Component);
         LogContext{}.LogDebug(&object->disconnectButton_Component);
         LogContext{}.LogDebug(&object->connectButton_Component);
+        LogContext{}.LogDebug(&object->settingButton_Component);
+
     #endif
 
     return object.get();
