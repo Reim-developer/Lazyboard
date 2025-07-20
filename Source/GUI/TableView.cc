@@ -2,7 +2,6 @@
 #include "../Clipboard/Include/ClipboardImage.hpp"
 #include "../Clipboard/Include/ClipboardText.hpp"
 #include "../Clipboard/Include/ClipboardCache.hpp"
-#include "Toolkit/Include/Components_Toolkit.hpp"
 #include "Include/ClipboardDialog.hpp"
 #include "Include/TableModel.hpp"
 #include <QTableWidget>
