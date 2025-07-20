@@ -6,7 +6,7 @@
 #include <QMainWindow>
 #include "../../Core/Include/CoreSystemTray.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
-#include "../Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 
 using ZClipboard::Core::SystemTrayCore;
 using ZClipboard::GUI::Toolkit::ComponentsToolkit;
