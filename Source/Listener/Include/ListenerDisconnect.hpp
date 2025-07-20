@@ -5,7 +5,7 @@
 #include "../../GUI/Include/GetConnectButton.hpp"
 #include "ListenerClearCache.hpp"
 #include "../../Utils/Include/Meta_Macro.hpp"
-#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
+#include "../../GUI/Toolkit/Include/MainWindow_Components.hpp"
 #include <QMainWindow>
 
 using ZClipboard::Lib_Memory::PtrUnique;
