@@ -13,7 +13,7 @@ VOID_FUNC ListenerDisconnect::TryGetListener() {
 
         auto connectButton = this
             ->  Impl
-            ->  toolkit
+            ->  componentsManager
             ->  GetConnectButton();
     
         auto server = this

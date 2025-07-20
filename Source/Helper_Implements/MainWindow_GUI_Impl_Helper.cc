@@ -4,7 +4,7 @@ using ZClipboard::GUI::SearchAreaImpl;
 using Impl = SearchAreaImpl;
 using Window = QMainWindow;
 
-void ClearButtonComponentImpl(Object *object, Toolkit *toolkit) {
+void ClearButtonComponentImpl(Object *object, ComponentsManager *componentsManager) {
     auto tableView = object
         ->  GetMainWindowObjects()
         ->  tableView_Component;
@@ -12,20 +12,20 @@ void ClearButtonComponentImpl(Object *object, Toolkit *toolkit) {
     object
         ->  GetMainWindowObjects()
         ->  clearButton_Component
-        ->  SetupClearButton(toolkit, tableView);
+        ->  SetupClearButton(componentsManager, tableView);
 }
 
-void TableViewComponentImpl(Object *object, Toolkit *toolkit) {
+void TableViewComponentImpl(Object *object, ComponentsManager *componentsManager) {
     auto tableView = object
         ->  GetMainWindowObjects()
         ->  tableView_Component;
 
     tableView
-        ->  UseToolkit(toolkit)
+        ->  UseToolkit(componentsManager)
         ->  SetupTableView();
 }
 
-void SearchAreaComponentImpl(Object *object, Toolkit *toolkit) {
+void SearchAreaComponentImpl(Object *object, ComponentsManager *componentsManager) {
     auto tableView = object
         ->  GetMainWindowObjects()
         ->  tableView_Component;
@@ -35,13 +35,13 @@ void SearchAreaComponentImpl(Object *object, Toolkit *toolkit) {
         ->  searchArea_Component
         ->  StartBuild()
         ->  WithAndThen(&Impl::tableView, tableView)
-        ->  WithAndThen(&Impl::toolkit, toolkit)
+        ->  WithAndThen(&Impl::componentsManager, componentsManager)
         ->  WhenDone()
         ->  SetupSearchPanel();
 }
 
-void NotificationComponentImpl(Object *object, Toolkit *toolkit) {
-    auto systemTrayIcon = toolkit->GetSystemTrayIcon();
+void NotificationComponentImpl(Object *object, ComponentsManager *componentsManager) {
+    auto systemTrayIcon = componentsManager->GetSystemTrayIcon();
     
     auto clipboard = object
         ->  GetMainWindowObjects()
@@ -54,21 +54,27 @@ void NotificationComponentImpl(Object *object, Toolkit *toolkit) {
         ->  onClipboardChanged(systemTrayIcon, clipboard);
 }
 
-void SystemTrayComponentImpl(Window *window, Object *object, Toolkit *toolkit, QIcon appIcon) {
+void SystemTrayComponentImpl(
+        Window *window, Object *object, 
+        ComponentsManager *componentsManager, QIcon appIcon) {
+
     object
         ->  GetMainWindowObjects()
         ->  systemTray_Component
-        ->  SetupSystemTray(window, &appIcon, toolkit);
+        ->  SetupSystemTray(window, &appIcon, componentsManager);
 }
 
-void ConnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+void ConnectButtonComponentImpl(Window *window, Object *object, ComponentsManager *componentsManager) {
     object
         ->  GetMainWindowObjects()
         ->  connectButton_Component
-        ->  SetupConnectButton(window, toolkit);
+        ->  SetupConnectButton(window, componentsManager);
 }
 
-void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+void DisconnectButtonComponentImpl(
+        Window *window, 
+        Object *object, ComponentsManager *componentsManager) {
+
     auto connectButton = object
         ->  GetMainWindowObjects()
         ->  connectButton_Component;
@@ -77,12 +83,15 @@ void DisconnectButtonComponentImpl(Window *window, Object *object, Toolkit *tool
         ->  GetMainWindowObjects()
         ->  disconnectButton_Component
         ->  UseConnectButton(connectButton)
-        ->  SetupDisconnectButton(toolkit, window);
+        ->  SetupDisconnectButton(componentsManager, window);
 }
 
-void SettingButtonComponentImpl(Window *window, Object *object, Toolkit *toolkit) {
+void SettingButtonComponentImpl(
+        Window *window, 
+        Object *object, ComponentsManager *componentsManager) {
+            
     object
         ->  GetMainWindowObjects()
         ->  settingButton_Component
-        ->  SetupSettingButton(window, toolkit);
+        ->  SetupSettingButton(window, componentsManager);
 }

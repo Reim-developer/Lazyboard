@@ -12,7 +12,7 @@ using Self = ConnectButton;
 using Window = QMainWindow;
 using Button = QPushButton;
 
-void Self::SetupConnectButton(Window *window, Toolkit *toolkit) {
+void Self::SetupConnectButton(Window *window, ComponentsManager *toolkit) {
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
     Utils::MakeSmartPtr<NetworkState>(networkState);
 

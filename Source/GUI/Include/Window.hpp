@@ -40,10 +40,10 @@ using ZClipboard::GUI::SystemTray;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::Lib_Memory::MainWindowObjectManager;
-using ZClipboard::Implements::MainWindowComponentsManager;
+using ZClipboard::Implements::MainWindowComponentsImpl;
 
 
 GUI_NAMESPACE
@@ -58,7 +58,7 @@ GUI_NAMESPACE
 
     private:
         using Object = MainWindowObjectManager;
-        using GUI_Manager = MainWindowComponentsManager;
+        using GUI_Manager = MainWindowComponentsImpl;
 
     public:
         explicit AppMainWindow(QWidget *zWindow = nullptr);
@@ -79,7 +79,7 @@ GUI_NAMESPACE
 
     private:
         PtrUnique<Object> objectManager;
-        PtrUnique<ComponentsToolkit> Components_Tookit;
+        PtrUnique<MainWindowComponentsManager> componentsManager;
         PtrUnique<HotReloadLanguage> hotReloadLanguage;
         PtrUnique<GUI_Manager> manager_GUI;
 
@@ -95,7 +95,7 @@ GUI_NAMESPACE
         #if defined (Z_DEBUG)
             private:
                 void __LOGGING_ALL_OBJECTS__() {
-                    LogContext{}.LogDebug(&Components_Tookit);
+                    LogContext{}.LogDebug(&objectManager);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->tableView_Component);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->searchArea_Component);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->clearButton_Component);

@@ -1,7 +1,7 @@
 #include "Include/MainWindow_Components.hpp"
 
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
-using Self = ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
+using Self = MainWindowComponentsManager;
 
 QTableView *Self::GetTableView() {
     if(!ClipboardTableView) {

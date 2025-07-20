@@ -12,14 +12,14 @@ IMPLEMENTS_NAMESPACE
     
     struct MainWindowComponentsManagerData {
         Object *object;
-        Toolkit *toolkit;
+        ComponentsManager *toolkit;
         QIcon *appIcon;
         QMainWindow *window;
     };
 
-    class MainWindowComponentsManager {
+    class MainWindowComponentsImpl {
         private:
-            using Self = MainWindowComponentsManager;
+            using Self = MainWindowComponentsImpl;
             using DataImpl = MainWindowComponentsManagerData;
             using Window = QMainWindow;
 
@@ -28,7 +28,7 @@ IMPLEMENTS_NAMESPACE
         
         private:
             Object *GetObject();
-            Toolkit *GetToolkit();
+            ComponentsManager *GetToolkit();
             QIcon *GetAppIcon();
             Window *GetWindow();
 

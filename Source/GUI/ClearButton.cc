@@ -14,7 +14,7 @@ using ZClipboard::AppUtils::Utils;
     #include "../Utils/Include/AssertNullPtr.hpp"
 #endif
 
-void ClearButton::SetupClearButton(Toolkit *toolkit, TableView *tableView) {
+void ClearButton::SetupClearButton(ComponentsManager *toolkit, TableView *tableView) {
     auto clearButton = toolkit->GetClearButton();
     Utils::MakeSmartPtr<QSettings>(settings, AUTHOR_NAME, APP_NAME);
     

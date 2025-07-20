@@ -1,13 +1,13 @@
 #include "Include/LayoutManager_Impl_Helper.hpp"
 #include "../GUI/Toolkit/Include/MainWindow_LayoutManager.hpp"
-using ZClipboard::GUI::Toolkit::LayoutMangerTookit;
-using ZClipboard::GUI::Toolkit::LayoutMangerTookitData;
+using ZClipboard::GUI::Toolkit::MainWindowLayoutManager;
+using ZClipboard::GUI::Toolkit::MainWindowLayoutData;
 using ZClipboard::Lib_Memory::MakePtr;
 using ZClipboard::Lib_Memory::PtrUnique;
 
-void SetupAppLayout(Toolkit *tookit, QGridLayout *layout) {
-    using LayoutManager = LayoutMangerTookit;
-    using Impl = LayoutMangerTookitData;
+void SetupAppLayout(ComponentsManager *tookit, QGridLayout *layout) {
+    using LayoutManager = MainWindowLayoutManager;
+    using Impl = MainWindowLayoutData;
 
     PtrUnique<LayoutManager> layoutManager = MakePtr<LayoutManager>();
 

@@ -1,13 +1,13 @@
 #include "Include/MainWindow_LayoutManager.hpp"
 #include "../../Utils/Include/Utils.hpp"
-#include "Include/Layout_Tookit.hpp"
+#include "Include/Layout_Toolkit.hpp"
 
-using ZClipboard::GUI::Toolkit::LayoutMangerTookit;
+using ZClipboard::GUI::Toolkit::MainWindowLayoutManager;
 using ZClipboard::AppUtils::Utils;
 using ZClipboard::GUI::Toolkit::WidgetProperty;
 
-using Self = LayoutMangerTookit;
-using Toolkit = ComponentsToolkit;
+using Self = MainWindowLayoutManager;
+using Toolkit = MainWindowComponentsManager;
 using Widget = WidgetProperty;
 using Layout = QGridLayout;
 

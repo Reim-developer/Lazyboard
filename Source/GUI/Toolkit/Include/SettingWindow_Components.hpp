@@ -11,7 +11,7 @@ using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_TOOLKIT_NAMESPACE
 
-    class SettingWindowComponents {
+    class SettingWindowComponentsManager {
         private:
             using Button = QPushButton;
             using ComboBox = QComboBox;

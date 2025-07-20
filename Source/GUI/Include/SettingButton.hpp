@@ -17,7 +17,7 @@
 #include "../../Utils/Include/Namespace_Macro.hpp"
 
 using ZClipboard::Core::SettingCore;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_NAMESPACE
@@ -36,7 +36,7 @@ GUI_NAMESPACE
 
     private:
         using Window = QMainWindow;
-        using Toolkit = ComponentsToolkit;
+        using Toolkit = MainWindowComponentsManager;
 
     public:
         void SetupSettingButton(Window *window, Toolkit *toolkit);

@@ -4,10 +4,10 @@
 #include "../../../Lib_Memory/Include/Memory.hpp"
 #include "../../../Utils/Include/Meta_Macro.hpp"
 #include "MainWindow_Components.hpp"
-#include "Layout_Tookit.hpp"
+#include "Layout_Toolkit.hpp"
 #include <QGridLayout>
 
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 using ZClipboard::Lib_Memory::PtrUnique;
 
 #if defined (Z_DEBUG)
@@ -17,16 +17,16 @@ using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_TOOLKIT_NAMESPACE
 
-    struct LayoutMangerTookitData {
+    struct MainWindowLayoutData {
         QGridLayout *layout;
-        ComponentsToolkit *tookit;
+        MainWindowComponentsManager *tookit;
     };
 
-    class LayoutMangerTookit {
+    class MainWindowLayoutManager {
         private:
-            using Self = LayoutMangerTookit;
-            using ImplData = LayoutMangerTookitData;
-            using Toolkit  = ComponentsToolkit;
+            using Self = MainWindowLayoutManager;
+            using ImplData = MainWindowLayoutData;
+            using Toolkit  = MainWindowComponentsManager;
             using Widget = WidgetProperty;
 
         private:
