@@ -9,13 +9,13 @@
 #include "../Toolkit/Include/MainWindow_Components.hpp"
 
 using ZClipboard::Core::SystemTrayCore;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
     class SystemTray {
 
     private:
-        using Toolkit = ComponentsToolkit;
+        using Toolkit = MainWindowComponentsManager;
         using Window = QMainWindow;
 
     public:
