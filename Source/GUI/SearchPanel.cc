@@ -19,7 +19,7 @@ SearchArea *SearchArea::WhenDone() {
 QLineEdit *SearchArea::GetSearchPanel() {
     auto searchLine = this
         ->  Impl
-        ->  toolkit
+        ->  componentsManager
         ->  GetSearchArea();
 
     return searchLine;
