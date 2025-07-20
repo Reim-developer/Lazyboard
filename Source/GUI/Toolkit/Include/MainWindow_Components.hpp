@@ -16,7 +16,7 @@ using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_TOOLKIT_NAMESPACE
 
-    class ComponentsToolkit {
+    class MainWindowComponentsManager {
         private:
             PtrUnique<QTableView> ClipboardTableView;
             PtrUnique<TableModel> ModelTable;
