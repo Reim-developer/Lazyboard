@@ -1,8 +1,8 @@
 #include "Include/Manager_MainWindow_Component_Impl.hpp"
 
-using ZClipboard::Implements::MainWindowComponentsManager;
+using ZClipboard::Implements::MainWindowComponentsImpl;
 
-using Self = MainWindowComponentsManager;
+using Self = MainWindowComponentsImpl;
 using Window = QMainWindow;
 
 Self *Self::StartBuild() {
@@ -31,7 +31,7 @@ Window *Self::GetWindow() {
         ->  window;
 }
 
-Toolkit *Self::GetToolkit() {
+ComponentsManager *Self::GetToolkit() {
     return this
         ->  Impl
         ->  toolkit;
