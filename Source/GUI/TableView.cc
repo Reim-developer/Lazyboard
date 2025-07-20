@@ -30,7 +30,8 @@ using ZClipboard::Database::DatabaseManager;
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::TableModel;
 
-#define __SELF__ TableView
+using Self = TableView;
+using ComponentsManager = MainWindowComponentsManager;
 
 void TableView::SetupTableProperty() {
     tableView->setModel(tableModel);
@@ -48,23 +49,22 @@ void TableView::SetupTableProperty() {
         ->  horizontalHeader()
         ->  setSectionResizeMode(TableModel::ContentLength, QHeaderView::ResizeToContents);
 
-
     tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     tableView->setWordWrap(false);
     tableView->setTextElideMode(Qt::ElideRight);
 
 }
 
-__SELF__ *__SELF__::UseToolkit(ComponentsToolkit *toolkit) {
-    this->toolkit = toolkit;
+Self *Self::UseToolkit(ComponentsManager *componentsManager) {
+    this->componentsManager = componentsManager;
     return this;
 }
 
 void TableView::SetupTableView() {
     databaseManager.setupinitDB();
 
-    tableModel = toolkit->GetTableModel();
-    tableView = toolkit->GetTableView();
+    tableModel = componentsManager->GetTableModel();
+    tableView = componentsManager->GetTableView();
     tableModel->SetupTableAbstract(&databaseManager);
     clipboard = QApplication::clipboard();
     SetupTableProperty();
