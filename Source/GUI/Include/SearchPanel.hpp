@@ -13,14 +13,14 @@
 
 using ZClipboard::GUI::TableView;
 using ZClipboard::GUI::TableModel;
-using ZClipboard::GUI::Toolkit::ComponentsToolkit;
+using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::AppUtils::Utils;
 
 GUI_NAMESPACE
     struct SearchAreaImpl {
         TableView *tableView;
-        ComponentsToolkit *toolkit;
+        MainWindowComponentsManager *componentsManager;
     };
 
     class SearchArea {
