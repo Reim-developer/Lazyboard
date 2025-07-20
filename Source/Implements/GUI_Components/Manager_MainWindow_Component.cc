@@ -54,4 +54,5 @@ void Self::Render_MainWindow_GUI() {
     SystemTrayComponentImpl(window, object, toolkit, *appIcon);
     ConnectButtonComponentImpl(window, object, toolkit);
     DisconnectButtonComponentImpl(window, object, toolkit);
+    SettingButtonComponentImpl(window, object, toolkit);
 }
