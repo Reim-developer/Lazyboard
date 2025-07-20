@@ -1,10 +1,10 @@
 #include "Include/SettingWindow_Components.hpp"
 #include "../../Utils/Include/Utils.hpp"
 
-using ZClipboard::GUI::Toolkit::SettingWindowComponents;
+using ZClipboard::GUI::Toolkit::SettingWindowComponentsManager;
 using ZClipboard::AppUtils::Utils;
 
-using Self = SettingWindowComponents;
+using Self = SettingWindowComponentsManager;
 
 using Button = QPushButton;
 using Label = QLabel;
