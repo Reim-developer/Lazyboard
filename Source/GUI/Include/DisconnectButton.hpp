@@ -8,7 +8,7 @@
 #include "../../Core/Include/CoreDisconnect.hpp"
 #include "../../Listener/Include/ListenerDisconnect.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
-#include "../../GUI/Toolkit/Include/Components_Toolkit.hpp"
+#include "../Toolkit/Include/MainWindow_Components.hpp"
 
 using ZClipboard::GUI::ConnectButton;
 using ZClipboard::Lib_Memory::PtrUnique;
