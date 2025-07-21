@@ -8,7 +8,6 @@
 #include <QSettings>
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Core/Include/CoreClearCache.hpp"
-#include "../../Listener/Include/ListenerClearCache.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
 #include "../Toolkit/Include/MainWindow_Components.hpp"
 
@@ -19,16 +18,14 @@
 
 using ZClipboard::GUI::TableView;
 using ZClipboard::Lib_Memory::PtrUnique;
-using ZClipboard::Core::ClearCoreBuilder;
-using ZClipboard::Listener::ClearCacheListener;
+using ZClipboard::Core::CoreClearBuilder;
 using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
 
 GUI_NAMESPACE
 
     class ClearButton  {
         private:
-            ClearCoreBuilder BuilderCore;
-            ClearCacheListener BuilderFunc;
+            PtrUnique<CoreClearBuilder> BuilderCore;
         
         private:
             using ComponentsManager = MainWindowComponentsManager;
@@ -46,7 +43,6 @@ GUI_NAMESPACE
             private:
                 void __LOGGING_ALL_OBJECTS__(QPushButton *clearButton) {
                     LogContext{}.LogDebug(&BuilderCore);
-                    LogContext{}.LogDebug(&BuilderFunc);
                     LogContext{}.LogDebug(&settings);
                     LogContext{}.LogDebug(&clearButton);
                 }
