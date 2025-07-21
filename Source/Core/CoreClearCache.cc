@@ -64,9 +64,11 @@ void Self::Finally_Setup_Listener() {
         ->  WhenDone()
         ->  TryGetListener();
 
-    using Assert = AssertContext;
-    using Debug = LogContext;
+   
     #if defined(Z_DEBUG)
+        using Assert = AssertContext;
+        using Debug = LogContext;
+        
         Assert{}.RequireNonNullPtr(Impl.get());
         Assert{}.RequireNonNullPtr(Impl->button);
         Assert{}.RequireNonNullPtr(func_Builder.get());
