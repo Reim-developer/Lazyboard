@@ -5,16 +5,7 @@
 #include <QGridLayout>
 #include <QWidget>
 #include <QString>
-#include <QSystemTrayIcon>
-#include <QStringLiteral>
-#include <QMenu>
 #include "LanguageManager.hpp"
-#include "SearchPanel.hpp"
-#include "ClearButton.hpp"
-#include "DisconnectButton.hpp"
-#include "GetConnectButton.hpp"
-#include "SettingButton.hpp"
-#include "../../Core/Include/CoreNotification.hpp"
 #include <QSettings>
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
@@ -22,21 +13,12 @@
 #include "../Toolkit/Include/MainWindow_Components.hpp"
 #include "../../Lib_Memory/Include/MainWindow_ObjectManager.hpp"
 #include "../../Implements/GUI_Components/Include/Manager_MainWindow_Component_Impl.hpp"
-#include "TableView.hpp"
 
 #if defined (Z_DEBUG)
     #include "../../Utils/Include/Logging.hpp"
     using ZClipboard::AppUtils::LogContext;
 #endif 
 
-using ZClipboard::Core::NotificationCore;
-using ZClipboard::GUI::DisconnectButton;
-using ZClipboard::GUI::TableView;
-using ZClipboard::GUI::ClearButton;
-using ZClipboard::GUI::ConnectButton;
-using ZClipboard::GUI::SearchArea;
-using ZClipboard::GUI::SettingButton;
-using ZClipboard::GUI::SystemTray;
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::Hot_Reload::HotReloadLanguage;
 using ZClipboard::GUI::Hot_Reload::HotReloadImpl;
@@ -88,9 +70,6 @@ GUI_NAMESPACE
         QWidget *centralWidget;
         QGridLayout *windowLayout;
 
-        PtrUnique<ConnectButton> getButton;
-        SettingButton *settingButton;
-        DisconnectButton *disconnectButton;
 
         #if defined (Z_DEBUG)
             private:
@@ -99,9 +78,6 @@ GUI_NAMESPACE
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->tableView_Component);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->searchArea_Component);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->clearButton_Component);
-                    LogContext{}.LogDebug(&getButton);
-                    LogContext{}.LogDebug(&settingButton);
-                    LogContext{}.LogDebug(&disconnectButton);
                     LogContext{}.LogDebug(&objectManager->GetMainWindowObjects()->systemTray_Component);
                     LogContext{}.LogDebug(&hotReloadLanguage);
                 }
