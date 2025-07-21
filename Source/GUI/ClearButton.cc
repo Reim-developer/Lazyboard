@@ -1,13 +1,12 @@
 #include "Include/ClearButton.hpp"
 #include "../Utils/Include/Config.hpp"
-#include "../Listener/Include/ListenerClearCache.hpp"
 #include "../Core/Include/CoreClearCache.hpp"
 #include "Include/TableView.hpp"
 #include "../Utils/Include/Utils.hpp"
 
 using ZClipboard::Lib_Memory::PtrUnique;
 using ZClipboard::GUI::ClearButton;
-using ZClipboard::Listener::ListenerCacheImpl;
+using ZClipboard::Core::CoreClearBuilderData;
 using ZClipboard::AppUtils::Utils;
 
 #if defined (Z_DEBUG)
@@ -25,8 +24,6 @@ void ClearButton::SetupClearButton(ComponentsManager *toolkit, TableView *tableV
 }
 
 void ClearButton::SetupEventListener(QPushButton *clearButton, TableView *tableView) {
-    using Impl = ListenerCacheImpl;
-
     #if defined (Z_DEBUG)
 
         AssertContext{}.RequireNonNullPtr(clearButton);
@@ -35,15 +32,16 @@ void ClearButton::SetupEventListener(QPushButton *clearButton, TableView *tableV
 
     #endif
 
-    const auto Function = BuilderFunc
-                .   StartBuild()
-                    ->  WithAndThen(&Impl::button, clearButton)
-                    ->  WithAndThen(&Impl::settings, settings.get())
-                    ->  WithAndThen(&Impl::table, tableView)
-                    ->  WhenDone()
-                    ->  TryGetListener();
+    if(!BuilderCore) {
+        Utils::MakeSmartPtr<CoreClearBuilder>(BuilderCore);
+    }
 
+    using ImplData = CoreClearBuilderData;
     BuilderCore
-        .   StartBuild(clearButton)
-            ->  ThenAddListener(Function);
+        ->  StartBuild()
+        ->  WithAndThen(&ImplData::button, clearButton)
+        ->  WithAndThen(&ImplData::settings, settings.get())
+        ->  WithAndThen(&ImplData::tableView, tableView)
+        ->  WhenDone()
+        ->  Finally_Setup_Listener();   
 }
