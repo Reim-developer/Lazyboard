@@ -57,12 +57,9 @@ void AppMainWindow::InitiationObject() {
     
     Utils::MakeSmartPtr<ComponentsManager>(__TOOLKIT__);
     Utils::MakeSmartPtr<Object>(objectManager);
-    Utils::MakeSmartPtr<ConnectButton>(getButton);
     Utils::MakeSmartPtr<GUI_Manager>(manager_GUI);
     
     objectManager->InitiationObjects();
-    settingButton = new SettingButton();
-    disconnectButton = new DisconnectButton();
 }
 
 void AppMainWindow::SetupApplicationGUI() {
