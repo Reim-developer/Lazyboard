@@ -18,7 +18,7 @@ using ComponentsManager = SettingWindowComponentsManager;
     using ZClipboard::AppUtils::LogContext;
 #endif
 
-Self *Self::StartBuild() {
+Self *Self::StartBuild() noexcept {
     if(!Impl) {
         Utils::MakeSmartPtr<DataImpl>(Impl);
     }
@@ -26,7 +26,7 @@ Self *Self::StartBuild() {
     return this;
 }
 
-Layout *Self::GetLayout() {
+Layout *Self::GetLayout() noexcept {
     auto layout = this
         ->  Impl
         ->  layout;
@@ -40,7 +40,7 @@ Layout *Self::GetLayout() {
     return layout;
 }
 
-ComponentsManager *Self::GetComponentsManager() {
+ComponentsManager *Self::GetComponentsManager() noexcept {
     auto componentsManager = this
         ->  Impl
         ->  componentsManager;
@@ -54,7 +54,7 @@ ComponentsManager *Self::GetComponentsManager() {
     return componentsManager;
 }
 
-Self *Self::WhenDone() {
+Self *Self::WhenDone() noexcept {
     #if defined (Z_DEBUG)
         AssertContext{}.RequireNonNullPtr(Impl.get());
         AssertContext{}.RequireNonNullPtr(Impl->componentsManager);
@@ -68,16 +68,121 @@ Self *Self::WhenDone() {
     return this;
 }
 
-Widget Self::GetSetPasswordButtonLayout() {
-    auto componentsManager = this->GetComponentsManager();
-    auto layout = this->GetLayout();
+Widget Self::GetSetPasswordButtonLayout(
+            Layout *layout, 
+            ComponentsManager *componentsManager) const noexcept {
 
     auto setPasswordButton = componentsManager->GetSetPasswordButton();
 
-    auto widgetData = Widget {
+    const auto widgetData = Widget {
         .widget = setPasswordButton,
         .row = 3, .column = 2
     };
 
     return widgetData;
+}
+
+Widget Self::GetHideWindowSettingCheckboxLayout(
+            Layout *layout,
+            ComponentsManager *componentsManager) const noexcept {
+    
+    auto autoHideCheckbox = componentsManager->GetHideSettingCheckBox();
+
+    const auto widgetData = Widget {
+        .widget = autoHideCheckbox,
+        .row = 0, .column = 0
+    };
+
+    return widgetData;
+}
+
+Widget Self::GetNotificationCheckboxLayout(
+            Layout *layout,
+            ComponentsManager *componentsManager) const noexcept {
+
+    auto notificationCheckbox = componentsManager->GetNotificationCheckBox();
+
+    const auto widgetData = Widget {
+        .widget = notificationCheckbox,
+        .row = 1, .column = 0
+    };
+
+    return widgetData;
+}
+
+Widget Self::GetLanguageListBoxLayout(
+            Layout *layout,
+            ComponentsManager *componentsManager) const noexcept {
+
+    auto languageListBox = componentsManager->GetLanguageListBox();
+    
+    const auto widgetData = Widget {
+        .widget = languageListBox,
+        .row = 2, .column = 0
+    };
+
+    return widgetData;
+}
+
+Widget Self::GetThemeListBoxLayout(
+            Layout *layout, 
+            ComponentsManager *componentsManager) const noexcept {
+    
+    auto themeListBox = componentsManager->GetThemeListBox();
+
+    const auto widgetData = Widget {
+        .widget = themeListBox,
+        .row = 3, .column = 0
+    };
+
+    return widgetData;
+}
+
+Widget Self::GetLanguageLabelLayout(
+            Layout *layout, 
+            ComponentsManager *componentsManager) const noexcept {
+
+    auto languageLabel = componentsManager->GetLanguageDescription();
+
+    const auto widgetData = Widget {
+        .widget = languageLabel,
+        .row = 2, .column = 1
+    };
+
+    return widgetData;
+}
+
+Widget Self::GetThemeLabelLayout(
+            Layout *layout,
+            ComponentsManager *componentsManager) const noexcept {
+
+    auto themeLabel = componentsManager->GetThemeDescription();
+
+    const auto widgetData = Widget {
+        .widget = themeLabel,
+        .row = 3, .column = 1
+    };
+
+    return widgetData;
+}
+
+void Self::SetupSettingWindowLayout() noexcept {
+    auto layout = this->GetLayout();
+    auto componentsManager = this->GetComponentsManager();
+
+    const auto passwordButtonLayout = this->GetSetPasswordButtonLayout(layout, componentsManager);
+    const auto hideWindowSettingCheckboxLayout = this->GetHideWindowSettingCheckboxLayout(layout, componentsManager);
+    const auto notificationCheckboxLayout = this->GetNotificationCheckboxLayout(layout, componentsManager);
+    const auto languageListBoxLayout = this->GetLanguageListBoxLayout(layout, componentsManager);
+    const auto themeListBoxLayout = this->GetThemeListBoxLayout(layout, componentsManager);
+    const auto languageLabelLayout = this->GetLanguageLabelLayout(layout, componentsManager);
+    const auto themeLabelLayout = this->GetThemeLabelLayout(layout, componentsManager);
+
+    GridLayoutAdd(
+        layout, 
+        passwordButtonLayout, hideWindowSettingCheckboxLayout,
+        notificationCheckboxLayout, languageListBoxLayout,
+        themeListBoxLayout, languageLabelLayout,
+        themeLabelLayout
+    );
 }

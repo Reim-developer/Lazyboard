@@ -29,23 +29,49 @@ GUI_TOOLKIT_NAMESPACE
             PtrUnique<DataImpl> Impl;
 
         public:
-            Self *StartBuild();
+            Self *StartBuild() noexcept;
 
             CLASS_BUILD(T, V)
-            Self *WithAndThen(T DataImpl::*member, V &&value) {
+            inline Self *WithAndThen(T DataImpl::*member, V &&value) noexcept {
                 Impl.get()->*member = FORWARD(V, value);
 
                 return this;
             }
 
-            Self *WhenDone();
+            Self *WhenDone() noexcept;
 
-            Layout *GetLayout();
-            ComponentsManager *GetComponentsManager();
+            Layout *GetLayout() noexcept;
+            ComponentsManager *GetComponentsManager() noexcept;
 
-            Widget GetSetPasswordButtonLayout();
+            Widget GetSetPasswordButtonLayout(
+                    Layout *layout, 
+                    ComponentsManager *componentsManager) const noexcept;
 
-            void SetupSettingWindowLayout();
+            Widget GetHideWindowSettingCheckboxLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            Widget GetNotificationCheckboxLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            Widget GetLanguageListBoxLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            Widget GetThemeListBoxLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            Widget GetLanguageLabelLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            Widget GetThemeLabelLayout(
+                    Layout *layout,
+                    ComponentsManager *componentsManager) const noexcept;
+
+            void SetupSettingWindowLayout() noexcept;
 
     };
 
