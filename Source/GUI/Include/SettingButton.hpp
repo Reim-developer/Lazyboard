@@ -14,10 +14,12 @@
 #include "../../Core/Include/CoreSetting.hpp"
 #include "../../Lib_Memory/Include/Memory.hpp"
 #include "../Toolkit/Include/MainWindow_Components.hpp"
+#include "../../Core/Include/CoreSettingWindow.hpp"
 #include "../../Utils/Include/Namespace_Macro.hpp"
 
 using ZClipboard::Core::SettingCore;
 using ZClipboard::GUI::Toolkit::MainWindowComponentsManager;
+using ZClipboard::Core::CoreSettingWindow;
 using ZClipboard::Lib_Memory::PtrUnique;
 
 GUI_NAMESPACE
@@ -36,10 +38,10 @@ GUI_NAMESPACE
 
     private:
         using Window = QMainWindow;
-        using Toolkit = MainWindowComponentsManager;
+        using MainWindowComponents = MainWindowComponentsManager;
 
     public:
-        void SetupSettingButton(Window *window, Toolkit *toolkit);
+        void SetupSettingButton(Window *window, MainWindowComponents *toolkit);
         QPushButton *getSettingButton();
 
     private:
@@ -52,6 +54,9 @@ GUI_NAMESPACE
     private:
         SettingCore *settingCore;
         PtrUnique<QSettings> settings;
+        PtrUnique<QDialog> dialog;
+        PtrUnique<QGridLayout> layout;
+        PtrUnique<CoreSettingWindow> coreSettingWindow;
         QPushButton *setPasswordButton;
 
         QLabel *languageDescription;
