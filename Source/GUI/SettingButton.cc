@@ -1,29 +1,53 @@
 #include "Include/SettingButton.hpp"
 #include "../Language/Include/Translate.hpp"
-#include "../Utils/Include/Settings.hpp"
-#include "../Utils/Include/Config.hpp"
-#include "../Utils/Include/Utils.hpp"
-#include "../Language/Include/Language.hpp"
 #include "Include/Window.hpp"
 #include <QStringLiteral>
 #include <QSettings>
 #include <QIcon>
-#include "../Core/Include/CoreSetting.hpp"
 
-using ZClipboard::Core::SettingCore;
-using ZClipboard::Core::SettingCoreParams;
-using ZClipboard::Language::Translate;
+using ZClipboard::Core::CoreSettingWindowData;
 using ZClipboard::Language::TransValue;
 using ZClipboard::GUI::SettingButton;
 using ZClipboard::AppUtils::Utils;
 
-void SettingButton::SetupSettingButton(QMainWindow *window, Toolkit *toolkit) {
-    auto settingButton = toolkit->GetSettingButton();
-    settingCore = new SettingCore();
+#if defined (Z_DEBUG)
+    #include "../Utils/Include/AssertNullPtr.hpp"
+#endif
 
-    const auto function = [this, window]() {
+void SettingButton::SetupSettingButton(
+                QMainWindow *window, MainWindowComponents *mainWindowComponents) {
+
+    auto settingButton = mainWindowComponents->GetSettingButton();
+                
+    Utils::MakeSmartPtr<CoreSettingWindow>(coreSettingWindow);
+    Utils::MakeSmartPtr<QDialog>(dialog);
+    Utils::MakeSmartPtr<QGridLayout>(layout, dialog.get());
+
+    // settingCore = new SettingCore();
+
+    const auto function = [this, settingButton, window]() {
         // window->hide();
         // showSettingDialog(window);
+
+        #if defined (Z_DEBUG)
+            using Assert = AssertContext;
+
+            Assert{}.RequireNonNullPtr(settingButton);
+            Assert{}.RequireNonNullPtr(layout.get());
+            Assert{}.RequireNonNullPtr(window);
+
+        #endif
+
+        using DataImpl = CoreSettingWindowData;
+        coreSettingWindow
+                    ->  StartBuild()
+                    ->  WithAndThen(&DataImpl::settingButton, settingButton)
+                    ->  WithAndThen(&DataImpl::layout, layout.get())
+                    ->  WithAndThen(&DataImpl::mainWindow, window)
+                    ->  Finally_Add_Listener();
+
+        dialog->exec();
+
     };
     connect(settingButton, &QPushButton::clicked, this, function);
 

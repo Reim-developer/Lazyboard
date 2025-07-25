@@ -22,7 +22,7 @@ cmake_detect() {
 }
 
 bear_detect() {
-    if command -v bear >/dev/null 2&1; then
+    if command -v bear >/dev/null 2>&1; then
         echo "[OK] Bear is already install in your os..."
 
     else

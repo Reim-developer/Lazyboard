@@ -28,18 +28,7 @@ GUI_TOOLKIT_NAMESPACE
         private:
             PtrUnique<DataImpl> Impl;
 
-        public:
-            Self *StartBuild() noexcept;
-
-            CLASS_BUILD(T, V)
-            inline Self *WithAndThen(T DataImpl::*member, V &&value) noexcept {
-                Impl.get()->*member = FORWARD(V, value);
-
-                return this;
-            }
-
-            Self *WhenDone() noexcept;
-
+        private:
             Layout *GetLayout() noexcept;
             ComponentsManager *GetComponentsManager() noexcept;
 
@@ -70,6 +59,18 @@ GUI_TOOLKIT_NAMESPACE
             Widget GetThemeLabelLayout(
                     Layout *layout,
                     ComponentsManager *componentsManager) const noexcept;
+
+        public:
+            Self *StartBuild() noexcept;
+
+            CLASS_BUILD(T, V)
+            inline Self *WithAndThen(T DataImpl::*member, V &&value) noexcept {
+                Impl.get()->*member = FORWARD(V, value);
+
+                return this;
+            }
+
+            Self *WhenDone() noexcept;
 
             void SetupSettingWindowLayout() noexcept;
 
