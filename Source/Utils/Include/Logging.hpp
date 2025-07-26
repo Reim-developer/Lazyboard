@@ -69,8 +69,9 @@
                     DEBUG << Ascii_Color::GREEN << "[DEBUG_MODE] Address: ";
 
                     (DEBUG << ... << (DEBUG << Ascii_Color::YELLOW, args));
-                    DEBUG << "\n";
                     DEBUG << Ascii_Color::WHITE; /* Reset to white, default of terminal. */
+                    DEBUG << "\n";
+              
                 }
 
                 /*
