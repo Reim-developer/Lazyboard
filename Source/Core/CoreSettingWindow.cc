@@ -19,41 +19,31 @@ using Layout = QGridLayout;
     #include "../Utils/Include/Logging.hpp"
 
     using ZClipboard::AppUtils::LogContext;
+
+    using Log = LogContext;
+    using Assert = AssertContext;
 #endif 
 
 Self *Self::StartBuild() noexcept {
-    if(!Impl) {
-        Utils::MakeSmartPtr<DataImpl>(Impl);
-    }
+    Utils::MakeSmartPtr<DataImpl>(Impl);
 
     return this;
 }
 
-WindowComponents *Self::GetWindowComponents() noexcept {
-    if(!windowComponents) {
-        Utils::MakeSmartPtr<WindowComponents>(windowComponents);
-    }
-
-    return this
-        ->  windowComponents.get();
-}
-
-Window *Self::GetMainWindow() noexcept {
-    return  this
-        ->  Impl
-        ->  mainWindow;
-}
-
-Button *Self::GetSettingButton() noexcept{
-    return this
-        ->  Impl
-        ->  settingButton;
-}
 
 Layout *Self::GetLayout() noexcept {
     return this 
         ->  Impl
         ->  layout;
+}
+
+Self *Self::WithLayout(Layout *layout) {
+    this
+        ->  Impl
+        ->  layout
+        =   layout;
+
+    return this;
 }
 
 Self *Self::WhenDone() noexcept {
@@ -62,30 +52,28 @@ Self *Self::WhenDone() noexcept {
         using Log = LogContext;
 
         Assert{}.RequireNonNullPtr(Impl.get());
-        Assert{}.RequireNonNullPtr(Impl->mainWindow);
-        Assert{}.RequireNonNullPtr(Impl->settingButton);
 
         Log{}.LogDebug(Impl.get());
-        Log{}.LogDebug(Impl->mainWindow);
-        Log{}.LogDebug(Impl->settingButton);
     #endif
 
     return this;
 }
 
-void Self::Finally_Add_Listener() noexcept {
-    // const auto window = this->GetMainWindow();
-    const auto settingButton = this->GetSettingButton();
-    const auto windowComponents = this->GetWindowComponents();
-    const auto layout = this->GetLayout();
+void Self::SetupWindow(WindowComponents *components) noexcept {
+    auto layout = this->GetLayout();
 
+    Utils::MakeSmartPtr<LayoutManager>(layoutManager);
+        
+    #if defined (Z_DEBUG)
+        Assert{}.RequireNonNullPtr(layoutManager.get());
+        Assert{}.RequireNonNullPtr(components);
+        Assert{}.RequireNonNullPtr(layout);
+    #endif
+    
     using Impl = SettingWindowLayoutData;
-    if(!layoutManager) {
-        Utils::MakeSmartPtr<LayoutManager>(layoutManager);
-    }
     layoutManager
         ->  StartBuild()
-        ->  WithAndThen(&Impl::componentsManager, windowComponents)
+        ->  WithAndThen(&Impl::componentsManager, components)
         ->  WithAndThen(&Impl::layout, layout)
         ->  WhenDone()
         ->  SetupSettingWindowLayout();

@@ -14,8 +14,6 @@ using ZClipboard::Lib_Memory::PtrUnique;
 CORE_NAMESPACE
 
     struct CoreSettingWindowData {
-        QPushButton *settingButton;
-        QMainWindow *mainWindow;
         QGridLayout *layout;
     };
 
@@ -30,28 +28,17 @@ CORE_NAMESPACE
             using Layout = QGridLayout;
  
         private:
-            PtrUnique<WindowComponents> windowComponents;
             PtrUnique<ImplData> Impl;
             PtrUnique<LayoutManager> layoutManager;
 
         private:
-            WindowComponents *GetWindowComponents() noexcept;
-            Window *GetMainWindow() noexcept;
-            Button *GetSettingButton() noexcept;
             Layout *GetLayout() noexcept;
 
         public:
             Self *StartBuild() noexcept;
-
-            CLASS_BUILD(T, V)
-            inline Self *WithAndThen(T ImplData::*member, V &&value) noexcept {
-                Impl.get()->*member = FORWARD(V, value);
-
-                return this;
-            }
-
+            Self *WithLayout(Layout *layout);
             Self *WhenDone() noexcept;
-            void Finally_Add_Listener() noexcept;
+            void SetupWindow(WindowComponents *components) noexcept;
     };
 
 END_NAMESPACE
