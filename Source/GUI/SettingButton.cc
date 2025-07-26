@@ -1,56 +1,59 @@
 #include "Include/SettingButton.hpp"
 #include "../Language/Include/Translate.hpp"
 #include "Include/Window.hpp"
+#include "Windows/Include/SettingWindow.hpp"
 #include <QStringLiteral>
 #include <QSettings>
 #include <QIcon>
 
-using ZClipboard::Core::CoreSettingWindowData;
 using ZClipboard::Language::TransValue;
 using ZClipboard::GUI::SettingButton;
-using ZClipboard::AppUtils::Utils;
+
+using Button = QPushButton;
 
 #if defined (Z_DEBUG)
     #include "../Utils/Include/AssertNullPtr.hpp"
+    #include "../Utils/Include/Logging.hpp"
+
+    using ZClipboard::AppUtils::LogContext;
+
+    using Assert = AssertContext;
+    using Log = LogContext;
 #endif
 
+void SettingButton::SetupListener(Button *openSettingButton) {
+    listener = MakePtr<Listener>();
+
+    #if defined (Z_DEBUG)
+        Assert{}.RequireNonNullPtr(listener.get());
+        Assert{}.RequireNonNullPtr(openSettingButton);
+
+        Log{}.LogDebug(openSettingButton);
+        Log{}.LogDebug(listener.get());
+    #endif
+    
+    listener   
+        ->  StartBuild(openSettingButton)
+        ->  SetupListener();
+}
+
 void SettingButton::SetupSettingButton(
-                QMainWindow *window, MainWindowComponents *mainWindowComponents) {
+                QMainWindow *window, Components *mainWindowComponents) {
 
-    auto settingButton = mainWindowComponents->GetSettingButton();
-                
-    Utils::MakeSmartPtr<CoreSettingWindow>(coreSettingWindow);
-    Utils::MakeSmartPtr<QDialog>(dialog);
-    Utils::MakeSmartPtr<QGridLayout>(layout, dialog.get());
+    auto openSettingButton = mainWindowComponents->GetSettingButton();
 
-    // settingCore = new SettingCore();
+    // windowManager = MakePtr<SettingWindowManager>();
 
-    const auto function = [this, settingButton, window]() {
-        // window->hide();
-        // showSettingDialog(window);
+    // const auto function = [this, settingButton]() {
+    //     // window->hide();
+    //     // showSettingDialog(window);
 
-        #if defined (Z_DEBUG)
-            using Assert = AssertContext;
+    //     windowManager->ShowSettingWindow(settingButton);
+    // };
+    // function();
+    //connect(settingButton, &QPushButton::clicked, this, function);
 
-            Assert{}.RequireNonNullPtr(settingButton);
-            Assert{}.RequireNonNullPtr(layout.get());
-            Assert{}.RequireNonNullPtr(window);
-
-        #endif
-
-        using DataImpl = CoreSettingWindowData;
-        coreSettingWindow
-                    ->  StartBuild()
-                    ->  WithAndThen(&DataImpl::settingButton, settingButton)
-                    ->  WithAndThen(&DataImpl::layout, layout.get())
-                    ->  WithAndThen(&DataImpl::mainWindow, window)
-                    ->  Finally_Add_Listener();
-
-        dialog->exec();
-
-    };
-    connect(settingButton, &QPushButton::clicked, this, function);
-
+    this->SetupListener(openSettingButton);
 }
 
 // void SettingButton::showSettingDialog(QMainWindow *parent) {
