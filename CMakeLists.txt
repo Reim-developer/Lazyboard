@@ -57,7 +57,7 @@ endif()
 if(Z_USE_LIB_NOTIFY)
     if(NOT LINUX)
         message(FATAL_ERROR "Could not use 'LibNotify' in operating system outside of Linux")
-    endif
+    endif()
 
     if(Z_STATIC_LINKING)
         message(FATAL_ERROR "Could not use 'LibNotify' if you want use static linking mode")
