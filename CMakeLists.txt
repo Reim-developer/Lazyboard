@@ -36,8 +36,34 @@ target_link_libraries(
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Network
 )
+
+# We don't suggest enable this in production.
 if(Z_DEBUG)
     add_compile_definitions(${PROJECT_NAME} PRIVATE Z_DEBUG)
+endif()
+
+# Enable all features, except to 'Z_DEBUG' flag.
+if(Z_ENABLE_ALL_FEATURES)
+    add_compile_definitions(${PROJECT_NAME} PRIVATE Z_ENABLE_ALL_FEATURES)
+endif
+
+# Static linking mode. Beta.
+if(Z_STATIC_LINKING)
+    add_compile_definitions(${PROJECT_NAME} PRIVATE Z_STATIC_LINKING)
+endif()
+
+# Use it if you want use native notification
+# in Linux. (Suggested.)
+if(Z_USE_LIB_NOTIFY)
+    if(NOT LINUX)
+        message(FATAL_ERROR "Could not use 'LibNotify' in operating system outside of Linux")
+    endif
+
+    if(Z_STATIC_LINKING)
+        message(FATAL_ERROR "Could not use 'LibNotify' if you want use static linking mode")
+    endif()
+
+    add_compile_definitions(${PROJECT_NAME} PRIVATE Z_USE_LIB_NOTIFY)
 endif()
 
 if(NOT WIN32) 
