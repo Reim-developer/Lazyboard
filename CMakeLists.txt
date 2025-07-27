@@ -45,7 +45,7 @@ endif()
 # Enable all features, except to 'Z_DEBUG' flag.
 if(Z_ENABLE_ALL_FEATURES)
     add_compile_definitions(${PROJECT_NAME} PRIVATE Z_ENABLE_ALL_FEATURES)
-endif
+endif()
 
 # Static linking mode. Beta.
 if(Z_STATIC_LINKING)
