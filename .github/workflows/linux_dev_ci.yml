@@ -12,8 +12,8 @@ jobs:
         - name: Install requirements depdendencies
           shell: bash
           run: |
-            chmod +x ./scripts/ci_dev/linux.sh
-            ./scripts/ci_dev/linux.sh install-base
-            ./scripts/ci_dev/linux.sh mkdir-build
-            ./scripts/ci_dev/linux.sh download-qt
-            ./scripts/ci_dev/linux.sh build-static-qt
+            chmod +x ./scripts/ci_dev_linux.sh
+            ./scripts/ci_dev_linux.sh install-base
+            ./scripts/ci_dev_linux.sh mkdir-build
+            ./scripts/ci_dev_linux.sh download-qt
+            ./scripts/ci_dev_linux.sh build-static-qt
