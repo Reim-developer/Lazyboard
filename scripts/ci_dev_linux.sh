@@ -15,7 +15,7 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y cmake ninja-build desktop-file-utils \
-        clang \
+        clang  libclang-dev \
         build-essential perl python3 python3-pip \
         libfontconfig1-dev libfreetype6-dev \
         libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
@@ -53,6 +53,11 @@ build_static_qt() {
 
     cd "$qt_build_dir" || exit 1
 
+    echo "Downloading Qt prebuilt libclang..."
+    wget -O libclang.7z "https://download.qt.io/development_releases/prebuilt/libclang/qt/libclang-release_18.1.7-based-linux-Ubuntu22.04-gcc11.2-x86_64.7z"
+    mkdir -p libclang
+    7z x libclang.7z -olibclang
+
     cmake "../qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
         -DCMAKE_BUILD_TYPE=Release \
@@ -87,6 +92,7 @@ build_static_qt() {
         -DQT_SKIP_MODULES=qtwebengine \
         -DQT_FEATURE_clang=ON \
         -DQT_FEATURE_clangcpp=ON \
+        -DCMAKE_PREFIX_PATH="$PWD/libclang"
     
     ninja -j "$nproc"
     sudo ninja install
