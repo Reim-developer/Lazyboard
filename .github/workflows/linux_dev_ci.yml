@@ -12,11 +12,11 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v4
 
-        # - name: Install requirements depdendencies
-        #   shell: bash
-        #   run: |
-        #     chmod +x ./scripts/ci_dev_linux.sh
-        #     ./scripts/ci_dev_linux.sh install-base
+        - name: Install requirements depdendencies
+          shell: bash
+          run: |
+            chmod +x ./scripts/ci_dev_linux.sh
+            ./scripts/ci_dev_linux.sh install-base
            
         - name: Create build dir
           shell: bash
