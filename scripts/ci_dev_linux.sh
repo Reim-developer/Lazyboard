@@ -29,7 +29,7 @@ install_base() {
         libdrm-dev libxkbfile-dev libxtst-dev libxshmfence-dev \
         libxrandr-dev libxcursor-dev libxcomposite-dev libudev-dev \
         libdbus-1-dev gperf libnss3-dev libharfbuzz-dev \
-        libprotobuf-dev protobuf-compiler libssl-dev
+        libprotobuf-dev protobuf-compiler libssl-dev libxcb-cursor-dev
 
     sudo pip3 install html5lib spdx-tools
 }
@@ -52,8 +52,6 @@ build_static_qt() {
     mkdir -p "$qt_build_dir"
 
     cd "$qt_build_dir" || exit 1
-    
-    local skip_modules="qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtconnectivity;qtdatavis3d;qtdoc;qtgamepad;qtgraphicaleffects;qthttpserver;qtimageformats;qtlocation;qtlottie;qtmultimedia;qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns"
 
     cmake "../qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
@@ -86,7 +84,7 @@ build_static_qt() {
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        -DQT_SKIP_MODULES="$skip_modules"
+        -DQT_SKIP_MODULES=qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtconnectivity;qtdatavis3d;qtdoc;qtgamepad;qtgraphicaleffects;qthttpserver;qtimageformats;qtlocation;qtlottie;qtmultimedia;qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
     
     ninja -j "$nproc"
     sudo ninja install
