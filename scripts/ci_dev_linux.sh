@@ -6,6 +6,7 @@ qt_install_dir="/opt/qt-static"
 qt_version="6.9.1"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+skip_modules="qt3d qt5compat qtactiveqt qtcharts qtconnectivity qtdatavis3d qtdoc qtgamepad qtgraphicaleffects qthttpserver qtimageformats qtlocation qtlottie qtmultimedia qtnetworkauth qtopcua qtpositioning qtpurchasing qtquick3d qtquickcontrols2 qtquicktimeline qtremoteobjects qtsensors tspeech qtstatemachine qtsvg qtvirtualkeyboard qtwayland qtwebchannel qtwebsockets qtwebview qtx11extras qtxmlpatterns"
 nproc=$(nproc)
 
 create_build_dir() {
@@ -94,16 +95,7 @@ build_static_qt() {
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        -DQT_SKIP_MODULES=qtwebengine \
-qtwebengine;\
-qt3d;qt5compat;qtactiveqt;qtcharts;\
-qtconnectivity;qtdatavis3d;qtdoc;\
-qtgamepad;qtgraphicaleffects;qthttpserver;\
-qtimageformats;qtlocation;qtlottie;qtmultimedia;\
-qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;\
-qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;\
-tspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
-qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
+        -DQT_SKIP_MODULES="$skip_modules"
     
     make -j "$nproc"
     sudo make install
