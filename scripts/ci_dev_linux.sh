@@ -88,8 +88,8 @@ build_static_qt() {
         -DQT_BUILD_TESTS=OFF \
         -DQT_SKIP_MODULES="$skip_modules"
     
-    make -j "$nproc"
-    sudo make install
+    ninja -j "$nproc"
+    sudo ninja install
     
     cd ..
 }
