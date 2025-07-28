@@ -53,15 +53,50 @@ build_static_qt() {
         return
     fi
     
-    "../$qt_src_dir/qt-everywhere-src-${qt_version}/configure" \
-        -static \
-        -release \
-        -no-pch \
-        -prefix "$qt_install_dir" \
-        -skip qtwebengine \
-        -nomake tests \
-        -nomake examples \
-        -fontconfig
+     cmake "$qt_src_dir/qt-everywhere-src-$qt_version" \
+        -G "Ninja" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX="$qt_install_dir" \
+        -DCMAKE_C_COMPILER=clang \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_CXX_FLAGS="$opt_flags" \
+        -DBUILD_SHARED_LIBS=OFF \
+        \
+        -DFEATURE_static=ON \
+        -DFEATURE_static_runtime=ON \
+        -DFEATURE_reduce_exports=ON \
+        -DFEATURE_opengl=desktop \
+        -DFEATURE_system_png=OFF \
+        -DFEATURE_system_jpeg=OFF \
+        -DFEATURE_system_zlib=OFF \
+        -DFEATURE_fontconfig=ON \
+        -DFEATURE_harfbuzz=ON \
+        -DFEATURE_xcb=ON \
+        -DFEATURE_xkbcommon=ON \
+        -DFEATURE_ssl=ON \
+        -DFEATURE_widgets=ON \
+        -DFEATURE_gui=ON \
+        -DFEATURE_network=ON \
+        -DFEATURE_concurrent=ON \
+        -DFEATURE_xml=ON \
+        \
+        -DQT_FEATURE_optimize_size=ON \
+        -DQT_FEATURE_pkg_config=OFF \
+        -DQT_FEATURE_separate_debug_info=OFF \
+        -DQT_FEATURE_strip=ON \
+        \
+        -DQT_BUILD_EXAMPLES=OFF \
+        -DQT_BUILD_TESTS=OFF \
+        \
+        -DQT_SKIP_MODULES=qtwebengine;\
+            qt3d;qt5compat;qtactiveqt;qtcharts;\
+            qtconnectivity;qtdatavis3d;qtdoc;\
+            qtgamepad;qtgraphicaleffects;qthttpserver;\
+            qtimageformats;qtlocation;qtlottie;qtmultimedia;\
+            qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;\
+            qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;\
+            qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
+            qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
     
     make -j "$nproc"
     sudo make install
