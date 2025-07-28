@@ -46,7 +46,7 @@ build_static_qt() {
 
     cd "$qt_build_dir" || exit 1
     
-    cmake "$qt_src_dir/qt-everywhere-src-$qt_version" \
+    cmake "qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$qt_install_dir" \
