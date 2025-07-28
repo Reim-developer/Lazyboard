@@ -57,7 +57,7 @@ build_static_qt() {
         -DQT_FEATURE_static=ON \
         -DQT_FEATURE_static_runtime=ON \
         -DQT_FEATURE_reduce_exports=ON \
-        -DQT_FEATURE_opengl=desktop \
+        -DQT_FEATURE_opengl=ON\
         -DQT_FEATURE_system_png=OFF \
         -DQT_FEATURE_system_jpeg=OFF \
         -DQT_FEATURE_system_zlib=OFF \
