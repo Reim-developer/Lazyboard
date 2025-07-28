@@ -1,0 +1,74 @@
+name: Build zClipboard on Linux, for 'dev' branch.
+
+on:
+    push:
+        branches: [ "dev"]
+      
+    pull_request:
+        branches: ["dev"]
+
+env:
+  CARGO_TERM_COLOR: always
+    
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            CI_SCRIPT: "scripts/ci_linux.sh"
+            APP_NAME: "zClipboard"
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Install Rust
+          shell: bash
+          run: |
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
+
+        - name: Add Rust components
+          shell: bash
+          run: |
+            rustup component add clippy
+
+        - name: Clippy check
+          shell: bash
+          run: |
+            cd ffi_rs
+            cargo clippy \
+            --all-targets --all-features \
+            -- -D clippy::all -D clippy::pedantic \
+            -D clippy::nursery -D clippy::perf
+
+        - name: Run test for 'ffi_rs' crates
+          shell: bash
+          run: |
+            cd ffi_rs
+            cargo test
+            
+
+        - name: Install C++ dependencies
+          working-directory: ${{ github.workspace }}
+          shell: bash
+          run: |
+            chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
+            ./${{ env.CI_SCRIPT }} install-base
+        
+        - name: Create build directory
+          working-directory: ${{ github.workspace }}
+          shell: bash
+          run: |
+            ./scripts/ci_linux.sh mkdir-build
+            
+        - name: Build zClipboard
+          working-directory: ${{ github.workspace }}
+          shell: bash
+          run: |
+            ./scripts/ci_linux.sh release-build
+
+        - name: Upload Release
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ env.APP_NAME }}
+            path: build/${{ env.APP_NAME }}
