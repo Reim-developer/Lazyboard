@@ -24,7 +24,24 @@ install_base() {
     libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev \
     libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
     libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev \
-    libxkbcommon-dev libxkbcommon-x11-dev
+    libxkbcommon-dev libxkbcommon-x11-dev \
+    libgl1-mesa-dev \
+    libegl1-mesa-dev \
+    libgles2-mesa-dev \
+    libdrm-dev \
+    libxcb-dri3-dev \
+    libxkbfile-dev \
+    libxtst-dev \
+    libxshmfence-dev \
+    libxrandr-dev \
+    libxcursor-dev \
+    libxcomposite-dev \
+    libudev-dev \
+    libdbus-1-dev \
+    gperf \
+    python3-html5lib \
+    libnss3-dev \
+    libharfbuzz-dev
 }
 
 download_qt_source() {
@@ -78,15 +95,15 @@ build_static_qt() {
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
         -DQT_SKIP_MODULES=qtwebengine
-            # qtwebengine;\
-            # qt3d;qt5compat;qtactiveqt;qtcharts;\
-            # qtconnectivity;qtdatavis3d;qtdoc;\
-            # qtgamepad;qtgraphicaleffects;qthttpserver;\
-            # qtimageformats;qtlocation;qtlottie;qtmultimedia;\
-            # qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;\
-            # qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;\
-            # qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
-            # qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
+qtwebengine;\
+qt3d;qt5compat;qtactiveqt;qtcharts;\
+qtconnectivity;qtdatavis3d;qtdoc;\
+qtgamepad;qtgraphicaleffects;qthttpserver;\
+qtimageformats;qtlocation;qtlottie;qtmultimedia;\
+qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;\
+qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;\
+tspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
+qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
     
     make -j "$nproc"
     sudo make install
