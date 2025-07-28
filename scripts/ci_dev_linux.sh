@@ -58,6 +58,7 @@ build_static_qt() {
     mkdir -p libclang
     7z x libclang.7z -olibclang
 
+    local skip_modules="qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtconnectivity;qtdatavis3d;qtdoc;qtgamepad;qtgraphicaleffects;qthttpserver;qtimageformats;qtlocation;qtlottie;qtmultimedia;qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns"
     cmake "../qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
         -DCMAKE_BUILD_TYPE=Release \
@@ -81,7 +82,7 @@ build_static_qt() {
         -DQT_FEATURE_widgets=ON \
         -DQT_FEATURE_gui=ON \
         -DQT_FEATURE_network=ON \
-        -DQT_FEATURE_concurrent=OFF \
+        -DQT_FEATURE_concurrent=ON \
         -DQT_FEATURE_xml=ON \
         -DQT_FEATURE_optimize_size=ON \
         -DQT_FEATURE_pkg_config=OFF \
@@ -93,7 +94,7 @@ build_static_qt() {
         -DQT_FEATURE_clang=ON \
         -DQT_FEATURE_clangcpp=ON \
         -DCMAKE_PREFIX_PATH="$PWD/libclang" \
-        -DQT_SKIP_MODULES=qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtquick3d
+        -DQT_SKIP_MODULES="$skip_modules"
     
     ninja -j "$nproc"
     sudo ninja install
