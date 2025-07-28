@@ -77,14 +77,15 @@ build_static_qt() {
         -DQT_FEATURE_harfbuzz=ON \
         -DQT_FEATURE_xcb=ON \
         -DQT_FEATURE_xkbcommon=ON \
-        -DQT_FEATURE_ssl=ON \
+        -DQT_FEATURE_ssl=OFF \
         -DQT_FEATURE_widgets=ON \
         -DQT_FEATURE_gui=ON \
         -DQT_FEATURE_network=ON \
-        -DQT_FEATURE_concurrent=ON \
+        -DQT_FEATURE_concurrent=OFF \
         -DQT_FEATURE_xml=ON \
         -DQT_FEATURE_optimize_size=ON \
         -DQT_FEATURE_pkg_config=OFF \
+        -DFEATURE_sql_=ON \
         -DQT_FEATURE_separate_debug_info=OFF \
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
@@ -92,7 +93,8 @@ build_static_qt() {
         -DQT_SKIP_MODULES=qtwebengine \
         -DQT_FEATURE_clang=ON \
         -DQT_FEATURE_clangcpp=ON \
-        -DCMAKE_PREFIX_PATH="$PWD/libclang"
+        -DCMAKE_PREFIX_PATH="$PWD/libclang" \
+        -DQT_SKIP_MODULES=qtwebengine,qt3d,qt5compat,qtactiveqt,qtcharts
     
     ninja -j "$nproc"
     sudo ninja install
