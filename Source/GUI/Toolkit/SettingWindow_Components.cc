@@ -65,5 +65,5 @@ CheckBox *Self::GetNotificationCheckBox() {
         Utils::MakeSmartPtr<CheckBox>(autoNotificatonCheckBox);
     }
 
-    return autoHideCheckBox.get();
+    return autoNotificatonCheckBox.get();
 }
