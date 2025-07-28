@@ -90,11 +90,10 @@ build_static_qt() {
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        -DQT_SKIP_MODULES=qtwebengine \
         -DQT_FEATURE_clang=ON \
         -DQT_FEATURE_clangcpp=ON \
         -DCMAKE_PREFIX_PATH="$PWD/libclang" \
-        -DQT_SKIP_MODULES=qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts
+        -DQT_SKIP_MODULES=qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtquick3d
     
     ninja -j "$nproc"
     sudo ninja install
