@@ -5,7 +5,7 @@ qt_build_dir="qt-build"
 qt_install_dir="/opt/qt-static"
 qt_version="6.9.1"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
-opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
+opt_flags="-O1 -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
 nproc=$(nproc)
 
 create_build_dir() {
@@ -15,7 +15,7 @@ create_build_dir() {
 install_base() {
     sudo apt-get update
     sudo apt-get install -y cmake ninja-build desktop-file-utils \
-        clang-17 lldb-17 libclang-17-dev \
+        clang \
         build-essential perl python3 python3-pip \
         libfontconfig1-dev libfreetype6-dev \
         libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
@@ -84,7 +84,9 @@ build_static_qt() {
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        -DQT_SKIP_MODULES=qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtconnectivity;qtdatavis3d;qtdoc;qtgamepad;qtgraphicaleffects;qthttpserver;qtimageformats;qtlocation;qtlottie;qtmultimedia;qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
+        -DQT_SKIP_MODULES=qtwebengine \
+        -DQT_FEATURE_clang=ON \
+        -DQT_FEATURE_clangcpp=ON \
     
     ninja -j "$nproc"
     sudo ninja install
