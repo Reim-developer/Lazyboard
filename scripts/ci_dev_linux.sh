@@ -94,7 +94,7 @@ build_static_qt() {
         -DQT_FEATURE_strip=ON \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        -DQT_SKIP_MODULES=qtwebengine
+        -DQT_SKIP_MODULES=qtwebengine \
 qtwebengine;\
 qt3d;qt5compat;qtactiveqt;qtcharts;\
 qtconnectivity;qtdatavis3d;qtdoc;\
