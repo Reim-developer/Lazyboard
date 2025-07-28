@@ -87,7 +87,6 @@ build_static_qt() {
         \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
-        \
         -DQT_SKIP_MODULES=\
             qtwebengine;\
             qt3d;qt5compat;qtactiveqt;qtcharts;\
