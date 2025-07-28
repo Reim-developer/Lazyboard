@@ -88,10 +88,10 @@ build_static_qt() {
             # qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
             # qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
     
-    make -j "$nproc"
-    sudo make install
+    # make -j "$nproc"
+    # sudo make install
     
-    cd ..
+    # cd ..
 }
 
 build_zclipboard() {
