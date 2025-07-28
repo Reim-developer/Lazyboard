@@ -46,7 +46,7 @@ build_static_qt() {
 
     cd "$qt_build_dir" || exit 1
     
-    cmake "qt-src/qt-everywhere-src-$qt_version" \
+    cmake "../qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$qt_install_dir" \
@@ -88,10 +88,10 @@ build_static_qt() {
             # qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;\
             # qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns
     
-    # make -j "$nproc"
-    # sudo make install
+    make -j "$nproc"
+    sudo make install
     
-    # cd ..
+    cd ..
 }
 
 build_zclipboard() {
