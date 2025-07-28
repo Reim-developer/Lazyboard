@@ -1,14 +1,18 @@
 use std::{ffi::{CStr}, os::raw::c_char, path::Path};
 
 #[unsafe(no_mangle)]
+/// # Safety
+/// 
+/// Make sure this `path` value given to 
+/// function parameter is a valid UTF-8 string.
 pub unsafe extern "C" fn is_valid_path(path: *mut c_char) -> bool { unsafe {
     if path.is_null() {
         return false;
     }
-
-    let c_str = match CStr::from_ptr(path).to_str() {
-        Ok(string) => string,
-        Err(_) => return false,
+    
+    let Ok(c_str) = CStr::from_ptr(path).to_str() 
+    else { 
+        return false 
     };
 
     if c_str.is_empty() {
@@ -33,10 +37,10 @@ fn test_is_valid_path() {
     unsafe {
         let c_string = CString
             ::new("../../src/utils/path.rs") /* Path to some exits file ...*/
-            .map(|raw| raw.into_raw())
+            .map(CString::into_raw)
             .unwrap_or(null_mut());
 
-        assert_eq!(true, is_valid_path(c_string));
+        assert!(is_valid_path(c_string));
         free_c_str(c_string);
     }
 }
