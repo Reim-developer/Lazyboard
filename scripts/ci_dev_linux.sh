@@ -6,7 +6,6 @@ qt_install_dir="/opt/qt-static"
 qt_version="6.9.1"
 release_flags="-DCMAKE_BUILD_TYPE=Release"
 opt_flags="-O3 -march=native -flto -funroll-loops -fomit-frame-pointer -fstrict-aliasing -ftree-vectorize -fvisibility=hidden"
-skip_modules="qt3d qt5compat qtactiveqt qtcharts qtconnectivity qtdatavis3d qtdoc qtgamepad qtgraphicaleffects qthttpserver qtimageformats qtlocation qtlottie qtmultimedia qtnetworkauth qtopcua qtpositioning qtpurchasing qtquick3d qtquickcontrols2 qtquicktimeline qtremoteobjects qtsensors tspeech qtstatemachine qtsvg qtvirtualkeyboard qtwayland qtwebchannel qtwebsockets qtwebview qtx11extras qtxmlpatterns"
 nproc=$(nproc)
 
 create_build_dir() {
@@ -15,34 +14,24 @@ create_build_dir() {
 
 install_base() {
     sudo apt-get update
-    sudo apt-get install -y git cmake ninja-build desktop-file-utils \
-    clang libnotify-dev libsodium-dev \
-    build-essential perl python3 \
-    libfontconfig1-dev libfreetype6-dev \
-    libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
-    libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev \
-    libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev \
-    libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev \
-    libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
-    libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev \
-    libxkbcommon-dev libxkbcommon-x11-dev \
-    libgl1-mesa-dev \
-    libegl1-mesa-dev \
-    libgles2-mesa-dev \
-    libdrm-dev \
-    libxcb-dri3-dev \
-    libxkbfile-dev \
-    libxtst-dev \
-    libxshmfence-dev \
-    libxrandr-dev \
-    libxcursor-dev \
-    libxcomposite-dev \
-    libudev-dev \
-    libdbus-1-dev \
-    gperf \
-    python3-html5lib \
-    libnss3-dev \
-    libharfbuzz-dev
+    sudo apt-get install -y cmake ninja-build desktop-file-utils \
+        clang-17 lldb-17 libclang-17-dev \
+        build-essential perl python3 python3-pip \
+        libfontconfig1-dev libfreetype6-dev \
+        libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
+        libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev \
+        libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev \
+        libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev \
+        libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
+        libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev \
+        libxkbcommon-dev libxkbcommon-x11-dev \
+        libgl1-mesa-dev libegl1-mesa-dev libgles2-mesa-dev \
+        libdrm-dev libxkbfile-dev libxtst-dev libxshmfence-dev \
+        libxrandr-dev libxcursor-dev libxcomposite-dev libudev-dev \
+        libdbus-1-dev gperf libnss3-dev libharfbuzz-dev \
+        libprotobuf-dev protobuf-compiler libssl-dev
+
+    sudo pip3 install html5lib spdx-tools
 }
 
 download_qt_source() {
@@ -64,6 +53,8 @@ build_static_qt() {
 
     cd "$qt_build_dir" || exit 1
     
+    local skip_modules="qtwebengine;qt3d;qt5compat;qtactiveqt;qtcharts;qtconnectivity;qtdatavis3d;qtdoc;qtgamepad;qtgraphicaleffects;qthttpserver;qtimageformats;qtlocation;qtlottie;qtmultimedia;qtnetworkauth;qtopcua;qtpositioning;qtpurchasing;qtquick3d;qtquickcontrols2;qtquicktimeline;qtremoteobjects;qtsensors;qtspeech;qtstatemachine;qtsvg;qtvirtualkeyboard;qtwayland;qtwebchannel;qtwebsockets;qtwebview;qtx11extras;qtxmlpatterns"
+
     cmake "../qt-src/qt-everywhere-src-$qt_version" \
         -G "Ninja" \
         -DCMAKE_BUILD_TYPE=Release \
