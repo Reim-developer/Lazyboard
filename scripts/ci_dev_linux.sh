@@ -78,7 +78,7 @@ build_static_qt() {
         -DQT_FEATURE_harfbuzz=ON \
         -DQT_FEATURE_xcb=ON \
         -DQT_FEATURE_xkbcommon=ON \
-        -DQT_FEATURE_ssl=OFF \
+        -DQT_FEATURE_ssl=ON \
         -DQT_FEATURE_widgets=ON \
         -DQT_FEATURE_gui=ON \
         -DQT_FEATURE_network=ON \
