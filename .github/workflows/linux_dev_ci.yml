@@ -1,0 +1,29 @@
+name: Build Qt static dev
+on:
+    push:
+        branches: ["dev-ci"]
+
+    
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Install requirements depdendencies
+          shell: bash
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y \
+            build-essential cmake \
+            ninja-build perl python3 \
+            libgl1-mesa-dev libegl1-mesa-dev \
+            libfontconfig1-dev libinput-dev \
+            libx11-xcb-dev libxcb-xfixes0-dev \
+            libxcb1-dev libxkbcommon-dev
+
+        - name: Checkout Qt source code
+          uses: actions/checkout@v4
+          with:
+            repository: qt/qt6
+            ref: v6.9.0
+            submodules: recursive
