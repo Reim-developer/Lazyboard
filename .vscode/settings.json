@@ -2,4 +2,5 @@
 	"rust-analyzer.linkedProjects": [
 		"src/back_end/Cargo.toml"
 	],
+	"rust-analyzer.check.command": "clippy"
 }
