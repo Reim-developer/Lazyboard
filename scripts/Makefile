@@ -1,0 +1,19 @@
+.PHONY: build
+
+debug-build:
+	@./debug.sh debug-build
+
+debug-gdb:
+	@./debug.sh debug-gdb
+
+linter-check:
+	@./debug.sh check
+
+dev-push:
+	@./debug.sh push-dev
+
+master-push:
+	@./debug.sh push-master
+
+stable-push:
+	@./debug.sh push-stable

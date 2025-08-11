@@ -1,0 +1,10 @@
+[package]
+name = "back_end"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+webbrowser = "1.0.5"

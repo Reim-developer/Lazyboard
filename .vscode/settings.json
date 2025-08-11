@@ -1,0 +1,5 @@
+{
+	"rust-analyzer.linkedProjects": [
+		"src/back_end/Cargo.toml"
+	],
+}
