@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 program_name="Lazyboard"
 compile_command="compile_commands.json"
 build_dir="../build"
@@ -63,9 +63,19 @@ function debug_build() {
 
 function linter_check() {
     run_clang_tidy="run-clang-tidy"
+    cargo="cargo"
+    backend="src/back_end"
     check "$run_clang_tidy"
-    
+    check "$cargo"
+
     cd ..
+    cd "$backend" || exit 1
+    "$cargo" clippy \
+    --all-targets --all-features \
+    -- -D clippy::all -D clippy::pedantic \
+    -D clippy::nursery -D clippy::perf
+
+    cd ../..
     $run_clang_tidy \
         -p=build \
         -checks="*" \
