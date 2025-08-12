@@ -50,6 +50,8 @@ function debug_build() {
         -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+        -DLAZY_DEBUG=ON \
+        -DRELEASE=OFF \
         ..
         
     make
