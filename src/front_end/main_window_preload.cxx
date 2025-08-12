@@ -9,6 +9,11 @@
 #include "../ffi/namespace/include/config.hxx"
 #include "../ffi/namespace/include/utils.hxx"
 
+#if defined(LAZY_DEBUG)
+#include <qdebug.h>
+#include <qstring.h>
+#endif
+
 using Lazyboard::front_end::MainWindowPreload;
 using Self = MainWindowPreload;
 
@@ -61,9 +66,9 @@ void Self::create_default_config(QMainWindow* main_window) {
   if (!is_config_exists) {
     // clang-format off
       #if defined (LAZY_DEBUG)
-        #include <qdebug.h>
+        auto q_string_value = QString::fromStdString(config_path);
 
-        qDebug() << "Config path not found, generate at: " << config_path << "\n";
+        qDebug() << "Config path not found, generate at: " <<  q_string_value << "\n";
       #endif
     // clang-format on
 
@@ -73,8 +78,9 @@ void Self::create_default_config(QMainWindow* main_window) {
 
   // clang-format off
     #if defined (LAZY_DEBUG)
-      #include <qdebug.h>
-      qDebug() << "Found config path at: " << config_path << "\n";
+      auto q_string_value = QString::fromStdString(config_path);
+
+      qDebug() << "Found config path at: " << q_string_value << "\n";
     #endif
   // clang-format on
 }
