@@ -1,0 +1,49 @@
+Checks: >
+  -*
+  ,modernize-use-nullptr
+  ,modernize-loop-convert
+  ,readability-identifier-naming
+  ,readability-magic-numbers
+  ,performance-*
+  ,bugprone-*
+  ,cppcoreguidelines-*      
+  ,cppcoreguidelines-pro-type-reinterpret-cast
+  ,cppcoreguidelines-pro-bounds-array-to-pointer-decay
+  ,cert-err58-cpp
+  ,cert-dcl58-cpp
+  ,cert-oop54-cpp
+  ,cert-oop11-cpp
+  ,misc-misleading-indentation
+  ,misc-definitions-in-headers
+  ,misc-unused-parameters
+  ,misc-static-assert
+  ,-llvmlibc-*
+  ,-fuchsia-*
+  ,-abseil-*
+  ,-google-*
+  ,-zircon-*
+  
+CheckOptions:
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.MethodCase
+    value: lower_case
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE
+
+WarningsAsErrors: "*"
+HeaderFilterRegex: '^.*/src/**/*.hxx'

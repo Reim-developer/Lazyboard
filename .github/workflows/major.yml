@@ -1,0 +1,67 @@
+name: Build (Debug) Lazyboard for Linux
+
+on:
+    push:
+        branches: [ "major"]
+      
+    pull_request:
+        branches: ["major"]
+
+env:
+  CARGO_TERM_COLOR: always
+    
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            APP_NAME: "Lazyboard"
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Install Rust
+          shell: bash
+          run: |
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
+          
+        - name: Install C++ libraries
+          shell: bash
+          run: |
+               sudo apt-get update
+               sudo apt-get install -y \
+               git cmake make ccache \
+               qt6-base-dev clang
+
+
+        - name: Add Rust components
+          shell: bash
+          run: |
+            rustup component add clippy
+
+        - name: Linter Check (Backend)
+          shell: bash
+          run: |
+            make check-backend
+
+        - name: Backend Test
+          shell: bash
+          run: |
+           make backend-test
+
+        - name: Build Lazyboard
+          shell: bash
+          run: |
+           make debug-non-gui
+        
+        - name: Linter Check (Frontend)
+          shell: bash
+          run: |
+           make check-frontend
+
+        - name: Upload Release
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ env.APP_NAME }}
+            path: build/${{ env.APP_NAME }}
