@@ -29,3 +29,7 @@ master-push:
 
 stable-push:
 	@$(MAKE) -C $(scripts_folder) stable-push
+
+build_options ?= none
+deploy-linux:
+	@$(MAKE) -C $(scripts_folder) deploy-linux build_options="$(build_options)"
