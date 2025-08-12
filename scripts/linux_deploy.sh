@@ -85,7 +85,7 @@ build_frontend() {
 
 match_options() {
     case "$1" in 
-    "install_dependency") install_dependency ;;
+    "install-dependency") install_dependency ;;
     "frontend-build") build_frontend ;;
 	"backend-build") build_backend ;;
     "frontend-check") {
@@ -100,7 +100,7 @@ match_options() {
         backend_test
     } ;;
     *)
-    echo "Usage: $0 {install_dependency | frontend-build | backend-build}"
+    echo "Usage: $0 {install-dependency | frontend-build | backend-build}"
     exit 1
     esac
 }
