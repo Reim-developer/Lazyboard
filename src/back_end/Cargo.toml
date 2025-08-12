@@ -1,10 +1,13 @@
 [package]
 name = "back_end"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [lib]
 crate-type = ["staticlib", "lib"]
+
+[profile.dev]
+panic = "abort"
 
 [dependencies]
 dirs = "6.0.0"

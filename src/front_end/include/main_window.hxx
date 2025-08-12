@@ -9,6 +9,7 @@
 #include <string>
 
 #include "about_widget.hxx"
+#include "main_window_preload.hxx"
 #include "setting_widget.hxx"
 #include "table_widget.hxx"
 
@@ -38,6 +39,7 @@ class MainWindow {
   unique_ptr<TableWidget> table_widget;
   unique_ptr<SettingWidget> setting_widget;
   unique_ptr<AboutWidget> about_widget;
+  unique_ptr<MainWindowPreload> main_window_preload;
 
  public:
   Self *init_main_window();

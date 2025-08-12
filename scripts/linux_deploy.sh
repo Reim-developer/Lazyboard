@@ -79,6 +79,7 @@ build_frontend() {
         -DCMAKE_CXX_FLAGS="$opt_flags" \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
         -DRELEASE=ON \
+        -DLAZY_DEBUG=OFF \
         "$release_flags" \
         ..
 
