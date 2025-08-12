@@ -17,6 +17,11 @@ Checks: >
   ,misc-definitions-in-headers
   ,misc-unused-parameters
   ,misc-static-assert
+  ,-llvmlibc-*
+  ,-fuchsia-*
+  ,-abseil-*
+  ,-google-*
+  ,-zircon-*
   
 CheckOptions:
   - key: readability-identifier-naming.VariableCase
@@ -40,5 +45,5 @@ CheckOptions:
   - key: readability-identifier-naming.EnumConstantCase
     value: UPPER_CASE
 
-WarningsAsErrors: '*'
-HeaderFilterRegex: '^.*/src/.*'
+WarningsAsErrors: "*"
+HeaderFilterRegex: '^.*/src/**/*.hxx'
