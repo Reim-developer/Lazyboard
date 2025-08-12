@@ -31,7 +31,7 @@ jobs:
           run: |
                sudo apt-get update
                sudo apt-get install -y \
-               git cmake make \
+               git cmake make ccache \
                qt6-base-dev clang
 
 
