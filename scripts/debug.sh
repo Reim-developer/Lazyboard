@@ -13,6 +13,17 @@ function check() {
     fi
 }
 
+function back_end_test() {
+    check "cargo"
+    check "rustup"
+
+    local back_end="src/back_end"
+    cd ..
+    cd "$back_end" || exit 1
+
+    cargo test
+}
+
 function debug_build() {
     check "clang"
     check "cmake"
@@ -51,13 +62,15 @@ function debug_build() {
 }
 
 function linter_check() {
-    clang_tidy="clang-tidy"
-    check "$clang_tidy"
+    run_clang_tidy="run-clang-tidy"
+    check "$run_clang_tidy"
     
-    find .. \
-    -regex '.*\.\(cxx\|hxx\)$' \
-    -not -path "./build/*" \
-    -exec "$clang_tidy" {} -p --quiet \;
+    cd ..
+    $run_clang_tidy \
+        -p=build \
+        -checks="*" \
+        -j 1 \
+        ".*src/.*\.(hxx|cxx)$"
 }
 
 function debug_gdb() {
@@ -85,6 +98,7 @@ function main() {
         }   ;;
         "debug-gdb") debug_gdb ;;
         "check") linter_check ;;
+        "backend-test") back_end_test ;;
         "push-dev") {
             local dev_branch="dev"
             pre_push $dev_branch
