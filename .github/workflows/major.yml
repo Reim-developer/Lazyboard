@@ -2,10 +2,10 @@ name: Build (Debug) Lazyboard for Linux
 
 on:
     push:
-        branches: [ "dev"]
+        branches: [ "major"]
       
     pull_request:
-        branches: ["dev"]
+        branches: ["major"]
 
 env:
   CARGO_TERM_COLOR: always
