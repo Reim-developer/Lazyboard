@@ -51,12 +51,12 @@ jobs:
           run:
             make deploy-linux build_options=backend-build
 
-        - name: Linter Check (C++ Frontend)
-          shell: bash
-          run: |
-            make deploy-linux build_options=frontend-check
-
         - name: Build (C++ Frontend)
           shell: bash
           run: |
             make deploy-linux build_options=frontend-build
+
+        - name: Linter Check (C++ Frontend)
+          shell: bash
+          run: |
+            make deploy-linux build_options=frontend-check
