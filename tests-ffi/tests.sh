@@ -3,14 +3,14 @@
 function main() {
 	local clang_cxx="clang++"
 	local build_dir="build"
-	local static_lib="../back_end/target/debug/libback_end.a"
+	local static_lib="../src/back_end/target/debug/libback_end.a"
 	local config_test="config.cxx"
 
 	cd ..
-	cd "back_end" || exit 1
+	cd "src/back_end" || exit 1
 	cargo build
-	cd .. 
-	cd "tests" || exit 1
+	cd ../..
+	cd "tests-ffi" || exit 1
 	
 	if [ ! -d "$build_dir" ]; then
 		mkdir -p "$build_dir"
