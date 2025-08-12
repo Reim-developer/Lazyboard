@@ -7,6 +7,9 @@ debug:
 debug-gdb:
 	@$(MAKE) -C scripts debug-gdb
 
+backend-test:
+	@$(MAKE) -C scripts backend-test
+
 check:
 	@$(MAKE) -C scripts linter-check
 

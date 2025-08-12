@@ -17,3 +17,6 @@ master-push:
 
 stable-push:
 	@./debug.sh push-stable
+
+backend-test:
+	@$(MAKE) -C scripts backend-test
