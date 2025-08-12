@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "include/about_widget.hxx"
+#include "include/main_window_preload.hxx"
 #include "include/setting_widget.hxx"
 #include "include/table_widget.hxx"
 
@@ -17,6 +18,7 @@ using Self = MainWindow;
 
 Self::MainWindow() {
   main_window = make_unique<QMainWindow>();
+  main_window_preload = make_unique<MainWindowPreload>();
   auto central_w = make_unique<QWidget>();
   auto layout_w = make_unique<QGridLayout>(central_w.get());
 
@@ -29,6 +31,7 @@ Self::MainWindow() {
 Self *Self::init_main_window() {
   main_window->setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
   main_window->setWindowTitle("Lazyboard");
+  main_window_preload->create_default_config(main_window.get());
   this->front_end_show();
   main_window->show();
 
