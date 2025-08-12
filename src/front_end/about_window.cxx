@@ -2,6 +2,7 @@
 
 #include <qdialog.h>
 #include <qgridlayout.h>
+#include <qlogging.h>
 #include <qmessagebox.h>
 #include <qobject.h>
 #include <qpushbutton.h>
@@ -18,29 +19,52 @@ AboutWindow::AboutWindow() {
   about_window = make_unique<QDialog>();
   grid_layout = make_unique<QGridLayout>();
   github_button = make_unique<QPushButton>();
+  github_issue_button = make_unique<QPushButton>();
+  github_pull_button = make_unique<QPushButton>();
 }
 
-void Self::on_github_button_clicked() {
-  const auto get_source_code = [this] {
-    const char *github_url = "https://github.com/reim-developer/zClipboard";
+void Self::is_open_browser_ok(OpenBrowserStatus status) {
+  switch (status) {
+    case OpenBrowserStatus::OK:
+      break;
 
-    auto is_ok = Lazyboard::ffi::browser_open(github_url);
-
-    if (!is_ok) {
+    case OpenBrowserStatus::OPEN_BROWSER_FAILED:
       QMessageBox::critical(about_window.get(), "Error",
-                            "Could not open web browser.");
-      return;
-    }
+                            "Could not open your browser");
+      break;
+
+    case OpenBrowserStatus::WRAP_RAW_C_FAILED:
+      QMessageBox::critical(about_window.get(), "Error",
+                            "Could not wrap C raw to safety string");
+
+      break;
+    case OpenBrowserStatus::URL_IS_EMPTY:
+      QMessageBox::critical(about_window.get(), "Error", "Url is empty");
+      break;
+  }
+}
+
+void Self::open_browser_when_clicked(QPushButton *button, const char *url) {
+  const auto open_browser = [this, url] {
+    auto status = Lazyboard::ffi::open_browser(url);
+    is_open_browser_ok(status);
   };
 
-  QObject::connect(github_button.get(), &QPushButton::clicked, get_source_code);
+  QObject::connect(button, &QPushButton::clicked, open_browser);
 }
 
 void Self::setup_buttons() {
-  github_button->setText("GitHub | Soure Code");
-  this->on_github_button_clicked();
+  github_button->setText("GitHub | Source Code");
+  github_issue_button->setText("Issue | Bug Report");
+  github_pull_button->setText("Pull Request | Contribute");
+
+  this->open_browser_when_clicked(github_button.get(), GITHUB_URL);
+  this->open_browser_when_clicked(github_issue_button.get(), GITHUB_ISSUE_URL);
+  this->open_browser_when_clicked(github_pull_button.get(), GITHUB_PULL_URL);
 
   grid_layout->addWidget(github_button.get(), 0, 0);
+  grid_layout->addWidget(github_issue_button.get(), 0, 1);
+  grid_layout->addWidget(github_pull_button.get(), 1, 0);
 }
 
 void Self::setup_front_end() {
