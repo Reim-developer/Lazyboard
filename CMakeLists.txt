@@ -12,7 +12,8 @@ set(RUST_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/back_end)
 if(RELEASE)
     set(RUST_BACKEND_LIB ${RUST_BACKEND_DIR}/target/release/libback_end.a)
 
-else()
+elseif(LAZY_DEBUG)
+    add_compile_definitions(PRIVATE LAZY_DEBUG)
     set(RUST_BACKEND_LIB ${RUST_BACKEND_DIR}/target/debug/libback_end.a)
 endif()
 
