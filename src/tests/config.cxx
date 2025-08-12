@@ -17,8 +17,8 @@ enum WriteConfigStatus : uint8_t {
   GET_DATA_LOCAL_FAILED,
 };
 
-extern "C" const char *raw_local_data();
-extern "C" void raw_free_c_str(const char *str);
+extern "C" char *raw_local_data();
+extern "C" void raw_free_c_str(char *str);
 extern "C" WriteConfigStatus raw_write_default_config();
 
 void gen_config_test() {
