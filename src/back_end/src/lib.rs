@@ -5,3 +5,7 @@ pub mod utils {
     pub mod fs_utils;
     pub mod memory;
 }
+
+pub mod internal {
+    pub mod app_config;
+}
