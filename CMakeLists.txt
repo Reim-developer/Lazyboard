@@ -8,7 +8,14 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Gui Core)
 
 set(RUST_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/back_end)
-set(RUST_BACKEND_LIB ${RUST_BACKEND_DIR}/target/debug/libback_end.a)
+
+if(RELEASE)
+    set(RUST_BACKEND_LIB ${RUST_BACKEND_DIR}/target/release/libback_end.a)
+
+else()
+    set(RUST_BACKEND_LIB ${RUST_BACKEND_DIR}/target/debug/libback_end.a)
+endif()
+
 
 file(GLOB_RECURSE SOURCES_CXX "src/*.cxx")
 file(GLOB_RECURSE SOURCES_C "src/*.c")

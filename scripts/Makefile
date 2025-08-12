@@ -1,9 +1,4 @@
 build_options ?= none
-valid_options := backend-build frontend-build backend-check frontend-check backend-test
-
-ifeq ($(filter $(build_options),$(valid_options)),)
-$(error "Invalid build option: $(build_options), all valid options is: | $(valid_options) |")
-endif
 
 .PHONY: build target
 
