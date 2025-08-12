@@ -1,3 +1,3 @@
 # Lazyboard
 
-*Lazyboard is a cache manager, using C++ as the front-end and Rust as the back-end.*
+*Lazyboard is a clipboard  manager, using C++ for front-end, &  Rust for back-end.*
