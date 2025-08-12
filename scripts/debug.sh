@@ -62,25 +62,31 @@ function debug_build() {
 }
 
 function linter_check() {
-    run_clang_tidy="run-clang-tidy"
-    cargo="cargo"
-    backend="src/back_end"
-    check "$run_clang_tidy"
-    check "$cargo"
+    local options=$1
 
-    cd ..
-    cd "$backend" || exit 1
-    "$cargo" clippy \
-    --all-targets --all-features \
-    -- -D clippy::all -D clippy::pedantic \
-    -D clippy::nursery -D clippy::perf
+    if [[ $options == "clippy" ]]; then 
+        local cargo="cargo"
+        local backend="src/back_end"
+        check "$cargo"
 
-    cd ../..
-    $run_clang_tidy \
+        cd ..
+        cd "$backend" || exit 1
+        "$cargo" clippy \
+        --all-targets --all-features \
+        -- -D clippy::all -D clippy::pedantic \
+        -D clippy::nursery -D clippy::perf
+
+    else 
+        local run_clang_tidy="run-clang-tidy"
+        check "$run_clang_tidy"
+
+        cd ..
+        $run_clang_tidy \
         -p=build \
         -checks="*" \
         -j 1 \
         ".*src/.*\.(hxx|cxx)$"
+    fi
 }
 
 function debug_gdb() {
@@ -107,7 +113,14 @@ function main() {
             debug_build $show_gui
         }   ;;
         "debug-gdb") debug_gdb ;;
-        "check") linter_check ;;
+        "check-backend")  {
+            local option="clippy"
+            linter_check $option
+        };;
+        "check-frontend") {
+            local option="clang-tidy"
+            linter_check "$option"
+        } ;;
         "backend-test") back_end_test ;;
         "push-dev") {
             local dev_branch="dev"

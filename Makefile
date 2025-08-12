@@ -10,8 +10,11 @@ debug-gdb:
 backend-test:
 	@$(MAKE) -C scripts backend-test
 
-check:
-	@$(MAKE) -C scripts linter-check
+check-backend:
+	@$(MAKE) -C scripts check-backend
+
+check-frontend:
+	@$(MAKE) -C scripts check-frontend
 
 dev-push:
 	@$(MAKE) -C scripts dev-push

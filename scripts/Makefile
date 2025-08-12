@@ -6,8 +6,11 @@ debug-build:
 debug-gdb:
 	@./debug.sh debug-gdb
 
-linter-check:
-	@./debug.sh check
+check-frontend:
+	@./debug.sh check-frontend
+
+check-backend:
+	@./debug.sh check-backend
 
 dev-push:
 	@./debug.sh push-dev

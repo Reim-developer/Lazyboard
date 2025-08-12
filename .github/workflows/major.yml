@@ -31,10 +31,10 @@ jobs:
           run: |
             rustup component add clippy
 
-        - name: Linter Check
+        - name: Linter Check (Backend)
           shell: bash
           run: |
-            make check
+            make check-backend
 
         - name: Backend Test
           shell: bash
@@ -45,6 +45,11 @@ jobs:
           shell: bash
           run: |
            make debug
+        
+        - name: Linter Check (Frontend)
+          shell: bash
+          run: |
+           make check-frontend
 
         - name: Upload Release
           uses: actions/upload-artifact@v4
