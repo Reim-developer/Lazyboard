@@ -13,10 +13,10 @@ pub(crate) const unsafe fn raw_from_ptr(url: *const c_char) -> (&'static str, bo
 #[unsafe(no_mangle)]
 /// # Safety
 /// Careful with double free.
-pub unsafe extern "C" fn raw_free_c_str(c_str: *const c_char) {
+pub unsafe extern "C" fn raw_free_c_str(c_str: *mut c_char) {
     unsafe {
         if !c_str.is_null() {
-            let _ = CString::from_raw(c_str.cast_mut());
+            let _ = CString::from_raw(c_str);
         }
     }
 }
