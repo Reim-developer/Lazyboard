@@ -53,7 +53,7 @@ jobs:
         - name: Build Lazyboard
           shell: bash
           run: |
-           make debug
+           make debug-non-gui
         
         - name: Linter Check (Frontend)
           shell: bash
