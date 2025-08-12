@@ -1,26 +1,31 @@
 .PHONY: build
 
+scripts_folder = scripts
+
 debug:
-	@$(MAKE) -C scripts debug-build
+	@$(MAKE) -C $(scripts_folder) debug-build
 	@echo "[INFO]: Exit with status: $$?"
 
+debug-non-gui:
+	@$(MAKE) -C $(scripts_folder) debug-non-gui
+
 debug-gdb:
-	@$(MAKE) -C scripts debug-gdb
+	@$(MAKE) -C $(scripts_folder) debug-gdb
 
 backend-test:
-	@$(MAKE) -C scripts backend-test
+	@$(MAKE) -C $(scripts_folder) backend-test
 
 check-backend:
-	@$(MAKE) -C scripts check-backend
+	@$(MAKE) -C $(scripts_folder) check-backend
 
 check-frontend:
-	@$(MAKE) -C scripts check-frontend
+	@$(MAKE) -C $(scripts_folder) check-frontend
 
 dev-push:
-	@$(MAKE) -C scripts dev-push
+	@$(MAKE) -C $(scripts_folder) dev-push
 
 master-push:
-	@$(MAKE) -C scripts master-push
+	@$(MAKE) -C $(scripts_folder) master-push
 
 stable-push:
-	@$(MAKE) -C scripts stable-push
+	@$(MAKE) -C $(scripts_folder) stable-push

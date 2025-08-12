@@ -3,6 +3,9 @@
 debug-build:
 	@./debug.sh debug-build
 
+debug-non-gui:
+	@./debug.sh debug-build-noshow
+
 debug-gdb:
 	@./debug.sh debug-gdb
 

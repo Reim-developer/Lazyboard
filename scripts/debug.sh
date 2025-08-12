@@ -112,6 +112,10 @@ function main() {
             local show_gui=1
             debug_build $show_gui
         }   ;;
+        "debug-build-noshow") {
+            local show_gui=0
+            debug_build $show_gui
+        } ;;
         "debug-gdb") debug_gdb ;;
         "check-backend")  {
             local option="clippy"
