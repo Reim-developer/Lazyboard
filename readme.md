@@ -10,6 +10,7 @@
 <div align="center">
     <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml"><img src="https://github.com/Reim-developer/zClipboard/actions/workflows/macos.yml/badge.svg?branch=master" /></a>
     <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml"><img src="https://github.com/Reim-developer/zClipboard/actions/workflows/linux.yml/badge.svg?branch=master" /></a>
+    <a href="https://github.com/Reim-developer/zClipboard/actions/workflows/windows.yml"><img src="https://github.com/Reim-developer/zClipboard/actions/workflows/windows.yml/badge.svg?branch=master" /></a>
 </div>
 
 ---
