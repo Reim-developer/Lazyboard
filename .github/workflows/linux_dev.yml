@@ -1,4 +1,4 @@
-name: Build zClipboard on Linux, for 'dev' branch.
+name: Build (Debug) Lazyboard for Linux
 
 on:
     push:
@@ -14,8 +14,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         env:
-            CI_SCRIPT: "scripts/ci_linux.sh"
-            APP_NAME: "zClipboard"
+            APP_NAME: "Lazyboard"
 
         steps:
         - name: Checkout code
@@ -26,46 +25,40 @@ jobs:
           run: |
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
+          
+        - name: Install C++ libraries
+          shell: bash
+          run: |
+               sudo apt-get update
+               sudo apt-get install -y \
+               git cmake make ccache \
+               qt6-base-dev clang
+
 
         - name: Add Rust components
           shell: bash
           run: |
             rustup component add clippy
 
-        - name: Clippy check
+        - name: Linter Check (Backend)
           shell: bash
           run: |
-            cd ffi_rs
-            cargo clippy \
-            --all-targets --all-features \
-            -- -D clippy::all -D clippy::pedantic \
-            -D clippy::nursery -D clippy::perf
+            make check-backend
 
-        - name: Run test for 'ffi_rs' crates
+        - name: Backend Test
           shell: bash
           run: |
-            cd ffi_rs
-            cargo test
-            
+           make backend-test
 
-        - name: Install C++ dependencies
-          working-directory: ${{ github.workspace }}
+        - name: Build Lazyboard
           shell: bash
           run: |
-            chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
-            ./${{ env.CI_SCRIPT }} install-base
+           make debug-non-gui
         
-        - name: Create build directory
-          working-directory: ${{ github.workspace }}
+        - name: Linter Check (Frontend)
           shell: bash
           run: |
-            ./scripts/ci_linux.sh mkdir-build
-            
-        - name: Build zClipboard
-          working-directory: ${{ github.workspace }}
-          shell: bash
-          run: |
-            ./scripts/ci_linux.sh release-build
+           make check-frontend
 
         - name: Upload Release
           uses: actions/upload-artifact@v4
