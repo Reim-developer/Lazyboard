@@ -77,15 +77,11 @@ function linter_check() {
         -D clippy::nursery -D clippy::perf
 
     else 
-        local run_clang_tidy="run-clang-tidy"
-        check "$run_clang_tidy"
+        local clang_tidy="clang-tidy"
+        check "$clang_tidy"
 
         cd ..
-        $run_clang_tidy \
-        -p=build \
-        -checks="*" \
-        -j 1 \
-        ".*src/.*\.(hxx|cxx)$"
+        clang-tidy src/**/*.cxx -p=build
     fi
 }
 
