@@ -24,7 +24,12 @@ extern "C" WriteConfigStatus raw_write_default_config();
 void gen_config_test() {
   auto status = raw_write_default_config();
 
-  cout << static_cast<int>(status) << "\n";
+  assert(status != WriteConfigStatus::WRITE_FILE_FAILED);
+  assert(status != WriteConfigStatus::CREATE_FILE_FAILED);
+  assert(status != WriteConfigStatus::CREATE_DIR_FAILED);
+  assert(status != WriteConfigStatus::GET_DATA_LOCAL_FAILED);
+  assert(status != WriteConfigStatus::TOML_TO_STRING_FAILED);
+  assert(status == WriteConfigStatus::OK);
 }
 
 int main() {
@@ -33,7 +38,6 @@ int main() {
   raw_free_c_str(raw_result);
 
   gen_config_test();
-  cout << result << "\n";
   assert(!result.empty());
 
   return 0;

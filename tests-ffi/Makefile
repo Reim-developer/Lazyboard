@@ -1,2 +1,2 @@
-test:
+tests:
 	@./tests.sh

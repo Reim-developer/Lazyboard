@@ -50,6 +50,11 @@ jobs:
           run: |
            make backend-test
 
+        - name: Frontend + Backend FFI Test
+          shell: bash
+          run: |
+            make tests-ffi
+
         - name: Build Lazyboard
           shell: bash
           run: |

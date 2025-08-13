@@ -1,4 +1,4 @@
-.PHONY: build
+.PHONY: build tests-ffi
 
 scripts_folder = scripts
 
@@ -33,3 +33,6 @@ stable-push:
 build_options ?= none
 deploy-linux:
 	@$(MAKE) -C $(scripts_folder) deploy-linux build_options="$(build_options)"
+
+tests-ffi:
+	@$(MAKE) -C tests-ffi tests
