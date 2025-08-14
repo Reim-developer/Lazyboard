@@ -22,65 +22,65 @@ using std::stringstream;
 using namespace Lazyboard::ffi;
 
 void Self::on_error(WriteConfigStatus status, QMainWindow* main_window) {
-  switch (status) {
-    case WriteConfigStatus::OK:
-      break;
+    switch (status) {
+        case WriteConfigStatus::OK:
+            break;
 
-    case WriteConfigStatus::CREATE_DIR_FAILED:
-      QMessageBox::critical(main_window, "Error",
-                            "Could not create config directory");
-      break;
+        case WriteConfigStatus::CREATE_DIR_FAILED:
+            QMessageBox::critical(main_window, "Error",
+                                  "Could not create config directory");
+            break;
 
-    case WriteConfigStatus::GET_DATA_LOCAL_FAILED:
-      QMessageBox::critical(main_window, "Error",
-                            "Could not get application local data");
-      break;
+        case WriteConfigStatus::GET_DATA_LOCAL_FAILED:
+            QMessageBox::critical(main_window, "Error",
+                                  "Could not get application local data");
+            break;
 
-    case WriteConfigStatus::CREATE_FILE_FAILED:
-      QMessageBox::critical(main_window, "Error",
-                            "Could not create configuration file");
-      break;
+        case WriteConfigStatus::CREATE_FILE_FAILED:
+            QMessageBox::critical(main_window, "Error",
+                                  "Could not create configuration file");
+            break;
 
-    case WriteConfigStatus::WRITE_FILE_FAILED:
-      QMessageBox::critical(main_window, "Error",
-                            "Could not write configuration");
-      break;
+        case WriteConfigStatus::WRITE_FILE_FAILED:
+            QMessageBox::critical(main_window, "Error",
+                                  "Could not write configuration");
+            break;
 
-    case WriteConfigStatus::TOML_TO_STRING_FAILED:
-      QMessageBox::critical(main_window, "Error",
-                            "Could not convert TOML data to string");
-      break;
-  }
+        case WriteConfigStatus::TOML_TO_STRING_FAILED:
+            QMessageBox::critical(main_window, "Error",
+                                  "Could not convert TOML data to string");
+            break;
+    }
 }
 
 void Self::create_default_config(QMainWindow* main_window) {
-  auto local_data_raw = ffi::local_data();
+    auto local_data_raw = ffi::local_data();
 
-  stringstream string_stream;
-  string_stream << local_data_raw << "/Lazyboard";
-  string config_path = string_stream.str();
+    stringstream string_stream;
+    string_stream << local_data_raw << "/Lazyboard";
+    string config_path = string_stream.str();
 
-  auto is_config_exists = ffi::is_exists_path(config_path.data());
-  ffi::free_c_str(local_data_raw);
+    auto is_config_exists = ffi::is_exists_path(config_path.data());
+    ffi::free_c_str(local_data_raw);
 
-  if (!is_config_exists) {
-    // clang-format off
+    if (!is_config_exists) {
+        // clang-format off
       #if defined (LAZY_DEBUG)
         auto q_string_value = QString::fromStdString(config_path);
 
         qDebug() << "Config path not found, generate at: " <<  q_string_value << "\n";
       #endif
-    // clang-format on
+        // clang-format on
 
-    auto status = ffi::write_default_config();
-    on_error(status, main_window);
-  }
+        auto status = ffi::write_default_config();
+        on_error(status, main_window);
+    }
 
-  // clang-format off
+    // clang-format off
     #if defined (LAZY_DEBUG)
       auto q_string_value = QString::fromStdString(config_path);
 
       qDebug() << "Found config path at: " << q_string_value << "\n";
     #endif
-  // clang-format on
+    // clang-format on
 }
