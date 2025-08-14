@@ -7,11 +7,11 @@
 
 namespace Lazyboard::front_end {
 class MainWindowPreload {
- private:
-  void on_error(WriteConfigStatus status, QMainWindow *main_window);
+   private:
+    void on_error(WriteConfigStatus status, QMainWindow* main_window);
 
- public:
-  void create_default_config(QMainWindow *main_window);
+   public:
+    void create_default_config(QMainWindow* main_window);
 };
 }  // namespace Lazyboard::front_end
 

@@ -28,7 +28,7 @@ void Self::setup_event() {
     QObject::connect(show_about.get(), &QPushButton::clicked, function);
 }
 
-void Self::setup_widget(QGridLayout *grid_layout) {
+void Self::setup_widget(QGridLayout* grid_layout) {
     show_about->setText("About");
     this->setup_event();
     grid_layout->addWidget(show_about.get(), 1, 1);

@@ -28,7 +28,7 @@ Self::MainWindow() {
     grid_layout = layout_w.release();
 }
 
-Self *Self::init_main_window() {
+Self* Self::init_main_window() {
     main_window->setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
     main_window->setWindowTitle("Lazyboard");
     main_window_preload->create_default_config(main_window.get());

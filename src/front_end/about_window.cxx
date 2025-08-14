@@ -44,7 +44,7 @@ void Self::is_open_browser_ok(OpenBrowserStatus status) {
     }
 }
 
-void Self::open_browser_when_clicked(QPushButton *button, const char *url) {
+void Self::open_browser_when_clicked(QPushButton* button, const char* url) {
     const auto open_browser = [this, url] {
         auto status = Lazyboard::ffi::open_browser(url);
         is_open_browser_ok(status);

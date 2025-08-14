@@ -10,12 +10,12 @@ using std::unique_ptr;
 
 namespace Lazyboard::front_end {
 class SettingWidget {
- private:
-  unique_ptr<QPushButton> open_setting;
+   private:
+    unique_ptr<QPushButton> open_setting;
 
- public:
-  SettingWidget();
-  void setup_widget(QGridLayout *grid_layout);
+   public:
+    SettingWidget();
+    void setup_widget(QGridLayout* grid_layout);
 };
 
 }  // namespace Lazyboard::front_end
