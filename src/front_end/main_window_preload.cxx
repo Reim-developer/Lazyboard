@@ -54,14 +54,14 @@ void Self::on_error(WriteConfigStatus status, QMainWindow* main_window) {
 }
 
 void Self::create_default_config(QMainWindow* main_window) {
-    auto local_data_raw = ffi::local_data();
+    auto config_dir_raw = ffi::config_dir();
 
     stringstream string_stream;
-    string_stream << local_data_raw << "/Lazyboard";
+    string_stream << config_dir_raw << "/Lazyboard" << "/settings.toml";
     string config_path = string_stream.str();
 
     auto is_config_exists = ffi::is_exists_path(config_path.data());
-    ffi::free_c_str(local_data_raw);
+    ffi::free_c_str(config_dir_raw);
 
     if (!is_config_exists) {
         // clang-format off
