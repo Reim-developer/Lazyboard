@@ -7,18 +7,32 @@ pub struct AppSettings {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct AppConfig {
-    pub app_settings: AppSettings,
+pub struct AppGuiSettings {
+    pub background_color: String,
+    pub foreground_color: String,
 }
 
-#[must_use]
-pub const fn get_default_config() -> AppConfig {
-    let settings = AppSettings {
-        hide_when_closed: false,
-        notification: false,
-    };
+#[derive(Deserialize, Serialize)]
+pub struct AppConfig {
+    pub app_settings: AppSettings,
+    pub app_gui_settings: AppGuiSettings,
+}
 
-    AppConfig {
-        app_settings: settings,
+impl AppConfig {
+    #[must_use]
+    pub fn default_config() -> Self {
+        let app_settings = AppSettings {
+            hide_when_closed: false,
+            notification: false,
+        };
+        let app_gui_settings = AppGuiSettings {
+            background_color: "#2f3136".to_string(),
+            foreground_color: "#ffffff".to_string(),
+        };
+
+        Self {
+            app_settings,
+            app_gui_settings,
+        }
     }
 }
