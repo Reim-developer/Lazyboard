@@ -57,7 +57,8 @@ void Self::create_default_config(QMainWindow* main_window) {
     auto config_dir_raw = ffi::config_dir();
 
     stringstream string_stream;
-    string_stream << config_dir_raw << "/Lazyboard" << "/settings.toml";
+    string_stream << config_dir_raw << "/Lazyboard"
+                  << "/settings.toml";
     string config_path = string_stream.str();
 
     auto is_config_exists = ffi::is_exists_path(config_path.data());

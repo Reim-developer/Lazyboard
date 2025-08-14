@@ -4,8 +4,8 @@
 
 namespace Lazyboard::ffi {
 
-inline char *config_dir() {
-    char *result = raw_config_dir();
+inline char* config_dir() {
+    char* result = raw_config_dir();
 
     return result;
 }

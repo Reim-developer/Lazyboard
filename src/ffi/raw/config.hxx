@@ -16,7 +16,7 @@ enum WriteConfigStatus : uint8_t {
     GET_DATA_LOCAL_FAILED,
 };
 
-char *raw_config_dir();
+char* raw_config_dir();
 WriteConfigStatus raw_write_default_config();
 
 #ifdef __cplusplus

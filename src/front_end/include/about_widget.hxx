@@ -12,18 +12,18 @@ using std::unique_ptr;
 
 namespace Lazyboard::front_end {
 class AboutWidget {
- public:
-  AboutWidget();
+   public:
+    AboutWidget();
 
- private:
-  unique_ptr<QPushButton> show_about;
-  unique_ptr<AboutWindow> about_window;
+   private:
+    unique_ptr<QPushButton> show_about;
+    unique_ptr<AboutWindow> about_window;
 
- private:
-  void setup_event();
+   private:
+    void setup_event();
 
- public:
-  void setup_widget(QGridLayout *layout);
+   public:
+    void setup_widget(QGridLayout* layout);
 };
 
 }  // namespace Lazyboard::front_end

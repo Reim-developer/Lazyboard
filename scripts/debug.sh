@@ -88,7 +88,7 @@ function linter_check() {
 }
 
 function debug_gdb() {
-    checl "gdb"
+    check "gdb"
     local gdb_cmd="../commands.gdb"
     local not_show_gui=0
 

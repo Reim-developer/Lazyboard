@@ -1,5 +1,5 @@
 use std::{
-    ffi::{CStr, c_char},
+    ffi::{CStr, CString, c_char},
     fs,
 };
 use toml::Value;
@@ -31,12 +31,15 @@ pub enum RawReadAppConfigStatus {
     ConvertToMutFailed,
 }
 
+const FALLBACK_BG_COLOR: &str = "#2f3136";
+const FALLBACK_FG_COLOR: &str = "#ffffff";
+
 /// # Safety
 /// Careful with raw pointers.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn raw_exists_config(
     raw_file_path: *const c_char,
-    raw_cfg_out: *mut RawAppSettings,
+    raw_cfg_out: *mut RawAppConfig,
 ) -> RawReadAppConfigStatus {
     use RawReadAppConfigStatus as Status;
 
@@ -67,12 +70,46 @@ pub unsafe extern "C" fn raw_exists_config(
             .unwrap_or(false),
     };
 
+    let bg_color = toml_value
+        .get("app_gui_settings")
+        .and_then(|value| value.get("background_color"))
+        .and_then(Value::as_str)
+        .unwrap_or(FALLBACK_BG_COLOR);
+
+    let fg_color = toml_value
+        .get("app_gui_settings")
+        .and_then(|value| value.get("foreground_color"))
+        .and_then(Value::as_str)
+        .unwrap_or(FALLBACK_FG_COLOR);
+
+    let Ok(bg_cstr) = CString::new(bg_color) else {
+        return Status::ParseTomlFailed;
+    };
+
+    let Ok(fg_cstr) = CString::new(fg_color) else {
+        return Status::ParseTomlFailed;
+    };
+
     if let Some(config) = unsafe { raw_cfg_out.as_mut() } {
-        config.hide_when_closed = app_settings.hide_when_closed;
-        config.notification = app_settings.notification;
+        config.app_settings.hide_when_closed = app_settings.hide_when_closed;
+        config.app_settings.notification = app_settings.notification;
+        config.app_gui_settings.background_color = bg_cstr.into_raw();
+        config.app_gui_settings.foreground_color = fg_cstr.into_raw();
 
         return RawReadAppConfigStatus::Ok;
     }
 
     RawReadAppConfigStatus::ConvertToMutFailed
+}
+
+#[unsafe(no_mangle)]
+/// # Safety
+/// Be careful with raw pointers & double-free.
+pub unsafe extern "C" fn raw_free_cstr_app_config(config: *mut RawAppConfig) {
+    unsafe {
+        if let Some(cfg) = config.as_mut() {
+            let _ = CString::from_raw(cfg.app_gui_settings.background_color);
+            let _ = CString::from_raw(cfg.app_gui_settings.foreground_color);
+        }
+    }
 }

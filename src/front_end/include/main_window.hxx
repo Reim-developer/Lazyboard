@@ -18,32 +18,32 @@ using std::unique_ptr;
 
 namespace Lazyboard::front_end {
 class MainWindow {
- private:
-  using Self = MainWindow;
-  using Window = QMainWindow;
-  using Layout = QGridLayout;
+   private:
+    using Self = MainWindow;
+    using Window = QMainWindow;
+    using Layout = QGridLayout;
 
- private:
-  static constexpr int MIN_WIDTH = 600;
-  static constexpr int MIN_HEIGHT = 400;
+   private:
+    static constexpr int MIN_WIDTH = 600;
+    static constexpr int MIN_HEIGHT = 400;
 
- public:
-  MainWindow();
+   public:
+    MainWindow();
 
- private:
-  Layout *grid_layout;
-  QWidget *central_widget;
+   private:
+    Layout* grid_layout;
+    QWidget* central_widget;
 
- private:
-  unique_ptr<Window> main_window;
-  unique_ptr<TableWidget> table_widget;
-  unique_ptr<SettingWidget> setting_widget;
-  unique_ptr<AboutWidget> about_widget;
-  unique_ptr<MainWindowPreload> main_window_preload;
+   private:
+    unique_ptr<Window> main_window;
+    unique_ptr<TableWidget> table_widget;
+    unique_ptr<SettingWidget> setting_widget;
+    unique_ptr<AboutWidget> about_widget;
+    unique_ptr<MainWindowPreload> main_window_preload;
 
- public:
-  Self *init_main_window();
-  void front_end_show();
+   public:
+    Self* init_main_window();
+    void front_end_show();
 };
 }  // namespace Lazyboard::front_end
 
