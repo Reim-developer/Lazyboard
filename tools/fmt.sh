@@ -31,7 +31,7 @@ function fmt() {
 		file_base_name=$(basename "$file")
 
 		echo -e "\e[0;32m[+] Format file: $file_base_name\e[0;37m"
-		"$clang_fmt" -style=file "$clang_fmt_cfg" "$file" >/dev/null
+		"$clang_fmt" -i "$file"
 	done 
 }
 
