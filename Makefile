@@ -36,3 +36,6 @@ deploy-linux:
 
 tests-ffi:
 	@$(MAKE) -C tests-ffi tests
+
+fmt:
+	@$(MAKE) -C tools fmt
