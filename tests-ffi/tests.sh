@@ -4,7 +4,7 @@ set -e
 function check() {
 	local required_tool=$1
 
-	if ! command -v >/dev/null 2>&1; then 
+	if ! command -v "$required_tool" >/dev/null 2>&1; then 
 		echo "$required_tool not found in system"
 		exit 
 	fi 
