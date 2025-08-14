@@ -1,0 +1,7 @@
+[app_settings]
+hide_when_closed = false
+notification = true
+
+[app_gui_settings]
+background_color = "#2f3136"
+foreground_color = "#fffff"

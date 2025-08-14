@@ -4,15 +4,15 @@
 
 namespace Lazyboard::ffi {
 
-inline char *local_data() {
-  char *result = raw_local_data();
+inline char *config_dir() {
+    char *result = raw_config_dir();
 
-  return result;
+    return result;
 }
 inline WriteConfigStatus write_default_config() {
-  auto result = raw_write_default_config();
+    auto result = raw_write_default_config();
 
-  return result;
+    return result;
 }
 }  // namespace Lazyboard::ffi
 

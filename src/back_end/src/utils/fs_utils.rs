@@ -1,4 +1,4 @@
-use crate::internal::app_config::get_default_config;
+use crate::internal::app_config::AppConfig;
 use crate::utils::memory::raw_from_ptr;
 use std::ffi::{CString, c_char};
 use std::fs::{self, File};
@@ -64,8 +64,8 @@ pub enum WriteConfigStatus {
 
 #[must_use]
 #[unsafe(no_mangle)]
-pub extern "C" fn raw_local_data() -> *mut c_char {
-    let result = dirs::data_dir()
+pub extern "C" fn raw_config_dir() -> *mut c_char {
+    let result = dirs::config_dir()
         .and_then(|path| path.into_os_string().into_string().ok())
         .and_then(|string| CString::new(string).ok());
 
@@ -81,16 +81,16 @@ pub extern "C" fn raw_local_data() -> *mut c_char {
 pub extern "C" fn raw_write_default_config() -> WriteConfigStatus {
     use WriteConfigStatus as Status;
 
-    let app_config = get_default_config();
+    let app_config = AppConfig::default_config();
 
     let Ok(toml_string) = toml::to_string(&app_config) else {
         return Status::TomlToStringFailed;
     };
 
-    if let Some(data_local) = dirs::data_local_dir() {
-        let data_local_string = data_local.to_string_lossy().to_string();
+    if let Some(data_local) = dirs::config_dir() {
+        let config_dir_string = data_local.to_string_lossy().to_string();
 
-        let config_dir = format!("{data_local_string}/{APP_NAME}");
+        let config_dir = format!("{config_dir_string}/{APP_NAME}");
         if fs::create_dir_all(&config_dir).is_err() {
             return Status::CreateDirFailed;
         }

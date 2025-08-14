@@ -55,8 +55,13 @@ void Self::open_browser_when_clicked(QPushButton *button, const char *url) {
 
 void Self::setup_buttons() {
     github_button->setText("GitHub | Source Code");
+    github_button->setToolTip("Get Lazyboard source code");
+
     github_issue_button->setText("Issue | Bug Report");
+    github_issue_button->setToolTip("Report issue/bug");
+
     github_pull_button->setText("Pull Request | Contribute");
+    github_pull_button->setToolTip("Contribute");
 
     this->open_browser_when_clicked(github_button.get(), GITHUB_URL);
     this->open_browser_when_clicked(github_issue_button.get(),
