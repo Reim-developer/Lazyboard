@@ -43,14 +43,20 @@ function run_ffi_test() {
 	fi
 
 	for file in *.cxx; do
+		build_output=$(basename "$file" ".cxx")
 		file_name=$(basename "$file")
 
-		$clang_cxx "$file" "$static_lib_path" -o "$build_dir/$file_name"
+		$clang_cxx "$file" "$static_lib_path" -o "$build_dir/$build_output"
 		echo
-		echo -e "\e[0;32m[+] Test for $file_name:\e[0;37m"
-		./"$build_dir/$file_name"
+		echo -e -n "\e[0;32m[+] Test for $file_name:\e[0;37m"
 
-		echo -e "\e[0;32m[+] Test for $file_name success with status code: $?\e[0;37m"
+		time_test=$( {
+			time ./"$build_dir/$build_output"
+		} )
+
+		status_code=$?
+		echo -e -n "$time_test"
+		echo -e "\e[0;32m[+] Test for $file_name success with status code: $status_code\e[0;37m"
 
 		for _ in {1..25}; do
 			printf "_"
