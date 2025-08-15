@@ -3,25 +3,25 @@
 #include "../../raw/utils.hxx"
 
 namespace Lazyboard::ffi {
-inline OpenBrowserStatus open_browser(const char* url) {
-    auto result = raw_open_browser(url);
+inline OpenBrowserStatus open_browser(const char *url) {
+	auto result = raw_open_browser(url);
 
-    return result;
+	return result;
 }
 
-inline CreateFileSystemStatus new_folder(const char* path) {
-    auto result = raw_new_folder(path);
+inline CreateFileSystemStatus new_folder(const char *path) {
+	auto result = raw_new_folder(path);
 
-    return result;
+	return result;
 }
 
-inline bool is_exists_path(char* path) {
-    auto result = raw_is_path_exists(path);
+inline bool is_exists_path(char *path) {
+	auto result = raw_is_path_exists(path);
 
-    return result;
+	return result;
 }
 
-inline void free_c_str(char* c_str) { raw_free_c_str(c_str); }
+inline void free_c_str(char *c_str) { raw_free_c_str(c_str); }
 }  // namespace Lazyboard::ffi
 
-#endif  // UTILS_HXX
+#endif	// UTILS_HXX
