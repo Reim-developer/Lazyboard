@@ -11,5 +11,6 @@ pub mod internal {
 }
 
 pub mod raw_config {
+    pub mod constant;
     pub mod raw_toml;
 }
