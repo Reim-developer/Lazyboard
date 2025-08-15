@@ -1,4 +1,9 @@
+---
 Language: Cpp
 BasedOnStyle: Google
 IndentWidth: 4
 ColumnLimit: 80
+UseTab: Always
+TabWidth: 4
+IndentPPDirectives: BeforeHash
+PPIndentWidth: 4

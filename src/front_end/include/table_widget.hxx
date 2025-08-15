@@ -12,18 +12,18 @@ using std::unique_ptr;
 namespace Lazyboard::front_end {
 class TableWidget {
    public:
-    TableWidget() noexcept;
+	TableWidget() noexcept;
 
    private:
-    QStringList header_labels;
-    static constexpr int DEFAULT_MAX_ROW = 10;
+	QStringList header_labels;
+	static constexpr int DEFAULT_MAX_ROW = 10;
 
    private:
-    unique_ptr<QTableWidget> table_widget;
+	unique_ptr<QTableWidget> table_widget;
 
    public:
-    void setup_widget(QGridLayout* grid_layout);
+	void setup_widget(QGridLayout *grid_layout);
 };
 }  // namespace Lazyboard::front_end
 
-#endif  // TABLE_WIDGET_HXX
+#endif	// TABLE_WIDGET_HXX

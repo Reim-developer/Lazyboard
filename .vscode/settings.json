@@ -2,5 +2,9 @@
 	"rust-analyzer.linkedProjects": [
 		"src/back_end/Cargo.toml"
 	],
-	"rust-analyzer.check.command": "clippy"
+	"rust-analyzer.check.command": "clippy",
+	"files.associations": {
+		".clang-format": "yaml",
+		".clang-tidy": "yaml"
+	}
 }

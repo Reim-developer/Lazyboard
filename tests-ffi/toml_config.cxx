@@ -9,62 +9,62 @@ using std::uint8_t;
 using std::unique_ptr;
 
 extern "C" enum RawReadAppConfigStatus : uint8_t {
-    OK,
-    READ_FILE_FAILED,
-    UTF_8_ERROR,
-    PARSE_TOML_FAILED,
-    CONVERT_TO_MUT_FAILED
+	OK,
+	READ_FILE_FAILED,
+	UTF_8_ERROR,
+	PARSE_TOML_FAILED,
+	CONVERT_TO_MUT_FAILED
 };
 
 extern "C" typedef struct {
-    bool hide_when_closed;
-    bool notification;
+	bool hide_when_closed;
+	bool notification;
 } RawAppSettings;
 
 extern "C" typedef struct {
-    char* background_color;
-    char* foreground_color;
+	char *background_color;
+	char *foreground_color;
 } RawAppGuiSettings;
 
 extern "C" typedef struct {
-    RawAppSettings raw_app_settings;
-    RawAppGuiSettings raw_app_gui_settings;
+	RawAppSettings raw_app_settings;
+	RawAppGuiSettings raw_app_gui_settings;
 } RawAppConfig;
 
-extern "C" RawReadAppConfigStatus raw_exists_config(const char* file_path,
-                                                    RawAppConfig* config_out);
+extern "C" RawReadAppConfigStatus raw_exists_config(const char *file_path,
+													RawAppConfig *config_out);
 
-extern "C" void raw_free_cstr_app_config(RawAppConfig* config);
+extern "C" void raw_free_cstr_app_config(RawAppConfig *config);
 
 int main() {
-    using Status = RawReadAppConfigStatus;
+	using Status = RawReadAppConfigStatus;
 
-    const char* path = "demo.toml";
-    unique_ptr<RawAppConfig> raw = make_unique<RawAppConfig>();
+	const char *path = "demo.toml";
+	unique_ptr<RawAppConfig> raw = make_unique<RawAppConfig>();
 
-    auto result = raw_exists_config(path, raw.get());
-    auto bg_color = string(raw->raw_app_gui_settings.background_color);
-    auto fg_color = string(raw->raw_app_gui_settings.foreground_color);
+	auto result = raw_exists_config(path, raw.get());
+	auto bg_color = string(raw->raw_app_gui_settings.background_color);
+	auto fg_color = string(raw->raw_app_gui_settings.foreground_color);
 
-    raw_free_cstr_app_config(raw.get());
+	raw_free_cstr_app_config(raw.get());
 
-    assert(result != Status::UTF_8_ERROR);
-    assert(result != Status::PARSE_TOML_FAILED);
-    assert(result != Status::READ_FILE_FAILED);
-    assert(result != Status::CONVERT_TO_MUT_FAILED);
-    assert(result == Status::OK);
+	assert(result != Status::UTF_8_ERROR);
+	assert(result != Status::PARSE_TOML_FAILED);
+	assert(result != Status::READ_FILE_FAILED);
+	assert(result != Status::CONVERT_TO_MUT_FAILED);
+	assert(result == Status::OK);
 
-    assert(raw->raw_app_settings.hide_when_closed != true);
-    assert(raw->raw_app_settings.hide_when_closed == false);
-    assert(raw->raw_app_settings.notification != false);
-    assert(raw->raw_app_settings.notification == true);
+	assert(raw->raw_app_settings.hide_when_closed != true);
+	assert(raw->raw_app_settings.hide_when_closed == false);
+	assert(raw->raw_app_settings.notification != false);
+	assert(raw->raw_app_settings.notification == true);
 
-    assert(!bg_color.empty());
-    assert(!fg_color.empty());
-    assert(bg_color != "717841xx18");
-    assert(fg_color != "81388181");
-    assert(bg_color == "#2f3136");
-    assert(fg_color == "#ffffff");
+	assert(!bg_color.empty());
+	assert(!fg_color.empty());
+	assert(bg_color != "717841xx18");
+	assert(fg_color != "81388181");
+	assert(bg_color == "#2f3136");
+	assert(fg_color == "#ffffff");
 
-    return 0;
+	return 0;
 }
