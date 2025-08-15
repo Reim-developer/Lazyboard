@@ -14,7 +14,12 @@ function check() {
 
 function fmt() {
 	local clang_fmt="clang-format"
+	local cargo="cargo"
+	local backend_dir="src/back_end"
+
 	check "$clang_fmt"
+	check "$cargo"
+
 	local tools_dir="tools"
 	local clang_fmt_cfg=".clang-format"
 
@@ -32,7 +37,11 @@ function fmt() {
 
 		echo -e "\e[0;32m[+] Format file: $file_base_name\e[0;37m"
 		"$clang_fmt" -i "$file"
-	done 
+	done
+
+	cd "$backend_dir" || exit 1
+	$cargo fmt
+	echo -e "\e[0;32m[+] Format Rust backend source code sucessfully\e[0;37m"
 }
 
 function main() {
