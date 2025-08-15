@@ -163,7 +163,7 @@ void Self::set_application_theme(QMainWindow *main_window,
 
 	palette.setColor(QPalette::Window, bg_hex);
 	palette.setColor(QPalette::Base, bg_hex);
-	palette.setColor(QPalette::WindowText, fg_hex);
+	palette.setColor(QPalette::Text, fg_hex);
 
 	main_window->setPalette(palette);
 	main_window->setAutoFillBackground(true);
