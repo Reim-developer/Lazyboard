@@ -10,6 +10,8 @@ pub struct AppSettings {
 pub struct AppGuiSettings {
     pub background_color: String,
     pub foreground_color: String,
+    pub background_button_color: String,
+    pub foreground_button_color: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -28,6 +30,8 @@ impl AppConfig {
         let app_gui_settings = AppGuiSettings {
             background_color: "#2f3136".to_string(),
             foreground_color: "#ffffff".to_string(),
+            background_button_color: "#2f3136".to_string(),
+            foreground_button_color: "#ffffff".to_string(),
         };
 
         Self {
