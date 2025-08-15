@@ -87,6 +87,12 @@ void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
 			QMessageBox::critical(main_window, "Error",
 								  "UTF-8 error in configuration file");
 			break;
+
+		case Status::CONVERT_TO_C_STR_FAILED:
+			QMessageBox::critical(
+				main_window, "Error",
+				"Could not convert value configuration to C string");
+			break;
 	}
 }
 
@@ -128,21 +134,32 @@ void Self::set_application_theme(QMainWindow *main_window,
 								 RawAppConfig *app_config) {
 	auto bg_color = string(app_config->raw_app_gui_settings.background_color);
 	auto fg_color = string(app_config->raw_app_gui_settings.foreground_color);
+	auto bg_button_color =
+		string(app_config->raw_app_gui_settings.background_button_color);
+	auto fg_button_color =
+		string(app_config->raw_app_gui_settings.foreground_button_color);
 
 	auto bg_hex = QColor(QString::fromStdString(bg_color));
 	auto fg_hex = QColor(QString::fromStdString(fg_color));
+	auto bg_btn_hex = QColor(QString::fromStdString(bg_button_color));
+	auto fg_btn_hex = QColor(QString::fromStdString(fg_button_color));
 	free_cstr_app_config(raw_app_config.get());
 
-	if (!bg_hex.isValid() || !fg_hex.isValid()) {
+	if (!bg_hex.isValid() || !fg_hex.isValid() || !bg_btn_hex.isValid() ||
+		!fg_btn_hex.isValid()) {
 		stringstream string_stream;
 
 		string_stream << "Invalid HEX color, please check your configuration\n"
 					  << "Your 'background_color' setting: " << bg_color << "\n"
-					  << "Your 'foregounrd_color: setting: " << fg_color
-					  << "\n";
-		auto error_message = string_stream.str();
+					  << "Your 'foreground_color' setting: " << fg_color << "\n"
+					  << "Your 'background_button_color' settings: "
+					  << bg_button_color << "\n"
+					  << "Your 'foreground_button_color' settings: "
+					  << fg_button_color << "\n";
 
+		auto error_message = string_stream.str();
 		QMessageBox::critical(main_window, "Error", error_message.c_str());
+
 		// clang-format off
 		#if defined (LAZY_DEBUG)
 			stringstream string_stream_debug;
@@ -150,7 +167,8 @@ void Self::set_application_theme(QMainWindow *main_window,
 				<< "[DEBUG] Found error when load TOML configuration:\n"
 				<< "[DEBUG] Error Type: 'Invalid HEX Color'\n"
 				<< "[DEBUG] 'bg_color' setting: " << bg_color << "\n"
-				<< "[DEBUG] 'fg_color' setting: " << fg_color << "\n";
+				<< "[DEBUG] 'fg_color' setting: " << fg_color << "\n"
+				<< "[DEBUG] 'bg_button_color' setting: " << bg_button_color << "\n";
 
 			cout << string_stream_debug.str().c_str();
 
@@ -165,8 +183,19 @@ void Self::set_application_theme(QMainWindow *main_window,
 	palette.setColor(QPalette::Base, bg_hex);
 	palette.setColor(QPalette::Text, fg_hex);
 
+	// clang-format off
+	auto stylesheet = QString(
+	R"""(
+		QPushButton {
+			background-color: %1;
+			qproperty-autoFillBackground: true;
+			color: %2;
+		}
+	)""").arg(bg_btn_hex.name(), fg_btn_hex.name());	// clang-format on
+
 	main_window->setPalette(palette);
 	main_window->setAutoFillBackground(true);
+	main_window->setStyleSheet(stylesheet);
 }
 
 void Self::read_if_exists_config(QMainWindow *main_window) {
@@ -182,6 +211,12 @@ void Self::read_if_exists_config(QMainWindow *main_window) {
 			<< raw_app_config->raw_app_gui_settings.background_color << "\n";
 
 		cout << "[DEBUG] " << "Found config setting 'foreground_color': "
+			<< raw_app_config->raw_app_gui_settings.foreground_color << "\n";
+		
+		cout << "[DEBUG] " << "Found config setting 'background_button_color': "
+			<< raw_app_config->raw_app_gui_settings.background_button_color << "\n";
+		
+		cout << "[DEBUG] " << "Found config setting 'foreground_button_color': "
 			<< raw_app_config->raw_app_gui_settings.foreground_color << "\n";
 	#endif	// clang-format on
 
