@@ -14,7 +14,9 @@ pub enum OpenBrowserStatus {
 /// # Safety
 /// Be careful with raw pointers.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_open_browser(url: *const c_char) -> OpenBrowserStatus {
+pub unsafe extern "C" fn raw_open_browser(
+    url: *const c_char,
+) -> OpenBrowserStatus {
     unsafe {
         use OpenBrowserStatus as Status;
 

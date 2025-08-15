@@ -1,6 +1,8 @@
 use std::ffi::{CStr, CString, c_char};
 
-pub(crate) const unsafe fn raw_from_ptr(url: *const c_char) -> (&'static str, bool) {
+pub(crate) const unsafe fn raw_from_ptr(
+    url: *const c_char,
+) -> (&'static str, bool) {
     unsafe {
         let Ok(c_str) = CStr::from_ptr(url).to_str() else {
             return ("", false);

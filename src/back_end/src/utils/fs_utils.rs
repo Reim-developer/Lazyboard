@@ -19,7 +19,9 @@ pub enum CreateFileSystemStatus {
 /// Be careful with raw pointers.
 #[must_use]
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_new_folder(folder_path: *const c_char) -> CreateFileSystemStatus {
+pub unsafe extern "C" fn raw_new_folder(
+    folder_path: *const c_char,
+) -> CreateFileSystemStatus {
     unsafe {
         use CreateFileSystemStatus as Status;
         let (c_str, is_ok) = raw_from_ptr(folder_path);
