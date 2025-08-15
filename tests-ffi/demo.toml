@@ -5,3 +5,5 @@ notification = true
 [app_gui_settings]
 background_color = "#2f3136"
 foreground_color = "#ffffff"
+background_button_color = "#2f3136"
+foreground_button_color = "#ffffff"

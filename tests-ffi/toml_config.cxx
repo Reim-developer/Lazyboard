@@ -13,7 +13,8 @@ extern "C" enum RawReadAppConfigStatus : uint8_t {
 	READ_FILE_FAILED,
 	UTF_8_ERROR,
 	PARSE_TOML_FAILED,
-	CONVERT_TO_MUT_FAILED
+	CONVERT_TO_MUT_FAILED,
+	CONVERT_TO_C_STR_FAILED,
 };
 
 extern "C" typedef struct {
@@ -24,6 +25,8 @@ extern "C" typedef struct {
 extern "C" typedef struct {
 	char *background_color;
 	char *foreground_color;
+	char *background_button_color;
+	char *foreground_button_color;
 } RawAppGuiSettings;
 
 extern "C" typedef struct {
@@ -45,6 +48,10 @@ int main() {
 	auto result = raw_exists_config(path, raw.get());
 	auto bg_color = string(raw->raw_app_gui_settings.background_color);
 	auto fg_color = string(raw->raw_app_gui_settings.foreground_color);
+	auto bg_btn_color =
+		string(raw->raw_app_gui_settings.background_button_color);
+	auto fg_btn_color =
+		string(raw->raw_app_gui_settings.foreground_button_color);
 
 	raw_free_cstr_app_config(raw.get());
 
@@ -52,6 +59,7 @@ int main() {
 	assert(result != Status::PARSE_TOML_FAILED);
 	assert(result != Status::READ_FILE_FAILED);
 	assert(result != Status::CONVERT_TO_MUT_FAILED);
+	assert(result != Status::CONVERT_TO_C_STR_FAILED);
 	assert(result == Status::OK);
 
 	assert(raw->raw_app_settings.hide_when_closed != true);
@@ -63,6 +71,10 @@ int main() {
 	assert(!fg_color.empty());
 	assert(bg_color != "717841xx18");
 	assert(fg_color != "81388181");
+	assert(bg_btn_color != "31831d$");
+	assert(bg_btn_color == "#2f3136");
+	assert(fg_btn_color != "#&$!&!&");
+	assert(fg_btn_color == "#ffffff");
 	assert(bg_color == "#2f3136");
 	assert(fg_color == "#ffffff");
 

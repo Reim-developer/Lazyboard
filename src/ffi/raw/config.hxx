@@ -28,6 +28,7 @@ enum RawReadAppConfigStatus : uint8_t {
 	UTF_8_ERROR,
 	PARSE_TOML_FAILED,
 	CONVERT_TO_MUT_FAILED,
+	CONVERT_TO_C_STR_FAILED,
 };
 
 typedef struct {
@@ -38,6 +39,8 @@ typedef struct {
 typedef struct {
 	char *background_color;
 	char *foreground_color;
+	char *background_button_color;
+	char *foreground_button_color;
 } RawAppGuiSettings;
 
 typedef struct {
