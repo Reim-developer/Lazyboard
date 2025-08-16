@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED 99)
 
 set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Gui Core)
+find_package(SQLite3 REQUIRED)
 
 set(RUST_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/back_end)
 
@@ -35,6 +36,7 @@ target_link_libraries(
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
+    PRIVATE SQLite::SQLite3
     PRIVATE ${RUST_BACKEND_LIB}
 )
 

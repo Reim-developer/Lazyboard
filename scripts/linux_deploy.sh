@@ -8,7 +8,7 @@ nproc=$(nproc)
 install_dependency() {
     sudo apt-get update
     sudo apt-get install -y git cmake \
-    clang 
+    clang sqlite3
 }
 
 function check() {
