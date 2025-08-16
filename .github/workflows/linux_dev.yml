@@ -32,7 +32,8 @@ jobs:
                sudo apt-get update
                sudo apt-get install -y \
                git cmake make ccache \
-               qt6-base-dev clang
+               qt6-base-dev clang \
+               libqt6core6-dev
 
 
         - name: Add Rust components
