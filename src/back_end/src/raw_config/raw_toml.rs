@@ -1,9 +1,10 @@
 use crate::raw_config::constant::{
     APP_GUI_SETTINGS, APP_SETTINGS, BACKGROUND_COLOR, BACKGROUND_COLOR_BUTTON,
-    FALLBACK_BG_BUTTON_COLOR, FALLBACK_BG_COLOR, FALLBACK_FG_BUTTON_COLOR,
-    FALLBACK_FG_COLOR, FOREGROUND_COLOR, FOREGROUND_COLOR_BUTTON,
-    HIDE_WHEN_CLOSED, HIDE_WHEN_CLOSED_FALLBACK, NOTIFICATION,
-    NOTIFICATION_FALLBACK,
+    BACKGROUND_COLOR_TABLE_HEADER, FALLBACK_BG_BUTTON_COLOR, FALLBACK_BG_COLOR,
+    FALLBACK_BG_TABLE_HEADER_COLOR, FALLBACK_FG_BUTTON_COLOR,
+    FALLBACK_FG_COLOR, FALLBACK_FG_TABLE_HEADER_COLOR, FOREGROUND_COLOR,
+    FOREGROUND_COLOR_BUTTON, FOREGROUND_COLOR_TABLE_HEADER, HIDE_WHEN_CLOSED,
+    HIDE_WHEN_CLOSED_FALLBACK, NOTIFICATION, NOTIFICATION_FALLBACK,
 };
 use std::{
     ffi::{CStr, CString, c_char},
@@ -23,6 +24,8 @@ pub struct RawAppGuiSettings {
     pub foreground_color: *mut c_char,
     pub background_button_color: *mut c_char,
     pub foreground_button_color: *mut c_char,
+    pub background_header_table_color: *mut c_char,
+    pub foreground_header_table_color: *mut c_char,
 }
 
 #[repr(C)]
@@ -109,6 +112,16 @@ pub unsafe extern "C" fn raw_exists_config(
         FOREGROUND_COLOR_BUTTON,
         FALLBACK_FG_BUTTON_COLOR,
     );
+    let bg_table_header_color = color_by_settings(
+        &toml_value,
+        BACKGROUND_COLOR_TABLE_HEADER,
+        FALLBACK_BG_TABLE_HEADER_COLOR,
+    );
+    let fg_table_header_color = color_by_settings(
+        &toml_value,
+        FOREGROUND_COLOR_TABLE_HEADER,
+        FALLBACK_FG_TABLE_HEADER_COLOR,
+    );
 
     let Ok(bg_cstr) = CString::new(bg_color) else {
         return Status::ConvertToCStringFailed;
@@ -126,6 +139,14 @@ pub unsafe extern "C" fn raw_exists_config(
         return Status::ConvertToCStringFailed;
     };
 
+    let Ok(bg_table_header_cstr) = CString::new(bg_table_header_color) else {
+        return Status::ConvertToCStringFailed;
+    };
+
+    let Ok(fg_table_header_cstr) = CString::new(fg_table_header_color) else {
+        return Status::ConvertToCStringFailed;
+    };
+
     if let Some(config) = unsafe { raw_cfg_out.as_mut() } {
         config.app_settings.hide_when_closed = app_settings.hide_when_closed;
         config.app_settings.notification = app_settings.notification;
@@ -135,6 +156,10 @@ pub unsafe extern "C" fn raw_exists_config(
             bg_btn_cstr.into_raw();
         config.app_gui_settings.foreground_button_color =
             fg_btn_cstr.into_raw();
+        config.app_gui_settings.background_header_table_color =
+            bg_table_header_cstr.into_raw();
+        config.app_gui_settings.foreground_header_table_color =
+            fg_table_header_cstr.into_raw();
 
         return RawReadAppConfigStatus::Ok;
     }
@@ -154,6 +179,12 @@ pub unsafe extern "C" fn raw_free_cstr_app_config(config: *mut RawAppConfig) {
                 CString::from_raw(cfg.app_gui_settings.background_button_color);
             let _ =
                 CString::from_raw(cfg.app_gui_settings.foreground_button_color);
+            let _ = CString::from_raw(
+                cfg.app_gui_settings.background_header_table_color,
+            );
+            let _ = CString::from_raw(
+                cfg.app_gui_settings.foreground_header_table_color,
+            );
         }
     }
 }

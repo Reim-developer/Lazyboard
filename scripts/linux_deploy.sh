@@ -8,7 +8,7 @@ nproc=$(nproc)
 install_dependency() {
     sudo apt-get update
     sudo apt-get install -y git cmake \
-    qt6-base-dev clang 
+    clang 
 }
 
 function check() {

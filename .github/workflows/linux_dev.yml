@@ -26,14 +26,16 @@ jobs:
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
           
-        - name: Install C++ libraries
+        - name: Install requirements
           shell: bash
           run: |
                sudo apt-get update
                sudo apt-get install -y \
                git cmake make ccache \
-               qt6-base-dev clang
+               clang 
 
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v4
 
         - name: Add Rust components
           shell: bash

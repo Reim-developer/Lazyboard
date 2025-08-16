@@ -41,6 +41,8 @@ typedef struct {
 	char *foreground_color;
 	char *background_button_color;
 	char *foreground_button_color;
+	char *background_table_header_color;
+	char *foreground_table_header_color;
 } RawAppGuiSettings;
 
 typedef struct {
