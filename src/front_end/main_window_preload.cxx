@@ -16,10 +16,10 @@
 
 #if defined(LAZY_DEBUG)
 	#include <iostream>
-
-	#include "include/error_debug.hxx"
 using std::cout;
 #endif
+
+#include "../front_end_utils/include/error_types.hxx"
 
 using Lazyboard::front_end::MainWindowPreload;
 using Self = MainWindowPreload;
@@ -28,6 +28,7 @@ using std::make_unique;
 using std::string;
 using std::stringstream;
 using namespace Lazyboard::ffi;
+using Lazyboard::front_end_utils::error_types_map;
 
 void Self::on_gen_default_cfg_error(WriteConfigStatus status,
 									QMainWindow *main_window) {
@@ -41,7 +42,7 @@ void Self::on_gen_default_cfg_error(WriteConfigStatus status,
 
 			break;
 
-		case WriteConfigStatus::GET_DATA_LOCAL_FAILED:
+		case WriteConfigStatus::GET_CONFIG_DIR_FAILED:
 			QMessageBox::critical(main_window, "Error",
 								  "Could not get application local data");
 			break;

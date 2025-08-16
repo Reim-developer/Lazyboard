@@ -11,12 +11,13 @@
 
 #if defined(LAZY_DEBUG)
 	#include <iostream>
-
-	#include "include/error_debug.hxx"
 using std::cout;
 #endif
 
+#include "../front_end_utils/include/error_types.hxx"
 using namespace Lazyboard::ffi;
+using Lazyboard::front_end_utils::error_to_string;
+using Lazyboard::front_end_utils::ErrorTypes;
 
 using std::make_unique;
 using std::string;
@@ -52,18 +53,21 @@ void Self::set_main_window_theme(QMainWindow *main_window,
 	if (!bg_hex.isValid() || !fg_hex.isValid() || !bg_btn_hex.isValid() ||
 		!fg_btn_hex.isValid() || !bg_header_table_hex.isValid() ||
 		!fg_header_table_hex.isValid()) {
-		QMessageBox::critical(
-			main_window, "Error",
-			"Invalid HEX color, please check your configuration");
+		// clang-format off
+		const auto error_name = error_to_string(ErrorTypes::INVALID_HEX_COLOR);
+		const auto error_message = QString(R"(
+Invalid HEX color, please check your TOML configuration
+Error name: %1
+		)").arg(error_name);  // clang-format on
+
+		QMessageBox::critical(main_window, "Error", error_message);
 
 		// clang-format off
 		#if defined (LAZY_DEBUG)
-			const auto &type_err = error_type().at(ErrorDebugType::INVALID_HEX_COLOR);
-
 			stringstream string_stream_debug;
 			string_stream_debug  
 				<< "[DEBUG] Found error when load TOML configuration:\n"
-				<< "[DEBUG] Error Type: " << type_err << "\n"
+				<< "[DEBUG] Error Type: " << error_name << "\n"
 				<< "[DEBUG] " << bg_color << "\n"
 				<< "[DEBUG] " << fg_color << "\n"
 				<< "[DEBUG] " << bg_button_color << "\n"
