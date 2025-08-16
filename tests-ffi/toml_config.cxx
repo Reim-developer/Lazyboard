@@ -27,6 +27,8 @@ extern "C" typedef struct {
 	char *foreground_color;
 	char *background_button_color;
 	char *foreground_button_color;
+	char *background_table_header_color;
+	char *foreground_table_header_color;
 } RawAppGuiSettings;
 
 extern "C" typedef struct {
@@ -52,6 +54,10 @@ int main() {
 		string(raw->raw_app_gui_settings.background_button_color);
 	auto fg_btn_color =
 		string(raw->raw_app_gui_settings.foreground_button_color);
+	auto bg_header_table_color =
+		string(raw->raw_app_gui_settings.background_table_header_color);
+	auto fg_header_table_color =
+		string(raw->raw_app_gui_settings.foreground_table_header_color);
 
 	raw_free_cstr_app_config(raw.get());
 
@@ -69,10 +75,21 @@ int main() {
 
 	assert(!bg_color.empty());
 	assert(!fg_color.empty());
+	assert(!bg_btn_color.empty());
+	assert(!fg_btn_color.empty());
+	assert(!bg_header_table_color.empty());
+	assert(!fg_header_table_color.empty());
+
+	assert(fg_header_table_color != "&!$!$?");
+	assert(bg_header_table_color != "$!&#&!");
+	assert(fg_header_table_color == "#ffffff");
+	assert(bg_header_table_color == "#2f3136");
+
 	assert(bg_color != "717841xx18");
 	assert(fg_color != "81388181");
 	assert(bg_btn_color != "31831d$");
 	assert(bg_btn_color == "#2f3136");
+
 	assert(fg_btn_color != "#&$!&!&");
 	assert(fg_btn_color == "#ffffff");
 	assert(bg_color == "#2f3136");
