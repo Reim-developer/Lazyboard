@@ -7,6 +7,7 @@
 #include <string>
 
 #include "../../ffi/raw/config.hxx"
+#include "theme_manager.hxx"
 
 using std::string;
 using std::unique_ptr;
@@ -15,6 +16,7 @@ namespace Lazyboard::front_end {
 class MainWindowPreload {
    private:
 	unique_ptr<RawAppConfig> raw_app_config;
+	unique_ptr<ThemeManager> theme_manager;
 
    private:
 	void on_gen_default_cfg_error(WriteConfigStatus status,
@@ -24,8 +26,6 @@ class MainWindowPreload {
 								  QMainWindow *main_window);
 
 	string application_config();
-	void set_application_theme(QMainWindow *main_window,
-							   RawAppConfig *app_config);
 
    public:
 	void create_default_config(QMainWindow *main_window);
