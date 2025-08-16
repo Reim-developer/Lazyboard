@@ -36,8 +36,6 @@ jobs:
 
         - name: Install Qt
           uses: jurplel/install-qt-action@v4
-          with:
-            os: "linux"
 
         - name: Add Rust components
           shell: bash
