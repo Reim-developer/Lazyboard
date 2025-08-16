@@ -6,9 +6,9 @@
 #include <qlist.h>
 #include <qnamespace.h>
 #include <qtmetamacros.h>
-#include <qtypes.h>
 #include <qvariant.h>
 
+#include <QtTypes>
 #include <algorithm>
 #include <climits>
 #include <cstdint>
