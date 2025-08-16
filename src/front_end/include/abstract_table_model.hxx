@@ -6,7 +6,6 @@
 #include <qlist.h>
 #include <qnamespace.h>
 #include <qtmetamacros.h>
-#include <qtpreprocessorsupport.h>
 #include <qtypes.h>
 #include <qvariant.h>
 
@@ -25,6 +24,11 @@ typedef struct TableItem {
 	bool is_pinned = false;
 } TableItem;
 
+template <typename T>
+constexpr void unused(T &t) {
+	(void)t;
+}
+
 class AbstractTableModel : public QAbstractTableModel {
 	Q_OBJECT
 
@@ -39,12 +43,12 @@ class AbstractTableModel : public QAbstractTableModel {
 	};	// clang-format on
 
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override {
-		Q_UNUSED(parent);
+		unused(parent);
 		return static_cast<int>(min(table_item.size(), qsizetype(INT_MAX)));
 	}
 
 	int columnCount(const QModelIndex &parent = QModelIndex()) const override {
-		Q_UNUSED(parent);
+		unused(parent);
 		return COLUMN_COUNT;
 	}
 
