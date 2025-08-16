@@ -2,14 +2,11 @@
 #define ERROR_TYPES_HXX
 
 #include <array>
-#include <initializer_list>
-#include <utility>
-#if !defined(LAZY_DEBUG)
-	#error "Could not include 'error_debug' if 'LAZY_DEBUG' is disabled.
-#endif
 #include <cstdint>
+#include <initializer_list>
 #include <map>
 #include <string_view>
+#include <utility>
 
 namespace Lazyboard::front_end_utils {
 
