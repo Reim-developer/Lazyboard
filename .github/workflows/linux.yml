@@ -25,6 +25,9 @@ jobs:
             chmod +x ${{ github.workspace }}/${{ env.CI_SCRIPT }}
             ./${{ env.CI_SCRIPT }} install-dependency
 
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v4
+
         - name: Install Rust
           shell: bash
           run: |
