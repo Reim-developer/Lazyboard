@@ -10,7 +10,14 @@ pub enum InitDatabaseStatus {
 }
 
 const INIT_QUERY: &str = r"--sql
-	CREATE TABLE IF NOT EXISTS clipboard_cache
+	CREATE TABLE IF NOT EXISTS clipboard_cache (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		content_hash TEXT NOT NULL UNIQUE,
+		time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		content TEXT NOT NULL,
+		type TEXT NOT NULL,
+		is_pinned BOOLEAN NOT NULL DEFAULT FALSE
+	);
 ";
 
 #[unsafe(no_mangle)]
