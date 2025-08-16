@@ -32,6 +32,7 @@ function run_ffi_test() {
 	local clang_cxx="clang++"
 	local static_lib_path="../src/back_end/target/debug/libback_end.a"
 	local build_dir="build"
+	local sqlite_lib="sqlite3"
 	check "$clang_cxx"
 
 	echo -e "\e[0;32m[+] Build backend:\e[0;37m"
@@ -46,7 +47,7 @@ function run_ffi_test() {
 		build_output=$(basename "$file" ".cxx")
 		file_name=$(basename "$file")
 
-		$clang_cxx "$file" "$static_lib_path" -o "$build_dir/$build_output"
+		$clang_cxx "$file" -l"$sqlite_lib" "$static_lib_path" -o "$build_dir/$build_output"
 		echo
 		echo -e -n "\e[0;32m[+] Test for $file_name:\e[0;37m"
 
