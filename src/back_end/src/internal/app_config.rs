@@ -12,6 +12,8 @@ pub struct AppGuiSettings {
     pub foreground_color: String,
     pub background_button_color: String,
     pub foreground_button_color: String,
+    pub background_table_header_color: String,
+    pub foreground_table_header_color: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -32,6 +34,8 @@ impl AppConfig {
             foreground_color: "#ffffff".to_string(),
             background_button_color: "#2f3136".to_string(),
             foreground_button_color: "#ffffff".to_string(),
+            background_table_header_color: "#2f3136".to_string(),
+            foreground_table_header_color: "#ffffff".to_string(),
         };
 
         Self {
