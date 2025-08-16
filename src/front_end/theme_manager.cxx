@@ -58,7 +58,7 @@ void Self::set_main_window_theme(QMainWindow *main_window,
 		const auto error_message = QString(R"(
 Invalid HEX color, please check your TOML configuration
 Error name: %1
-		)").arg(error_name);  // clang-format on
+		)").arg(error_name.data());	 // clang-format on
 
 		QMessageBox::critical(main_window, "Error", error_message);
 
