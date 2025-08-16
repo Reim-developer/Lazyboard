@@ -14,7 +14,7 @@ enum WriteConfigStatus : uint8_t {
 	CREATE_DIR_FAILED,
 	CREATE_FILE_FAILED,
 	WRITE_FILE_FAILED,
-	GET_DATA_LOCAL_FAILED,
+	GET_CONFIG_DIR_FAILED,
 };
 
 char *raw_config_dir();
