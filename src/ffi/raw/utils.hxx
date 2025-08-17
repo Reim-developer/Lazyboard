@@ -23,6 +23,7 @@ enum class CreateFileSystemStatus : uint8_t {
 
 OpenBrowserStatus raw_open_browser(const char *url);
 CreateFileSystemStatus raw_new_folder(const char *path);
+char *raw_cache_dir();
 bool raw_is_path_exists(const char *path);
 void raw_free_c_str(char *c_str);
 
