@@ -20,6 +20,7 @@ using std::cout;
 #endif
 
 #include "../front_end_utils/include/error_types.hxx"
+#include "../front_end_utils/include/utils.hxx"
 
 using Lazyboard::front_end::MainWindowPreload;
 using Self = MainWindowPreload;
@@ -28,38 +29,36 @@ using std::make_unique;
 using std::string;
 using std::stringstream;
 using namespace Lazyboard::ffi;
-using Lazyboard::front_end_utils::error_types_map;
+using Lazyboard::front_end_utils::error_dialog_show;
+using Lazyboard::front_end_utils::ErrorTypes;
 
 void Self::on_gen_default_cfg_error(WriteConfigStatus status,
 									QMainWindow *main_window) {
 	switch (status) {
+		using E = ErrorTypes;
+
 		case WriteConfigStatus::OK:
 			break;
 
 		case WriteConfigStatus::CREATE_DIR_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not create config directory");
+			error_dialog_show(main_window, E::CREATE_DIR_FAILED);
 
 			break;
 
 		case WriteConfigStatus::GET_CONFIG_DIR_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not get application local data");
+			error_dialog_show(main_window, E::GET_CONFIG_DIR_FAILED);
 			break;
 
 		case WriteConfigStatus::CREATE_FILE_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not create configuration file");
+			error_dialog_show(main_window, E::CREATE_FILE_FAILED);
 			break;
 
 		case WriteConfigStatus::WRITE_FILE_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not write configuration");
+			error_dialog_show(main_window, E::WRITE_FILE_FAILED);
 			break;
 
 		case WriteConfigStatus::TOML_TO_STRING_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not convert TOML data to string");
+			error_dialog_show(main_window, E::TOML_TO_STRING_FAILED);
 			break;
 	}
 }
@@ -67,35 +66,30 @@ void Self::on_gen_default_cfg_error(WriteConfigStatus status,
 void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
 									QMainWindow *main_window) {
 	using Status = RawReadAppConfigStatus;
+	using E = ErrorTypes;
 
 	switch (status) {
 		case Status::READ_OK:
 			break;
 
 		case Status::CONVERT_TO_MUT_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not convert to *mut c_char");
+			error_dialog_show(main_window, E::CONVERT_TO_MUT_FAILED);
 			break;
 
 		case Status::PARSE_TOML_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Parse TOML configuration failed");
+			error_dialog_show(main_window, E::PARSE_TOML_FAILED);
 			break;
 
 		case Status::READ_FILE_FAILED:
-			QMessageBox::critical(main_window, "Error",
-								  "Could not read configuration file");
+			error_dialog_show(main_window, E::READ_FILE_FAILED);
 			break;
 
 		case Status::UTF_8_ERROR:
-			QMessageBox::critical(main_window, "Error",
-								  "UTF-8 error in configuration file");
+			error_dialog_show(main_window, E::UTF_8_ERROR);
 			break;
 
 		case Status::CONVERT_TO_C_STR_FAILED:
-			QMessageBox::critical(
-				main_window, "Error",
-				"Could not convert value configuration to C string");
+			error_dialog_show(main_window, E::CONVERT_TO_C_STR_FAILED);
 			break;
 	}
 }
@@ -122,9 +116,8 @@ void Self::create_default_config(QMainWindow *main_window) {
 
 		// clang-format off
 		#if defined(LAZY_DEBUG)
-				cout << "[DEBUG] " << "Config path not found, generate at: " << config_path
-					<< "\n";
-		#endif
+			cout << "[DEBUG] " << "Config path not found, generate at: " << config_path << "\n";
+		#endif 
 
 		return;
 	}
@@ -137,8 +130,8 @@ void Self::create_default_config(QMainWindow *main_window) {
 void Self::read_if_exists_config(QMainWindow *main_window) {
 	raw_app_config = make_unique<RawAppConfig>();
 	theme_manager = make_unique<ThemeManager>();
-	auto config_path = this->application_config();
 
+	auto config_path = this->application_config();
 	auto status = exists_config(config_path.data(), raw_app_config.get());
 	this->on_read_exists_cfg_error(status, main_window);
 
