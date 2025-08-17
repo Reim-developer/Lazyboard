@@ -15,7 +15,7 @@ class SQLiteManager {
 	void on_create_clipboard_cache_error(const InitDataResult &status) noexcept;
 
    public:
-	void create_clipboard_cache(QMainWindow *main_window) noexcept;
+	void create_clipboard_cache(QMainWindow *main_window);
 
    private:
 	QMainWindow *_main_window;

@@ -65,7 +65,7 @@ void Self::on_create_folder_error(const MkdirResult& result) noexcept {
 	}
 }
 
-void Self::create_clipboard_cache(QMainWindow* main_window) noexcept {
+void Self::create_clipboard_cache(QMainWindow* main_window) {
 	this->_main_window = main_window;
 
 	auto raw_cache_directory = cache_dir();
