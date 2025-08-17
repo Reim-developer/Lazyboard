@@ -21,7 +21,14 @@ inline bool is_exists_path(char *path) {
 	return result;
 }
 
+inline char *cache_dir() {
+	auto cache_dir = raw_cache_dir();
+
+	return cache_dir;
+}
+
 inline void free_c_str(char *c_str) { raw_free_c_str(c_str); }
+
 }  // namespace Lazyboard::ffi
 
 #endif	// UTILS_HXX

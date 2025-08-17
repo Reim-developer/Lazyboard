@@ -29,13 +29,16 @@ enum class ErrorTypes : uint8_t {
 	PARSE_TOML_FAILED,
 	READ_FILE_FAILED,
 	UTF_8_ERROR,
+	CREATE_DATABASE_ERR,
+	EXECUTE_SQL_ERR,
+	WRAP_C_STR_ERR,
 };
 
 using Types = initializer_list<pair<ErrorTypes, string_view>>;
 inline constexpr Types error_types_map() noexcept {
 	using E = ErrorTypes;
 
-	const Types error_types = {
+	static constexpr Types ERROR_TYPES = {
 		{E::INVALID_HEX_COLOR,
 		 "Invalid HEX color, please check your TOML configuration and try "
 		 "again"},
@@ -51,10 +54,12 @@ inline constexpr Types error_types_map() noexcept {
 		 "again"},
 		{E::READ_FILE_FAILED, "Could not read file"},
 		{E::UTF_8_ERROR, "UTF-8 error"},
-
+		{E::EXECUTE_SQL_ERR, "Could not execute SQLite query"},
+		{E::CREATE_DATABASE_ERR, "Could not create database"},
+		{E::WRAP_C_STR_ERR, "Could not wrap 'c_str'"},
 	};
 
-	return error_types;
+	return ERROR_TYPES;
 }
 
 inline constexpr string_view error_to_string(ErrorTypes error) noexcept {
@@ -64,7 +69,7 @@ inline constexpr string_view error_to_string(ErrorTypes error) noexcept {
 		}
 	}
 
-	return "UNKOWN_ERROR";
+	return "UNKNOWN_ERROR";
 }
 
 }  // namespace Lazyboard::front_end_utils

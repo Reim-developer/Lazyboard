@@ -8,11 +8,13 @@
 #include <memory>
 #include <string>
 
+#include "../../front_end_db/include/sqlite_manager.hxx"
 #include "about_widget.hxx"
 #include "main_window_preload.hxx"
 #include "setting_widget.hxx"
 #include "table_widget.hxx"
 
+using Lazyboard::front_end_db::SQLiteManager;
 using std::string;
 using std::unique_ptr;
 
@@ -40,6 +42,7 @@ class MainWindow {
 	unique_ptr<SettingWidget> setting_widget;
 	unique_ptr<AboutWidget> about_widget;
 	unique_ptr<MainWindowPreload> main_window_preload;
+	unique_ptr<SQLiteManager> sqlite_manager;
 
    public:
 	Self *init_main_window();
