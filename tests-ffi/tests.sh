@@ -47,7 +47,7 @@ function run_ffi_test() {
 		build_output=$(basename "$file" ".cxx")
 		file_name=$(basename "$file")
 
-		$clang_cxx "$file" -l"$sqlite_lib" "$static_lib_path" -o "$build_dir/$build_output"
+		$clang_cxx "$file" -l"$sqlite_lib" "$static_lib_path" -o "$build_dir/$build_output" -std=c++20
 		echo
 		echo -e -n "\e[0;32m[+] Test for $file_name:\e[0;37m"
 
