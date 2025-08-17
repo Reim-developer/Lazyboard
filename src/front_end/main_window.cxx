@@ -1,17 +1,21 @@
 #include "include/main_window.hxx"
 
 #include <qgridlayout.h>
+#include <qicon.h>
 #include <qmainwindow.h>
 #include <qwidget.h>
 
 #include <memory>
 
+#include "../front_end_utils/include/utils.hxx"
 #include "include/about_widget.hxx"
+#include "include/icon_bytes.hxx"
 #include "include/main_window_preload.hxx"
 #include "include/setting_widget.hxx"
 #include "include/table_widget.hxx"
 
 using Lazyboard::front_end::MainWindow;
+using Lazyboard::front_end_utils::image_from_bytes;
 using std::make_unique;
 
 using Self = MainWindow;
@@ -31,6 +35,7 @@ Self::MainWindow() {
 Self *Self::init_main_window() {
 	main_window->setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
 	main_window->setWindowTitle("Lazyboard");
+	main_window->setWindowIcon(image_from_bytes(image_bytes));
 	main_window_preload->create_default_config(main_window.get());
 	main_window_preload->read_if_exists_config(main_window.get());
 	this->front_end_show();
