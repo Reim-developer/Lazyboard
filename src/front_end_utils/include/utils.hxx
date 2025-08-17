@@ -2,11 +2,21 @@
 #define FRONT_END_UTILS_HXX
 
 #include <qcolor.h>
+#include <qicon.h>
+#include <qpixmap.h>
+#include <qstringview.h>
 
+#include <initializer_list>
 #include <type_traits>
+#include <vector>
 
+#include "error_types.hxx"
+
+using std::initializer_list;
 using std::is_same_v;
 using std::stringstream;
+using std::vector;
+
 namespace Lazyboard::front_end_utils {
 
 template <typename T>
@@ -25,6 +35,22 @@ inline constexpr bool is_valid_hex_color(const Args&... args) noexcept {
 			return true;
 		}(),
 		...);
+}
+
+inline QIcon image_from_bytes(const initializer_list<uint8_t>& data) {
+	QByteArray bytes_array;
+	bytes_array.reserve(static_cast<int>(data.size()));
+
+	for (auto byte : data) {
+		bytes_array.append(static_cast<char>(byte));
+	}
+
+	QPixmap pixmap;
+	if (pixmap.loadFromData(bytes_array)) {
+		return QIcon(pixmap);
+	}
+
+	return QIcon();
 }
 
 }  // namespace Lazyboard::front_end_utils
