@@ -19,6 +19,7 @@ using std::cout;
 #endif
 
 using namespace Lazyboard::ffi;
+using Lazyboard::front_end_utils::error_dialog_show;
 using Lazyboard::front_end_utils::error_to_string;
 using Lazyboard::front_end_utils::ErrorTypes;
 using Lazyboard::front_end_utils::is_valid_hex_color;
@@ -51,14 +52,10 @@ auto Self::gui_settings(RawAppConfig *raw_app_config) noexcept -> GuiSettings {
 }
 
 void Self::on_invalid_hex_color_error(QMainWindow *main_window) {
-	// clang-format off
-	const auto error_name = error_to_string(ErrorTypes::INVALID_HEX_COLOR);
-	const auto error_message = QString(R"(
-Invalid HEX color, please check your TOML configuration
-Error name: %1
-		)").arg(error_name.data());	 // clang-format on
+	using E = ErrorTypes;
 
-	QMessageBox::critical(main_window, "Error", error_message);
+	const auto message = "Invalid HEX Color in your TOML configuration";
+	error_dialog_show(main_window, message, E::INVALID_HEX_COLOR);
 }
 
 void Self::set_main_window_theme(QMainWindow *main_window,
