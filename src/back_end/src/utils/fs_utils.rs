@@ -71,11 +71,17 @@ pub extern "C" fn raw_config_dir() -> *mut c_char {
         .and_then(|path| path.into_os_string().into_string().ok())
         .and_then(|string| CString::new(string).ok());
 
-    result.map_or(null_mut(), |c_str| {
-        CString::new(c_str)
-            .map(CString::into_raw)
-            .unwrap_or(null_mut())
-    })
+    result.map_or(null_mut(), CString::into_raw)
+}
+
+#[must_use]
+#[unsafe(no_mangle)]
+pub extern "C" fn raw_cache_dir() -> *mut c_char {
+    let result = dirs::cache_dir()
+        .and_then(|path| path.into_os_string().into_string().ok())
+        .and_then(|string| CString::new(string).ok());
+
+    result.map_or(null_mut(), CString::into_raw)
 }
 
 #[must_use]
