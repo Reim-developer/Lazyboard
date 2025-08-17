@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.19)
 project(Lazyboard)
 
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
-set(CMAKE_C_STANDARD_REQUIRED 99)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Gui Core)
