@@ -15,6 +15,7 @@
 
 #include "error_types.hxx"
 
+using std::abort;
 using std::initializer_list;
 using std::is_same_v;
 using std::stringstream;
@@ -56,12 +57,12 @@ inline QIcon image_from_bytes(const initializer_list<uint8_t>& data) noexcept {
 	return QIcon();
 }
 
-inline void error_dialog_show(QWidget* parent, const QString& message,
+inline void error_dialog_show(QWidget* parent,
 							  ErrorTypes error_types) noexcept {
 	auto error_string = error_to_string(error_types).data();
-	auto fmt_msg = QString("%1\nError name: %2").arg(message).arg(error_string);
 
-	QMessageBox::critical(parent, "Error", fmt_msg);
+	QMessageBox::critical(parent, "Error", error_string);
+	abort();
 }
 
 }  // namespace Lazyboard::front_end_utils

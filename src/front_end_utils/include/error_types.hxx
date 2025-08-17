@@ -23,6 +23,12 @@ enum class ErrorTypes : uint8_t {
 	GET_CONFIG_DIR_FAILED,
 	CREATE_FILE_FAILED,
 	TOML_TO_STRING_FAILED,
+	WRITE_FILE_FAILED,
+	CONVERT_TO_MUT_FAILED,
+	CONVERT_TO_C_STR_FAILED,
+	PARSE_TOML_FAILED,
+	READ_FILE_FAILED,
+	UTF_8_ERROR,
 };
 
 using Types = initializer_list<pair<ErrorTypes, string_view>>;
@@ -30,11 +36,22 @@ inline constexpr Types error_types_map() noexcept {
 	using E = ErrorTypes;
 
 	const Types error_types = {
-		pair{E::INVALID_HEX_COLOR, "INVALID_HEX_COLOR"},
-		pair{E::CREATE_DIR_FAILED, "CREATE_DIR_FAILED"},
-		pair{E::GET_CONFIG_DIR_FAILED, "GET_CONFIG_DIR_FAILED"},
-		pair{E::CREATE_FILE_FAILED, "CREATE_FILE_FAILED"},
-		pair{E::TOML_TO_STRING_FAILED, "TOML_TO_STRING_FAILED"},
+		{E::INVALID_HEX_COLOR,
+		 "Invalid HEX color, please check your TOML configuration and try "
+		 "again"},
+		{E::CREATE_DIR_FAILED, "Create directory failed"},
+		{E::GET_CONFIG_DIR_FAILED, "Get configuration directory failed"},
+		{E::CREATE_FILE_FAILED, "Create file faled"},
+		{E::TOML_TO_STRING_FAILED, "Could not convert TOML to string"},
+		{E::WRITE_FILE_FAILED, "Could not write file"},
+		{E::CONVERT_TO_MUT_FAILED, "Could not convert value to '*mut c_char'"},
+		{E::CONVERT_TO_C_STR_FAILED, "Could not convert value to 'c_str'"},
+		{E::PARSE_TOML_FAILED,
+		 "Could not parse TOML, please check your configuration and try "
+		 "again"},
+		{E::READ_FILE_FAILED, "Could not read file"},
+		{E::UTF_8_ERROR, "UTF-8 error"},
+
 	};
 
 	return error_types;

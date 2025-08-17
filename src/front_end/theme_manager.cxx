@@ -54,8 +54,7 @@ auto Self::gui_settings(RawAppConfig *raw_app_config) noexcept -> GuiSettings {
 void Self::on_invalid_hex_color_error(QMainWindow *main_window) {
 	using E = ErrorTypes;
 
-	const auto message = "Invalid HEX Color in your TOML configuration";
-	error_dialog_show(main_window, message, E::INVALID_HEX_COLOR);
+	error_dialog_show(main_window, E::INVALID_HEX_COLOR);
 }
 
 void Self::set_main_window_theme(QMainWindow *main_window,
