@@ -21,6 +21,13 @@ using std::is_same_v;
 using std::stringstream;
 using std::vector;
 
+#if defined(LAZY_DEBUG)
+	#include <print>
+	#include <source_location>
+using std::println;
+using std::source_location;
+#endif
+
 namespace Lazyboard::front_end_utils {
 
 template <typename T>
@@ -41,7 +48,8 @@ inline constexpr bool is_valid_hex_color(const Args&... args) noexcept {
 		...);
 }
 
-inline QIcon image_from_bytes(const initializer_list<uint8_t>& data) noexcept {
+using init_list = initializer_list<uint8_t>;
+inline QIcon image_from_bytes(const init_list& data) noexcept {
 	QByteArray bytes_array;
 	bytes_array.reserve(static_cast<int>(data.size()));
 
@@ -64,6 +72,23 @@ inline void error_dialog_show(QWidget* parent,
 	QMessageBox::critical(parent, "Error", error_string);
 	abort();
 }
+
+#if defined(LAZY_DEBUG)
+using src_loc = source_location;
+template <typename T>
+inline void dump_ptr_address(T* t,
+							 const src_loc& location = src_loc::current()) {
+	auto green = "\x1b[32m";
+	auto white = "\x1b[37m";
+
+	auto file_name = location.file_name();
+	auto file_line = location.line();
+
+	println("{}[MEMORY_DEBUG]{} File: {}", green, white, file_name);
+	println("{}[MEMORY_DEBUG]{} Line: {}", green, white, file_line);
+	println("{}[MEMORY_DEBUG]{} {}", green, white, static_cast<void*>(t));
+}
+#endif
 
 }  // namespace Lazyboard::front_end_utils
 
