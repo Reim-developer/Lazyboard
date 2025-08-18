@@ -52,7 +52,7 @@ inline constexpr bool is_valid_hex_color(Args&&... args) noexcept {
 }
 
 using init_list = initializer_list<uint8_t>;
-inline QIcon image_from_bytes(const init_list&& data) noexcept {
+inline QIcon image_from_bytes(const init_list& data) noexcept {
 	QByteArray bytes_array;
 	bytes_array.reserve(static_cast<int>(data.size()));
 
