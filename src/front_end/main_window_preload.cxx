@@ -7,7 +7,7 @@
 #include <qpalette.h>
 
 #include <memory>
-#include <sstream>
+#include <print>
 #include <string>
 
 #include "../ffi/namespace/include/config.hxx"
@@ -15,8 +15,11 @@
 #include "include/theme_manager.hxx"
 
 #if defined(LAZY_DEBUG)
-	#include <iostream>
-using std::cout;
+	#include <format>
+
+	#include "../front_end_utils/include/utils.hxx"
+using Lazyboard::front_end_utils::dump_ptr_address;
+using std::println;
 #endif
 
 #include "../front_end_utils/include/error_types.hxx"
@@ -25,9 +28,9 @@ using std::cout;
 using Lazyboard::front_end::MainWindowPreload;
 using Self = MainWindowPreload;
 
+using std::format;
 using std::make_unique;
 using std::string;
-using std::stringstream;
 using namespace Lazyboard::ffi;
 using Lazyboard::front_end_utils::error_dialog_show;
 using Lazyboard::front_end_utils::ErrorTypes;
@@ -96,11 +99,7 @@ void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
 
 string Self::application_config() {
 	auto config_dir_raw = ffi::config_dir();
-
-	stringstream string_stream;
-	string_stream << config_dir_raw << "/Lazyboard"
-				  << "/settings.toml";
-	string config_path = string_stream.str();
+	string config_path = format("{}/Lazyboard/settings.toml", config_dir_raw);
 
 	ffi::free_c_str(config_dir_raw);
 	return config_path;
@@ -116,14 +115,14 @@ void Self::create_default_config(QMainWindow *main_window) {
 
 		// clang-format off
 		#if defined(LAZY_DEBUG)
-			cout << "[DEBUG] " << "Config path not found, generate at: " << config_path << "\n";
+			println("[DEBUG] Config path not found, generate at: {}", config_path);
 		#endif 
 
 		return;
 	}
 
 	#if defined(LAZY_DEBUG)
-		cout << "[DEBUG] " << "Found config path at: " << config_path << "\n";
+		println("[DEBUG] Found config path at: {}", config_path);
 	#endif	// clang-format on
 }
 
@@ -136,4 +135,12 @@ void Self::read_if_exists_config(QMainWindow *main_window) {
 	this->on_read_exists_cfg_error(status, main_window);
 
 	theme_manager->set_main_window_theme(main_window, raw_app_config.get());
+
+	// clang-format off
+	#if defined (LAZY_DEBUG)
+		dump_ptr_address(raw_app_config.get());
+		dump_ptr_address(theme_manager.get());
+		dump_ptr_address(main_window);
+
+	#endif	// clang-format on
 }
