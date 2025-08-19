@@ -4,6 +4,9 @@ pub mod utils {
     pub mod browser;
     pub mod fs_utils;
     pub mod memory;
+}
+
+pub mod core {
     pub mod sqlite;
 }
 

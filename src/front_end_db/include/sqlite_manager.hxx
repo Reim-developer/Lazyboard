@@ -8,7 +8,7 @@
 namespace Lazyboard::front_end_db {
 class SQLiteManager {
    private:
-	using InitDataResult = InitDatabaseStatus;
+	using InitDataResult = QueryResult;
 	using MkdirResult = CreateFileSystemStatus;
 
 	void on_create_folder_error(const MkdirResult &result) noexcept;

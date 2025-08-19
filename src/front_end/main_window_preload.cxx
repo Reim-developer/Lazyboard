@@ -88,11 +88,11 @@ void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
 			break;
 
 		case Status::UTF_8_ERROR:
-			error_dialog_show(main_window, E::UTF_8_ERROR);
+			error_dialog_show(main_window, E::UTF_8_ERR);
 			break;
 
 		case Status::CONVERT_TO_C_STR_FAILED:
-			error_dialog_show(main_window, E::CONVERT_TO_C_STR_FAILED);
+			error_dialog_show(main_window, E::CONVERT_TO_C_STR_ERR);
 			break;
 	}
 }
