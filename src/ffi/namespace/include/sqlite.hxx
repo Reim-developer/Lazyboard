@@ -3,7 +3,7 @@
 #include "../../raw/sqlite.hxx"
 
 namespace Lazyboard::ffi {
-inline auto init_clipboard_cache(const char *path) -> InitDatabaseStatus {
+inline auto init_clipboard_cache(const char *path) -> QueryResult {
 	auto status = raw_init_clipboard_cache(path);
 
 	return status;

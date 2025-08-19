@@ -25,11 +25,11 @@ enum class ErrorTypes : uint8_t {
 	TOML_TO_STRING_FAILED,
 	WRITE_FILE_FAILED,
 	CONVERT_TO_MUT_FAILED,
-	CONVERT_TO_C_STR_FAILED,
+	CONVERT_TO_C_STR_ERR,
 	PARSE_TOML_FAILED,
 	READ_FILE_FAILED,
-	UTF_8_ERROR,
-	CREATE_DATABASE_ERR,
+	UTF_8_ERR,
+	OPEN_DATABASE_ERR,
 	EXECUTE_SQL_ERR,
 	WRAP_C_STR_ERR,
 };
@@ -48,14 +48,14 @@ inline constexpr Types error_types_map() noexcept {
 		{E::TOML_TO_STRING_FAILED, "Could not convert TOML to string"},
 		{E::WRITE_FILE_FAILED, "Could not write file"},
 		{E::CONVERT_TO_MUT_FAILED, "Could not convert value to '*mut c_char'"},
-		{E::CONVERT_TO_C_STR_FAILED, "Could not convert value to 'c_str'"},
+		{E::CONVERT_TO_C_STR_ERR, "Could not convert value to 'c_str'"},
 		{E::PARSE_TOML_FAILED,
 		 "Could not parse TOML, please check your configuration and try "
 		 "again"},
 		{E::READ_FILE_FAILED, "Could not read file"},
-		{E::UTF_8_ERROR, "UTF-8 error"},
+		{E::UTF_8_ERR, "UTF-8 error"},
 		{E::EXECUTE_SQL_ERR, "Could not execute SQLite query"},
-		{E::CREATE_DATABASE_ERR, "Could not create database"},
+		{E::OPEN_DATABASE_ERR, "Could not create database"},
 		{E::WRAP_C_STR_ERR, "Could not wrap 'c_str'"},
 	};
 

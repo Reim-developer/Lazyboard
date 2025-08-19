@@ -24,25 +24,26 @@ using Lazyboard::front_end_utils::ErrorTypes;
 using Self = SQLiteManager;
 using std::format;
 using std::string;
-using Status = InitDatabaseStatus;
+using Status = QueryResult;
 
 void Self::on_create_clipboard_cache_error(
 	const InitDataResult& result) noexcept {
 	using E = ErrorTypes;
+	using R = InitDataResult;
 
 	switch (result) {
-		case InitDataResult::OK:
+		case R::OK:
 			break;
 
-		case InitDataResult::C_STR_CONVERT_FAILED:
-			error_dialog_show(this->_main_window, E::CONVERT_TO_C_STR_FAILED);
+		case R::C_STR_CONVERT_ERR:
+			error_dialog_show(this->_main_window, E::CONVERT_TO_C_STR_ERR);
 			break;
 
-		case InitDataResult::CREATE_DATABASE_FAILED:
-			error_dialog_show(this->_main_window, E::CREATE_DATABASE_ERR);
+		case R::OPEN_DATABASE_ERR:
+			error_dialog_show(this->_main_window, E::OPEN_DATABASE_ERR);
 			break;
 
-		case InitDataResult::EXECUTE_SQL_FAILED:
+		case R::EXECUTE_SQL_ERR:
 			error_dialog_show(this->_main_window, E::EXECUTE_SQL_ERR);
 	}
 }

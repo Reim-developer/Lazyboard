@@ -8,14 +8,14 @@ extern "C" {
 #include <cstdint>
 using std::uint8_t;
 
-enum class InitDatabaseStatus : uint8_t {
+enum class QueryResult : uint8_t {
 	OK,
-	CREATE_DATABASE_FAILED,
-	C_STR_CONVERT_FAILED,
-	EXECUTE_SQL_FAILED
+	OPEN_DATABASE_ERR,
+	C_STR_CONVERT_ERR,
+	EXECUTE_SQL_ERR
 };
 
-auto raw_init_clipboard_cache(const char *path) -> InitDatabaseStatus;
+auto raw_init_clipboard_cache(const char *path) -> QueryResult;
 
 #if defined(__cplusplus)
 }
