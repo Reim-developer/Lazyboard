@@ -1,12 +1,14 @@
 use sqlite::Connection;
 use std::ffi::{CStr, c_char};
 
+#[derive(PartialEq, Eq, Debug)]
 #[repr(C)]
-pub enum InitDatabaseStatus {
-    Ok,
-    CreateDatabaseFailed,
-    CStrConvertFailed,
-    ExecuteSqlFailed,
+#[allow(non_camel_case_types)]
+pub enum QueryResult {
+    OK,
+    OPEN_DATABASE_ERR,
+    C_STR_CONVERT_ERR,
+    EXECUTE_SQL_ERR,
 }
 
 const INIT_QUERY: &str = r"--sql
@@ -25,24 +27,56 @@ const INIT_QUERY: &str = r"--sql
 /// Careful with unsafe context & raw pointers.
 pub unsafe extern "C" fn raw_init_clipboard_cache(
     file_path: *const c_char,
-) -> InitDatabaseStatus {
+) -> QueryResult {
     unsafe {
-        use InitDatabaseStatus as Status;
+        use QueryResult as R;
 
         let Ok(file_path_cstr) = CStr::from_ptr(file_path).to_str() else {
-            return Status::CStrConvertFailed;
+            return R::C_STR_CONVERT_ERR;
         };
 
         let Ok(sql) = Connection::open(file_path_cstr) else {
-            return Status::CreateDatabaseFailed;
+            return R::OPEN_DATABASE_ERR;
         };
 
         let is_err = sql.execute(INIT_QUERY).is_err();
 
         if is_err {
-            return Status::ExecuteSqlFailed;
+            return R::EXECUTE_SQL_ERR;
         }
 
-        Status::Ok
+        R::OK
+    }
+}
+
+/// # Safety
+/// Careful with raw pointers & memory leaks.
+#[must_use]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn raw_execute_sql(
+    db_path: *const c_char,
+    query: *const c_char,
+) -> QueryResult {
+    use QueryResult as R;
+    unsafe {
+        let Ok(file_path_cstr) = CStr::from_ptr(db_path).to_str() else {
+            return R::C_STR_CONVERT_ERR;
+        };
+
+        let Ok(sql) = Connection::open(file_path_cstr) else {
+            return R::OPEN_DATABASE_ERR;
+        };
+
+        let Ok(query_str) = CStr::from_ptr(query).to_str() else {
+            return R::C_STR_CONVERT_ERR;
+        };
+
+        let is_err = sql.execute(query_str).is_err();
+
+        if is_err {
+            return R::EXECUTE_SQL_ERR;
+        }
+
+        R::OK
     }
 }
