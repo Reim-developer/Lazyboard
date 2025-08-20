@@ -38,17 +38,15 @@ concept is_qcolor = requires(const T& t) { QColor(t); };
 
 template <is_qcolor... Args>
 inline constexpr bool is_valid_hex_color(Args&&... args) noexcept {
-	return (
-		[&]() {
-			QColor color(std::forward<Args>(args));
+	return (... && [&]() {
+		QColor color(std::forward<Args>(args));
 
-			if (!color.isValid()) {
-				return false;
-			}
+		if (!color.isValid()) {
+			return false;
+		}
 
-			return true;
-		}(),
-		...);
+		return true;
+	}());
 }
 
 using init_list = initializer_list<uint8_t>;
