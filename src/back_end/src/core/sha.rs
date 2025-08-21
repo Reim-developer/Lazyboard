@@ -1,13 +1,8 @@
 use std::ffi::{CStr, CString, c_char};
 
+use crate::core::result_enum::AllocResult;
+use crate::ensure;
 use sha2::{Digest, Sha256};
-
-#[repr(C)]
-#[allow(non_camel_case_types)]
-pub enum GetShaResult {
-    OK,
-    C_STRING_CONVERT_ERR,
-}
 
 /// # Safety
 /// Careful with raw pointers.
@@ -15,9 +10,12 @@ pub enum GetShaResult {
 pub unsafe extern "C" fn text_sha256(
     text: *const c_char,
     out: *mut *mut c_char,
-) -> GetShaResult {
+) -> AllocResult {
     unsafe {
-        use GetShaResult as R;
+        use AllocResult as R;
+
+        ensure!(!text.is_null(), R::NULL_DEFERENCE_ERR);
+        ensure!(!out.is_null(), R::NULL_DEFERENCE_ERR);
 
         let mut hasher = Sha256::new();
 
