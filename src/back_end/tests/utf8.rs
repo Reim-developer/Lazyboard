@@ -12,7 +12,7 @@ fn test_utf8_null_dererence() {
         let mut output_null: *mut c_char = ptr::null_mut();
         let result_null: *const c_char = ptr::null();
 
-        let result = to_utf8(result_null, &mut output_null);
+        let result = to_utf8(result_null, &raw mut output_null);
 
         assert_ne!(result, R::OK);
         assert_ne!(result, R::C_STRING_CONVERT_ERR);
@@ -40,7 +40,7 @@ fn test_utf8() {
         )
         .unwrap();
 
-        let result = to_utf8(content.as_ptr(), &mut out);
+        let result = to_utf8(content.as_ptr(), &raw mut out);
         let content_str = CStr::from_ptr(out).to_str().unwrap();
 
         assert_ne!(result, R::C_STRING_CONVERT_ERR);
