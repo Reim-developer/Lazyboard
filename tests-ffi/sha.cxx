@@ -71,5 +71,6 @@ void test_sha_mismatch_err() {
 int main() {
 	test_success();
 	test_deference_err();
+	test_sha_mismatch_err();
 	return 0;
 }
