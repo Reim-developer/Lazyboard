@@ -7,8 +7,11 @@ pub mod utils {
 }
 
 pub mod core {
+    pub mod r#macro;
+    pub mod result_enum;
     pub mod sha;
     pub mod sqlite;
+    pub mod utf8;
 }
 
 pub mod internal {
