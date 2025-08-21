@@ -7,6 +7,7 @@ pub mod utils {
 }
 
 pub mod core {
+    pub mod sha;
     pub mod sqlite;
 }
 
