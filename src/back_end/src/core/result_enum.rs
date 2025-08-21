@@ -1,3 +1,4 @@
+#[derive(PartialEq, Eq, Debug)]
 #[repr(C)]
 #[allow(non_camel_case_types)]
 pub enum AllocResult {
