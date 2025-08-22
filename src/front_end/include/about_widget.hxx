@@ -2,6 +2,7 @@
 #define ABOUT_WIDGET_HXX
 
 #include <qgridlayout.h>
+#include <qmainwindow.h>
 #include <qpushbutton.h>
 
 #include <memory>
@@ -24,6 +25,7 @@ class AboutWidget {
 
    public:
 	void setup_widget(QGridLayout *layout);
+	void setup_about_window_event(QMainWindow *main_window);
 };
 
 }  // namespace Lazyboard::front_end

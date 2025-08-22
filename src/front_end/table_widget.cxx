@@ -3,6 +3,7 @@
 #include <qabstractitemview.h>
 #include <qgridlayout.h>
 #include <qheaderview.h>
+#include <qmainwindow.h>
 #include <qtableview.h>
 #include <qtablewidget.h>
 

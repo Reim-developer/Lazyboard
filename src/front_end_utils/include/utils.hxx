@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <initializer_list>
+#include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -22,6 +23,7 @@ using std::for_each;
 using std::forward;
 using std::initializer_list;
 using std::is_same_v;
+using std::string;
 using std::stringstream;
 using std::vector;
 
@@ -34,9 +36,9 @@ using std::source_location;
 
 namespace Lazyboard::front_end_utils {
 template <typename T>
-concept is_qcolor = requires(const T& t) { QColor(t); };
+concept qcolor_bound = requires(const T& t) { QColor(t); };
 
-template <is_qcolor... Args>
+template <qcolor_bound... Args>
 inline constexpr bool is_valid_hex_color(Args&&... args) noexcept {
 	return (... && [&]() {
 		QColor color(std::forward<Args>(args));
@@ -91,11 +93,11 @@ inline void dump_ptr_address(T* t,
 }
 
 template <typename T>
-concept string_bound = requires(const T& t) { string(t); };
+concept string_bound = requires(const T& t) { std::string(t); };
 
 template <typename string_bound>
 inline void debug_info(string_bound&& information) {
-	auto info = forward<string_bound>(information);
+	auto info = std::forward<string_bound>(information);
 
 	println("{}[INFO_DEBUG]{} {}", green, white, info);
 }

@@ -3,6 +3,7 @@
 #include <qdialog.h>
 #include <qgridlayout.h>
 #include <qlogging.h>
+#include <qmainwindow.h>
 #include <qmessagebox.h>
 #include <qobject.h>
 #include <qpushbutton.h>
@@ -15,8 +16,16 @@ using Lazyboard::front_end::AboutWindow;
 using std::make_unique;
 using Self = AboutWindow;
 
+#if defined(LAZY_DEBUG)
+	#include <string>
+
+	#include "../front_end_utils/include/utils.hxx"
+using Lazyboard::front_end_utils::debug_info;
+using Lazyboard::front_end_utils::dump_ptr_address;
+using std::string;
+#endif
+
 AboutWindow::AboutWindow() {
-	about_window = make_unique<QDialog>();
 	grid_layout = make_unique<QGridLayout>();
 	github_button = make_unique<QPushButton>();
 	github_issue_button = make_unique<QPushButton>();
@@ -31,8 +40,7 @@ void Self::is_open_browser_ok(ResultContext &status) {
 			break;
 
 		case R::FAILED:
-			QMessageBox::critical(about_window.get(), "Error",
-								  "Could not open your browser");
+			QMessageBox::critical(this, "Error", "Could not open your browser");
 	}
 }
 
@@ -66,14 +74,48 @@ void Self::setup_buttons() {
 }
 
 void Self::setup_front_end() {
-	about_window->setLayout(this->grid_layout.get());
+	this->setLayout(this->grid_layout.get());
 	this->setup_buttons();
 }
 
 void Self::show_window() {
-	about_window->setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
-	about_window->setWindowTitle("Lazyboard About");
+	this->setMinimumSize(MIN_WIDTH, MIN_HEIGHT);
+	this->setWindowTitle("Lazyboard About");
 
 	this->setup_front_end();
-	about_window->exec();
+	this->exec();
+}
+
+void Self::on_closed(QMainWindow *main_window) {
+	using O = QObject;
+	const auto fn = [this, main_window] {
+		main_window->show();
+
+		// clang-format off
+		#if defined (LAZY_DEBUG)
+			debug_info("About window is closed");
+		#endif	// clang-format on
+	};
+
+	O::connect(this, &QDialog::rejected, fn);
+}
+
+void Self::showEvent(QShowEvent *event) {
+	QDialog::showEvent(event);
+	this->_main_window->setHidden(true);
+
+	// clang-format off
+	#if defined (LAZY_DEBUG)
+		debug_info("About Dialog is open");
+	#endif	// clang-format on
+}
+
+void Self::on_about_window_event(QMainWindow *main_window) {
+	this->_main_window = main_window;
+	this->on_closed(this->_main_window);
+
+	// clang-format off
+	#if defined (LAZY_DEBUG) 
+		dump_ptr_address(main_window);
+	#endif	// clang-format on
 }
