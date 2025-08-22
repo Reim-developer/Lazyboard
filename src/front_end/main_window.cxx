@@ -55,5 +55,7 @@ void Self::front_end_show() {
 
 	table_widget->setup_widget(this->grid_layout);
 	setting_widget->setup_widget(this->grid_layout);
+
 	about_widget->setup_widget(this->grid_layout);
+	about_widget->setup_about_window_event(main_window.get());
 }

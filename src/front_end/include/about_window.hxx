@@ -3,6 +3,7 @@
 
 #include <qdialog.h>
 #include <qgridlayout.h>
+#include <qmainwindow.h>
 #include <qpushbutton.h>
 
 #include <memory>
@@ -11,9 +12,8 @@
 using std::unique_ptr;
 
 namespace Lazyboard::front_end {
-class AboutWindow {
+class AboutWindow : public QDialog {
    private:
-	unique_ptr<QDialog> about_window;
 	unique_ptr<QGridLayout> grid_layout;
 	unique_ptr<QPushButton> github_button;
 	unique_ptr<QPushButton> github_issue_button;
@@ -29,16 +29,24 @@ class AboutWindow {
 		"https://github.com/reim-developer/zClipboard/pulls";
 
    private:
+	QMainWindow *_main_window = nullptr;
+
+   protected:
+	void showEvent(QShowEvent *event) override;
+
+   private:
 	void is_open_browser_ok(ResultContext &status);
 	void open_browser_when_clicked(QPushButton *button, const char *url);
 
    private:
 	void setup_front_end();
 	void setup_buttons();
+	void on_closed(QMainWindow *main_window);
 
    public:
 	AboutWindow();
 	void show_window();
+	void on_about_window_event(QMainWindow *main_window);
 };
 }  // namespace Lazyboard::front_end
 
