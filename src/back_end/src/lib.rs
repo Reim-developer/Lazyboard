@@ -11,6 +11,7 @@ pub mod core {
     pub mod result_enum;
     pub mod sha;
     pub mod sqlite;
+    pub mod time;
     pub mod utf8;
 }
 
