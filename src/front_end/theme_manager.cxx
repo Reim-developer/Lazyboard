@@ -9,7 +9,7 @@
 #include <sstream>
 #include <string>
 
-#include "../ffi/namespace/include/config.hxx"
+#include "../ffi/include/config.h"
 #include "../front_end_utils/include/error_types.hxx"
 #include "../front_end_utils/include/utils.hxx"
 
@@ -18,7 +18,6 @@
 using std::cout;
 #endif
 
-using namespace Lazyboard::ffi;
 using Lazyboard::front_end_utils::error_dialog_show;
 using Lazyboard::front_end_utils::error_to_string;
 using Lazyboard::front_end_utils::ErrorTypes;
@@ -29,7 +28,7 @@ using std::string;
 using std::stringstream;
 using Self = Lazyboard::front_end::ThemeManager;
 
-auto Self::gui_settings(RawAppConfig *raw_app_config) noexcept -> GuiSettings {
+auto Self::gui_settings(AppConfig *raw_app_config) noexcept -> GuiSettings {
 	// clang-format off
 	auto raw_background_color = raw_app_config->raw_app_gui_settings.background_color;
 	auto raw_foreground_color = raw_app_config->raw_app_gui_settings.foreground_color;
@@ -58,8 +57,8 @@ void Self::on_invalid_hex_color_error(QMainWindow *main_window) {
 }
 
 void Self::set_main_window_theme(QMainWindow *main_window,
-								 RawAppConfig *raw_app_config) noexcept {
-	auto settings_gui = this->gui_settings(raw_app_config);
+								 AppConfig *app_config) noexcept {
+	auto settings_gui = this->gui_settings(app_config);
 
 	// clang-format off
 	auto bg_color = data(settings_gui.background_color);
@@ -76,7 +75,7 @@ void Self::set_main_window_theme(QMainWindow *main_window,
 	auto fg_btn_hex = QColor(fg_button_color);
 	auto bg_header_table_hex = QColor(bg_header_table_color);
 	auto fg_header_table_hex = QColor(fg_header_table_color);
-	ffi::free_cstr_app_config(raw_app_config);
+	free_app_config(app_config);
 
 	const auto valid_color =
 		is_valid_hex_color(bg_hex, fg_hex, bg_btn_hex, fg_btn_hex,

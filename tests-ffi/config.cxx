@@ -1,44 +1,31 @@
 
 #include <cassert>
 #include <cstdint>
-#include <iostream>
-#include <string>
-
-using std::cout;
-using std::string;
 using std::uint8_t;
 
-enum WriteConfigStatus : uint8_t {
+enum class UtilsResult : uint8_t {
 	OK,
-	TOML_TO_STRING_FAILED,
-	CREATE_DIR_FAILED,
-	CREATE_FILE_FAILED,
-	WRITE_FILE_FAILED,
-	GET_DATA_LOCAL_FAILED,
+	ALLOC_ERR,
+	NULL_DEFERENCE_ERR,
+	GET_DIR_ERR,
 };
 
-extern "C" char *raw_config_dir();
-extern "C" void raw_free_c_str(char *str);
-extern "C" WriteConfigStatus raw_write_default_config();
+extern "C" UtilsResult config_dir(char **out);
 
-void gen_config_test() {
-	auto status = raw_write_default_config();
+void test_config_dir() {
+	using R = UtilsResult;
 
-	assert(status != WriteConfigStatus::WRITE_FILE_FAILED);
-	assert(status != WriteConfigStatus::CREATE_FILE_FAILED);
-	assert(status != WriteConfigStatus::CREATE_DIR_FAILED);
-	assert(status != WriteConfigStatus::GET_DATA_LOCAL_FAILED);
-	assert(status != WriteConfigStatus::TOML_TO_STRING_FAILED);
-	assert(status == WriteConfigStatus::OK);
+	char *out = nullptr;
+	auto result = config_dir(&out);
+
+	assert(result != R::ALLOC_ERR);
+	assert(result != R::NULL_DEFERENCE_ERR);
+	assert(result != R::GET_DIR_ERR);
+	assert(result == R::OK);
 }
 
 int main() {
-	auto raw_result = raw_config_dir();
-	auto result = string(raw_result);
-	raw_free_c_str(raw_result);
-
-	gen_config_test();
-	assert(!result.empty());
+	test_config_dir();
 
 	return 0;
 }

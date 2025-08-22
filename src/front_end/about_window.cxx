@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include <memory>
 
-#include "../ffi/namespace/include/utils.hxx"
+#include "../ffi/include/utils.h"
 using Lazyboard::front_end::AboutWindow;
 using std::make_unique;
 using Self = AboutWindow;
@@ -23,34 +23,26 @@ AboutWindow::AboutWindow() {
 	github_pull_button = make_unique<QPushButton>();
 }
 
-void Self::is_open_browser_ok(OpenBrowserStatus status) {
+void Self::is_open_browser_ok(ResultContext &status) {
+	using R = ResultContext;
+
 	switch (status) {
-		case OpenBrowserStatus::OK:
+		case R::OK:
 			break;
 
-		case OpenBrowserStatus::OPEN_BROWSER_FAILED:
+		case R::FAILED:
 			QMessageBox::critical(about_window.get(), "Error",
 								  "Could not open your browser");
-			break;
-
-		case OpenBrowserStatus::WRAP_RAW_C_FAILED:
-			QMessageBox::critical(about_window.get(), "Error",
-								  "Could not wrap C raw to safety string");
-
-			break;
-		case OpenBrowserStatus::URL_IS_EMPTY:
-			QMessageBox::critical(about_window.get(), "Error", "Url is empty");
-			break;
 	}
 }
 
 void Self::open_browser_when_clicked(QPushButton *button, const char *url) {
-	const auto open_browser = [this, url] {
-		auto status = Lazyboard::ffi::open_browser(url);
+	const auto fn = [this, url] {
+		auto status = open_browser(url);
 		is_open_browser_ok(status);
 	};
 
-	QObject::connect(button, &QPushButton::clicked, open_browser);
+	QObject::connect(button, &QPushButton::clicked, fn);
 }
 
 void Self::setup_buttons() {

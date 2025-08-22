@@ -15,7 +15,7 @@ enum class QueryResult : uint8_t {
 	EXECUTE_SQL_ERR
 };
 
-auto raw_init_clipboard_cache(const char *path) -> QueryResult;
+auto init_clipboard_cache(const char *path) -> QueryResult;
 
 #if defined(__cplusplus)
 }

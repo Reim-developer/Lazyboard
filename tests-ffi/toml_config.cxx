@@ -8,7 +8,7 @@ using std::string;
 using std::uint8_t;
 using std::unique_ptr;
 
-extern "C" enum RawReadAppConfigStatus : uint8_t {
+extern "C" enum ReadAppConfigStatus : uint8_t {
 	OK,
 	READ_FILE_FAILED,
 	UTF_8_ERROR,
@@ -20,7 +20,7 @@ extern "C" enum RawReadAppConfigStatus : uint8_t {
 extern "C" typedef struct {
 	bool hide_when_closed;
 	bool notification;
-} RawAppSettings;
+} AppSettings;
 
 extern "C" typedef struct {
 	char *background_color;
@@ -29,25 +29,25 @@ extern "C" typedef struct {
 	char *foreground_button_color;
 	char *background_table_header_color;
 	char *foreground_table_header_color;
-} RawAppGuiSettings;
+} AppGuiSettings;
 
 extern "C" typedef struct {
-	RawAppSettings raw_app_settings;
-	RawAppGuiSettings raw_app_gui_settings;
-} RawAppConfig;
+	AppSettings raw_app_settings;
+	AppGuiSettings raw_app_gui_settings;
+} AppConfig;
 
-extern "C" RawReadAppConfigStatus raw_exists_config(const char *file_path,
-													RawAppConfig *config_out);
+extern "C" ReadAppConfigStatus read_exists_config(const char *file_path,
+												  AppConfig *out);
 
-extern "C" void raw_free_cstr_app_config(RawAppConfig *config);
+extern "C" void free_app_config(AppConfig *config);
 
 int main() {
-	using Status = RawReadAppConfigStatus;
+	using Status = ReadAppConfigStatus;
 
 	const char *path = "demo.toml";
-	unique_ptr<RawAppConfig> raw = make_unique<RawAppConfig>();
+	unique_ptr<AppConfig> raw = make_unique<AppConfig>();
 
-	auto result = raw_exists_config(path, raw.get());
+	auto result = read_exists_config(path, raw.get());
 	auto bg_color = string(raw->raw_app_gui_settings.background_color);
 	auto fg_color = string(raw->raw_app_gui_settings.foreground_color);
 	auto bg_btn_color =
@@ -59,7 +59,7 @@ int main() {
 	auto fg_header_table_color =
 		string(raw->raw_app_gui_settings.foreground_table_header_color);
 
-	raw_free_cstr_app_config(raw.get());
+	free_app_config(raw.get());
 
 	assert(result != Status::UTF_8_ERROR);
 	assert(result != Status::PARSE_TOML_FAILED);

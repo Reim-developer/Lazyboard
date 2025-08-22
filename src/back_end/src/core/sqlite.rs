@@ -25,7 +25,7 @@ const INIT_QUERY: &str = r"--sql
 #[unsafe(no_mangle)]
 /// # Safety
 /// Careful with unsafe context & raw pointers.
-pub unsafe extern "C" fn raw_init_clipboard_cache(
+pub unsafe extern "C" fn init_clipboard_cache(
     file_path: *const c_char,
 ) -> QueryResult {
     unsafe {
@@ -61,7 +61,7 @@ pub struct TextClipboard {
 /// Careful with raw pointers & memory leaks.
 #[must_use]
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_add_text_clipboard(
+pub unsafe extern "C" fn add_text_clipboard(
     db_path: *const c_char,
     text_clipboard: TextClipboard,
 ) -> QueryResult {

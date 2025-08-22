@@ -2,17 +2,14 @@
 #define SQLITE_MANAGER_HXX
 #include <qmainwindow.h>
 
-#include "../../ffi/raw/sqlite.hxx"
-#include "../../ffi/raw/utils.hxx"
+#include "../../ffi/include/sqlite.h"
+#include "../../ffi/include/utils.h"
 
 namespace Lazyboard::front_end_db {
 class SQLiteManager {
    private:
-	using InitDataResult = QueryResult;
-	using MkdirResult = CreateFileSystemStatus;
-
-	void on_create_folder_error(const MkdirResult &result) noexcept;
-	void on_create_clipboard_cache_error(const InitDataResult &status) noexcept;
+	void on_create_folder_error(const ResultContext &result) noexcept;
+	void on_create_clipboard_cache_error(const QueryResult &status) noexcept;
 
    public:
 	void create_clipboard_cache(QMainWindow *main_window);

@@ -1,8 +1,7 @@
 #[test]
 fn test_add_text_clipboard() {
     use back_end::core::sqlite::{
-        QueryResult, TextClipboard, raw_add_text_clipboard,
-        raw_init_clipboard_cache,
+        QueryResult, TextClipboard, add_text_clipboard, init_clipboard_cache,
     };
     use std::ffi::CString;
     use std::fs;
@@ -25,8 +24,8 @@ fn test_add_text_clipboard() {
     };
 
     unsafe {
-        let init_result = raw_init_clipboard_cache(db_path.as_ptr());
-        let result = raw_add_text_clipboard(db_path.as_ptr(), text_clipboard);
+        let init_result = init_clipboard_cache(db_path.as_ptr());
+        let result = add_text_clipboard(db_path.as_ptr(), text_clipboard);
 
         assert_ne!(init_result, R::C_STR_CONVERT_ERR);
         assert_ne!(init_result, R::EXECUTE_SQL_ERR);

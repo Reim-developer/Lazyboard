@@ -11,6 +11,7 @@ pub mod core {
     pub mod result_enum;
     pub mod sha;
     pub mod sqlite;
+    pub mod time;
     pub mod utf8;
 }
 
@@ -18,7 +19,7 @@ pub mod internal {
     pub mod app_config;
 }
 
-pub mod raw_config {
+pub mod config {
     pub mod constant;
-    pub mod raw_toml;
+    pub mod toml;
 }

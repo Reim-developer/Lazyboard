@@ -11,7 +11,7 @@ enum class AllocResult : uint8_t {
 	C_STRING_CONVERT_ERR
 };	// clang-format on
 extern "C" AllocResult text_sha256(const char* text, char** out);
-extern "C" void raw_free_c_str(char* str);
+extern "C" void free_alloc(char* str);
 
 using std::string;
 
@@ -25,7 +25,7 @@ void test_success() {
 
 	auto result = text_sha256(my_text, &out);
 	string hash_result = string(out);
-	raw_free_c_str(out);
+	free_alloc(out);
 
 	assert(!hash_result.empty());
 	assert(hash_result == real_result);
@@ -42,7 +42,7 @@ void test_deference_err() {
 	char* out = nullptr;
 
 	auto result = text_sha256(my_text, nullptr);
-	raw_free_c_str(out);
+	free_alloc(out);
 
 	assert(result != R::OK);
 	assert(result != R::C_STRING_CONVERT_ERR);
@@ -58,7 +58,7 @@ void test_sha_mismatch_err() {
 
 	auto result = text_sha256(my_text, &out);
 	string hash_result = string(out);
-	raw_free_c_str(out);
+	free_alloc(out);
 
 	assert(result != R::C_STRING_CONVERT_ERR);
 	assert(result != R::NULL_DEFERENCE_ERR);
