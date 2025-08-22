@@ -12,7 +12,7 @@ extern "C" enum class AllocResult : uint8_t {
 };
 
 extern "C" AllocResult time_now(char **out);
-extern "C" void raw_free_c_str(char *str);
+extern "C" void free_alloc(char *str);
 
 void null_deference_test() {
 	using R = AllocResult;
@@ -29,7 +29,7 @@ void time_now_test() {
 	char *out = nullptr;
 	auto result = time_now(&out);
 	auto time_now_string = string(out);
-	raw_free_c_str(out);
+	free_alloc(out);
 
 	assert(result != R::CONVERT_TO_STR_FAILED);
 	assert(result != R::NULL_DEFERENCE_ERR);

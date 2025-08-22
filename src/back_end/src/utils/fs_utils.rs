@@ -1,41 +1,30 @@
+use crate::core::result_enum::ResultContext;
+use crate::ensure;
 use crate::internal::app_config::AppConfig;
-use crate::utils::memory::raw_from_ptr;
-use std::ffi::{CString, c_char};
+use std::ffi::{CStr, CString, c_char};
 use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
-use std::ptr::null_mut;
 
 const APP_NAME: &str = "Lazyboard";
-
-#[repr(C)]
-pub enum CreateFileSystemStatus {
-    Ok,
-    WrapRawCFailed,
-    Failed,
-}
 
 /// # Safety
 /// Be careful with raw pointers.
 #[must_use]
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_new_folder(
+pub unsafe extern "C" fn new_folder(
     folder_path: *const c_char,
-) -> CreateFileSystemStatus {
+) -> ResultContext {
     unsafe {
-        use CreateFileSystemStatus as Status;
-        let (c_str, is_ok) = raw_from_ptr(folder_path);
+        use ResultContext as R;
+        let folder_path_str = CStr::from_ptr(folder_path).to_string_lossy();
 
+        let is_ok = fs::create_dir_all(&*folder_path_str).is_ok();
         if !is_ok {
-            return Status::WrapRawCFailed;
+            return R::FAILED;
         }
 
-        let is_create_success = fs::create_dir_all(c_str).is_ok();
-        if !is_create_success {
-            return Status::Failed;
-        }
-
-        Status::Ok
+        R::OK
     }
 }
 
@@ -43,56 +32,94 @@ pub unsafe extern "C" fn raw_new_folder(
 #[unsafe(no_mangle)]
 /// # Safety
 /// Careful with raw pointers.
-pub unsafe extern "C" fn raw_is_path_exists(path: *const c_char) -> bool {
+pub unsafe extern "C" fn path_exists(path: *const c_char) -> bool {
     unsafe {
-        let (c_str, is_ok) = raw_from_ptr(path);
-        if !is_ok {
-            return false;
-        }
+        let path_str = CStr::from_ptr(path).to_string_lossy();
 
-        Path::new(c_str).exists()
+        Path::new(&*path_str).exists()
     }
 }
 
 #[repr(C)]
-pub enum WriteConfigStatus {
-    Ok,
-    TomlToStringFailed,
-    CreateDirFailed,
-    CreateFileFailed,
-    WriteFileFailed,
-    GetDataLocalFailed,
+#[allow(non_camel_case_types)]
+pub enum ConfigResult {
+    OK,
+    TOML_TO_STRING_ERR,
+    CREATE_DIR_ERR,
+    CREATE_FILE_ERR,
+    WRITE_FILE_ERR,
+    GET_CONFIG_DIR_ERR,
+}
+
+#[derive(PartialEq, Eq, Debug)]
+#[repr(C)]
+#[allow(non_camel_case_types)]
+pub enum UtilsResult {
+    OK,
+    ALLOC_ERR,
+    NULL_DEFERENCE_ERR,
+    GET_DIR_ERR,
 }
 
 #[must_use]
 #[unsafe(no_mangle)]
-pub extern "C" fn raw_config_dir() -> *mut c_char {
-    let result = dirs::config_dir()
-        .and_then(|path| path.into_os_string().into_string().ok())
-        .and_then(|string| CString::new(string).ok());
+/// # Safety
+/// Careful with memory leaks & double-free.
+pub unsafe extern "C" fn config_dir(out: *mut *mut c_char) -> UtilsResult {
+    use UtilsResult as R;
 
-    result.map_or(null_mut(), CString::into_raw)
+    unsafe {
+        if let Some(config_path) = dirs::config_dir() {
+            let path = config_path.to_string_lossy();
+
+            let Ok(config_path_cstring) = CString::new(path.to_string()) else {
+                return R::ALLOC_ERR;
+            };
+
+            ensure!(!out.is_null(), R::NULL_DEFERENCE_ERR);
+            *out = config_path_cstring.into_raw();
+
+            return R::OK;
+        }
+
+        R::GET_DIR_ERR
+    }
 }
 
 #[must_use]
 #[unsafe(no_mangle)]
-pub extern "C" fn raw_cache_dir() -> *mut c_char {
-    let result = dirs::cache_dir()
-        .and_then(|path| path.into_os_string().into_string().ok())
-        .and_then(|string| CString::new(string).ok());
+/// # Safety
+/// Careful with raw pointers & memory leaks
+pub unsafe extern "C" fn cache_dir(out: *mut *mut c_char) -> UtilsResult {
+    use UtilsResult as R;
 
-    result.map_or(null_mut(), CString::into_raw)
+    unsafe {
+        if let Some(result) = dirs::cache_dir() {
+            let path_str = result.to_string_lossy();
+
+            let Ok(path_c_string) = CString::new(path_str.to_string()) else {
+                return R::ALLOC_ERR;
+            };
+
+            ensure!(!out.is_null(), R::NULL_DEFERENCE_ERR);
+            *out = path_c_string.into_raw();
+
+            return R::OK;
+        }
+
+        R::GET_DIR_ERR
+    }
 }
 
 #[must_use]
 #[unsafe(no_mangle)]
-pub extern "C" fn raw_write_default_config() -> WriteConfigStatus {
-    use WriteConfigStatus as Status;
+pub extern "C" fn create_default_cfg() -> ConfigResult {
+    use ConfigResult as R;
 
     let app_config = AppConfig::default_config();
 
     let Ok(toml_string) = toml::to_string(&app_config) else {
-        return Status::TomlToStringFailed;
+        return R::TOML_TO_STRING_ERR;
     };
 
     if let Some(data_local) = dirs::config_dir() {
@@ -100,7 +127,7 @@ pub extern "C" fn raw_write_default_config() -> WriteConfigStatus {
 
         let config_dir = format!("{config_dir_string}/{APP_NAME}");
         if fs::create_dir_all(&config_dir).is_err() {
-            return Status::CreateDirFailed;
+            return R::CREATE_DIR_ERR;
         }
 
         let config_file_path = format!("{config_dir}/settings.toml");
@@ -108,17 +135,17 @@ pub extern "C" fn raw_write_default_config() -> WriteConfigStatus {
 
         if !path.exists() {
             let Ok(mut file) = File::create_new(config_file_path) else {
-                return Status::CreateFileFailed;
+                return R::CREATE_FILE_ERR;
             };
 
             match file.write_all(toml_string.as_bytes()) {
-                Ok(()) => return Status::Ok,
-                Err(_) => return Status::WriteFileFailed,
+                Ok(()) => return R::OK,
+                Err(_) => return R::WRITE_FILE_ERR,
             };
         }
 
-        return Status::Ok;
+        return R::OK;
     }
 
-    Status::GetDataLocalFailed
+    R::GET_CONFIG_DIR_ERR
 }

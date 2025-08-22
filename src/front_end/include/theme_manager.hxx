@@ -7,7 +7,7 @@
 #include <memory>
 #include <string_view>
 
-#include "../../ffi/raw/config.hxx"
+#include "../../ffi/include/config.h"
 
 using std::string_view;
 using std::unique_ptr;
@@ -29,11 +29,11 @@ class ThemeManager {
 
    private:
 	void on_invalid_hex_color_error(QMainWindow *main_window);
-	auto gui_settings(RawAppConfig *raw_app_config) noexcept -> GuiSettings;
+	auto gui_settings(AppConfig *raw_app_config) noexcept -> GuiSettings;
 
    public:
 	void set_main_window_theme(QMainWindow *main_window,
-							   RawAppConfig *raw_app_config) noexcept;
+							   AppConfig *raw_app_config) noexcept;
 };
 }  // namespace Lazyboard::front_end
 

@@ -19,9 +19,9 @@ extern "C" struct TextClipboard {
 	bool is_pinned;
 };
 
-extern "C" auto raw_init_clipboard_cache(const char* path) -> QueryResult;
-extern "C" QueryResult raw_add_text_clipboard(const char* path,
-											  TextClipboard text_clipboard);
+extern "C" auto init_clipboard_cache(const char* path) -> QueryResult;
+extern "C" QueryResult add_text_clipboard(const char* path,
+										  TextClipboard text_clipboard);
 
 int main() {
 	using R = QueryResult;
@@ -36,8 +36,8 @@ int main() {
 		.is_pinned = true,
 	};
 
-	auto init_result = raw_init_clipboard_cache(test_path);
-	auto add_text_result = raw_add_text_clipboard(test_path, text_clipboard);
+	auto init_result = init_clipboard_cache(test_path);
+	auto add_text_result = add_text_clipboard(test_path, text_clipboard);
 
 	assert(init_result != R::OPEN_DATABASE_ERR);
 	assert(init_result != R::C_STR_CONVERT_ERR);

@@ -10,8 +10,8 @@
 #include <print>
 #include <string>
 
-#include "../ffi/namespace/include/config.hxx"
-#include "../ffi/namespace/include/utils.hxx"
+#include "../ffi/include/config.h"
+#include "../ffi/include/utils.h"
 #include "include/theme_manager.hxx"
 
 #if defined(LAZY_DEBUG)
@@ -28,47 +28,46 @@ using std::println;
 using Lazyboard::front_end::MainWindowPreload;
 using Self = MainWindowPreload;
 
+using Lazyboard::front_end_utils::error_dialog_show;
+using Lazyboard::front_end_utils::ErrorTypes;
 using std::format;
 using std::make_unique;
 using std::string;
-using namespace Lazyboard::ffi;
-using Lazyboard::front_end_utils::error_dialog_show;
-using Lazyboard::front_end_utils::ErrorTypes;
 
-void Self::on_gen_default_cfg_error(WriteConfigStatus status,
+void Self::on_gen_default_cfg_error(ConfigResult status,
 									QMainWindow *main_window) {
 	switch (status) {
 		using E = ErrorTypes;
 
-		case WriteConfigStatus::OK:
+		case ConfigResult::OK:
 			break;
 
-		case WriteConfigStatus::CREATE_DIR_FAILED:
+		case ConfigResult::CREATE_DIR_FAILED:
 			error_dialog_show(main_window, E::CREATE_DIR_FAILED);
 
 			break;
 
-		case WriteConfigStatus::GET_CONFIG_DIR_FAILED:
+		case ConfigResult::GET_CONFIG_DIR_FAILED:
 			error_dialog_show(main_window, E::GET_CONFIG_DIR_FAILED);
 			break;
 
-		case WriteConfigStatus::CREATE_FILE_FAILED:
+		case ConfigResult::CREATE_FILE_FAILED:
 			error_dialog_show(main_window, E::CREATE_FILE_FAILED);
 			break;
 
-		case WriteConfigStatus::WRITE_FILE_FAILED:
+		case ConfigResult::WRITE_FILE_FAILED:
 			error_dialog_show(main_window, E::WRITE_FILE_FAILED);
 			break;
 
-		case WriteConfigStatus::TOML_TO_STRING_FAILED:
+		case ConfigResult::TOML_TO_STRING_FAILED:
 			error_dialog_show(main_window, E::TOML_TO_STRING_FAILED);
 			break;
 	}
 }
 
-void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
+void Self::on_read_exists_cfg_error(ReadConfigResult status,
 									QMainWindow *main_window) {
-	using Status = RawReadAppConfigStatus;
+	using Status = ReadConfigResult;
 	using E = ErrorTypes;
 
 	switch (status) {
@@ -98,19 +97,20 @@ void Self::on_read_exists_cfg_error(RawReadAppConfigStatus status,
 }
 
 string Self::application_config() {
-	auto config_dir_raw = ffi::config_dir();
-	string config_path = format("{}/Lazyboard/settings.toml", config_dir_raw);
+	char *out = nullptr;
+	auto result = config_dir(&out);
+	string config_path = format("{}/Lazyboard/settings.toml", out);
 
-	ffi::free_c_str(config_dir_raw);
+	free_alloc(out);
 	return config_path;
 }
 
 void Self::create_default_config(QMainWindow *main_window) {
 	auto config_path = this->application_config();
-	auto is_config_exists = ffi::is_exists_path(config_path.data());
+	auto is_config_exists = path_exists(config_path.data());
 
 	if (!is_config_exists) {
-		auto status = ffi::write_default_config();
+		auto status = create_default_cfg();
 		on_gen_default_cfg_error(status, main_window);
 
 		// clang-format off
@@ -127,11 +127,11 @@ void Self::create_default_config(QMainWindow *main_window) {
 }
 
 void Self::read_if_exists_config(QMainWindow *main_window) {
-	raw_app_config = make_unique<RawAppConfig>();
+	raw_app_config = make_unique<AppConfig>();
 	theme_manager = make_unique<ThemeManager>();
 
 	auto config_path = this->application_config();
-	auto status = exists_config(config_path.data(), raw_app_config.get());
+	auto status = read_exists_config(config_path.data(), raw_app_config.get());
 	this->on_read_exists_cfg_error(status, main_window);
 
 	theme_manager->set_main_window_theme(main_window, raw_app_config.get());

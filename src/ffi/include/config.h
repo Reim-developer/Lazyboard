@@ -1,5 +1,5 @@
-#ifndef CONFIG_RAW_HXX
-#define CONFIG_RAW_HXX
+#ifndef CONFIG_RAW_H
+#define CONFIG_RAW_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,7 +8,7 @@ extern "C" {
 #include <cstdint>
 
 /* From module `utils::fs_utils` in Rust backend */
-enum WriteConfigStatus : uint8_t {
+enum ConfigResult : uint8_t {
 	OK,
 	TOML_TO_STRING_FAILED,
 	CREATE_DIR_FAILED,
@@ -17,12 +17,11 @@ enum WriteConfigStatus : uint8_t {
 	GET_CONFIG_DIR_FAILED,
 };
 
-char *raw_config_dir();
-auto raw_write_default_config() -> WriteConfigStatus;
+auto create_default_cfg() -> ConfigResult;
 /* End module */
 
-/* From module `raw_config` in Rust backend */
-enum RawReadAppConfigStatus : uint8_t {
+/* From module `config` in Rust backend */
+enum ReadConfigResult : uint8_t {
 	READ_OK,
 	READ_FILE_FAILED,
 	UTF_8_ERROR,
@@ -34,7 +33,7 @@ enum RawReadAppConfigStatus : uint8_t {
 typedef struct {
 	bool hide_when_closed;
 	bool notification;
-} RawAppSettings;
+} AppSettings;
 
 typedef struct {
 	char *background_color;
@@ -43,19 +42,18 @@ typedef struct {
 	char *foreground_button_color;
 	char *background_table_header_color;
 	char *foreground_table_header_color;
-} RawAppGuiSettings;
+} AppGuiSettings;
 
 typedef struct {
-	RawAppSettings raw_app_settings;
-	RawAppGuiSettings raw_app_gui_settings;
-} RawAppConfig;
+	AppSettings raw_app_settings;
+	AppGuiSettings raw_app_gui_settings;
+} AppConfig;
 
-RawReadAppConfigStatus raw_exists_config(const char *path,
-										 RawAppConfig *config_out);
-void raw_free_cstr_app_config(RawAppConfig *config);
+ReadConfigResult read_exists_config(const char *path, AppConfig *config_out);
+void free_app_config(AppConfig *config);
 /* End module */
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+#endif	// CONFIG_H

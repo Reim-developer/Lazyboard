@@ -1,12 +1,23 @@
 #[test]
 fn test_config() {
-    use back_end::utils::fs_utils::raw_config_dir;
-    use back_end::utils::memory::raw_free_c_str;
-
-    let c_str = raw_config_dir();
-    assert!(!c_str.is_null());
-
     unsafe {
-        raw_free_c_str(c_str);
+        use back_end::utils::fs_utils::UtilsResult;
+        use back_end::utils::fs_utils::config_dir;
+        use std::ffi::CString;
+        use std::ffi::c_char;
+        use std::ptr::null_mut;
+
+        use UtilsResult as R;
+
+        let mut out: *mut c_char = null_mut();
+        let result = config_dir(&raw mut out);
+        let out_c_string = CString::from_raw(out);
+        let out_str = out_c_string.to_string_lossy();
+
+        assert_ne!(result, R::ALLOC_ERR);
+        assert_ne!(result, R::GET_DIR_ERR);
+        assert_eq!(result, R::OK);
+        assert!(out_str.is_ascii());
+        assert!(!out_str.is_empty());
     }
 }

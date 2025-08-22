@@ -1,4 +1,4 @@
-use crate::raw_config::constant::{
+use crate::config::constant::{
     APP_GUI_SETTINGS, APP_SETTINGS, BACKGROUND_COLOR, BACKGROUND_COLOR_BUTTON,
     BACKGROUND_COLOR_TABLE_HEADER, FALLBACK_BG_BUTTON_COLOR, FALLBACK_BG_COLOR,
     FALLBACK_BG_TABLE_HEADER_COLOR, FALLBACK_FG_BUTTON_COLOR,
@@ -13,13 +13,13 @@ use std::{
 use toml::Value;
 
 #[repr(C)]
-pub struct RawAppSettings {
+pub struct AppSettings {
     pub hide_when_closed: bool,
     pub notification: bool,
 }
 
 #[repr(C)]
-pub struct RawAppGuiSettings {
+pub struct AppGuiSettings {
     pub background_color: *mut c_char,
     pub foreground_color: *mut c_char,
     pub background_button_color: *mut c_char,
@@ -29,13 +29,13 @@ pub struct RawAppGuiSettings {
 }
 
 #[repr(C)]
-pub struct RawAppConfig {
-    pub app_settings: RawAppSettings,
-    pub app_gui_settings: RawAppGuiSettings,
+pub struct AppConfig {
+    pub app_settings: AppSettings,
+    pub app_gui_settings: AppGuiSettings,
 }
 
 #[repr(C)]
-pub enum RawReadAppConfigStatus {
+pub enum ReadConfigResult {
     Ok,
     ReadFileFailed,
     Utf8Error,
@@ -58,8 +58,8 @@ fn color_by_settings(
     color.to_string()
 }
 
-fn raw_app_settings(toml_value: &Value) -> RawAppSettings {
-    RawAppSettings {
+fn app_settings(toml_value: &Value) -> AppSettings {
+    AppSettings {
         hide_when_closed: toml_value
             .get(APP_SETTINGS)
             .and_then(|value| value.get(HIDE_WHEN_CLOSED))
@@ -77,13 +77,13 @@ fn raw_app_settings(toml_value: &Value) -> RawAppSettings {
 /// # Safety
 /// Careful with raw pointers.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_exists_config(
-    raw_file_path: *const c_char,
-    raw_cfg_out: *mut RawAppConfig,
-) -> RawReadAppConfigStatus {
-    use RawReadAppConfigStatus as Status;
+pub unsafe extern "C" fn read_exists_config(
+    file_path: *const c_char,
+    out: *mut AppConfig,
+) -> ReadConfigResult {
+    use ReadConfigResult as Status;
 
-    let file_path_str = unsafe { CStr::from_ptr(raw_file_path).to_str() };
+    let file_path_str = unsafe { CStr::from_ptr(file_path).to_str() };
     let Ok(file_path) = file_path_str else {
         return Status::Utf8Error;
     };
@@ -96,7 +96,7 @@ pub unsafe extern "C" fn raw_exists_config(
         return Status::ParseTomlFailed;
     };
 
-    let app_settings = raw_app_settings(&toml_value);
+    let app_settings = app_settings(&toml_value);
 
     let bg_color =
         color_by_settings(&toml_value, BACKGROUND_COLOR, FALLBACK_BG_COLOR);
@@ -147,7 +147,7 @@ pub unsafe extern "C" fn raw_exists_config(
         return Status::ConvertToCStringFailed;
     };
 
-    if let Some(config) = unsafe { raw_cfg_out.as_mut() } {
+    if let Some(config) = unsafe { out.as_mut() } {
         config.app_settings.hide_when_closed = app_settings.hide_when_closed;
         config.app_settings.notification = app_settings.notification;
         config.app_gui_settings.background_color = bg_cstr.into_raw();
@@ -161,16 +161,16 @@ pub unsafe extern "C" fn raw_exists_config(
         config.app_gui_settings.foreground_header_table_color =
             fg_table_header_cstr.into_raw();
 
-        return RawReadAppConfigStatus::Ok;
+        return ReadConfigResult::Ok;
     }
 
-    RawReadAppConfigStatus::ConvertToMutFailed
+    ReadConfigResult::ConvertToMutFailed
 }
 
 #[unsafe(no_mangle)]
 /// # Safety
 /// Be careful with raw pointers & double-free.
-pub unsafe extern "C" fn raw_free_cstr_app_config(config: *mut RawAppConfig) {
+pub unsafe extern "C" fn free_app_config(config: *mut AppConfig) {
     unsafe {
         if let Some(cfg) = config.as_mut() {
             let _ = CString::from_raw(cfg.app_gui_settings.background_color);

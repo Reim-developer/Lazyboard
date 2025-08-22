@@ -1,6 +1,6 @@
 #[test]
 fn test_memory_mod() {
-    use back_end::utils::memory::raw_free_c_str;
+    use back_end::utils::memory::free_alloc;
     use std::ffi::CString;
     use std::ptr::null_mut;
 
@@ -9,6 +9,6 @@ fn test_memory_mod() {
         .unwrap_or(null_mut());
 
     unsafe {
-        raw_free_c_str(raw_str);
+        free_alloc(raw_str);
     }
 }

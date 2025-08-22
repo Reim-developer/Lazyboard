@@ -1,38 +1,23 @@
-use std::ffi::c_char;
+use std::ffi::{CStr, c_char};
 use webbrowser::open;
 
-use crate::utils::memory::raw_from_ptr;
-
-#[repr(C)]
-pub enum OpenBrowserStatus {
-    Ok,
-    WrapRawCFailed,
-    UrlIsEmpty,
-    OpenBrowserFailed,
-}
+use crate::core::result_enum::ResultContext;
 
 /// # Safety
 /// Be careful with raw pointers.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn raw_open_browser(
-    url: *const c_char,
-) -> OpenBrowserStatus {
+pub unsafe extern "C" fn open_browser(url: *const c_char) -> ResultContext {
     unsafe {
-        use OpenBrowserStatus as Status;
+        use ResultContext as R;
 
-        let (c_str, is_ok) = raw_from_ptr(url);
+        let c_str = CStr::from_ptr(url).to_string_lossy();
+
+        let is_ok = open(&c_str).is_ok();
+
         if !is_ok {
-            return Status::WrapRawCFailed;
+            return R::FAILED;
         }
 
-        if c_str.is_empty() {
-            return Status::UrlIsEmpty;
-        }
-
-        if open(c_str).is_ok() {
-            Status::Ok
-        } else {
-            Status::OpenBrowserFailed
-        }
+        R::OK
     }
 }

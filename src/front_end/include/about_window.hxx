@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "../../ffi/raw/utils.hxx"
+#include "../../ffi/include/utils.h"
 using std::unique_ptr;
 
 namespace Lazyboard::front_end {
@@ -29,7 +29,7 @@ class AboutWindow {
 		"https://github.com/reim-developer/zClipboard/pulls";
 
    private:
-	void is_open_browser_ok(OpenBrowserStatus status);
+	void is_open_browser_ok(ResultContext &status);
 	void open_browser_when_clicked(QPushButton *button, const char *url);
 
    private:
