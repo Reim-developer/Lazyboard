@@ -10,6 +10,7 @@ crate-type = ["staticlib", "lib"]
 panic = "abort"
 
 [dependencies]
+chrono = "0.4.41"
 dirs = "6.0.0"
 hex = "0.4.3"
 rusqlite = { version = "0.37.0", features = ["bundled"] }
