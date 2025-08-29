@@ -26,10 +26,10 @@ using std::string;
 #endif
 
 AboutWindow::AboutWindow() {
-	grid_layout = make_unique<QGridLayout>();
-	github_button = make_unique<QPushButton>();
+	grid_layout			= make_unique<QGridLayout>();
+	github_button		= make_unique<QPushButton>();
 	github_issue_button = make_unique<QPushButton>();
-	github_pull_button = make_unique<QPushButton>();
+	github_pull_button	= make_unique<QPushButton>();
 }
 
 void Self::is_open_browser_ok(ResultContext &status) {
@@ -87,7 +87,7 @@ void Self::show_window() {
 }
 
 void Self::on_closed(QMainWindow *main_window) {
-	using O = QObject;
+	using O		  = QObject;
 	const auto fn = [this, main_window] {
 		main_window->show();
 

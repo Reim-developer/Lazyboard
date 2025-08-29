@@ -44,10 +44,10 @@ extern "C" void free_app_config(AppConfig *config);
 int main() {
 	using Status = ReadAppConfigStatus;
 
-	const char *path = "demo.toml";
+	const char *path		  = "demo.toml";
 	unique_ptr<AppConfig> raw = make_unique<AppConfig>();
 
-	auto result = read_exists_config(path, raw.get());
+	auto result	  = read_exists_config(path, raw.get());
 	auto bg_color = string(raw->raw_app_gui_settings.background_color);
 	auto fg_color = string(raw->raw_app_gui_settings.foreground_color);
 	auto bg_btn_color =

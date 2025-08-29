@@ -15,7 +15,7 @@ extern "C" UtilsResult config_dir(char **out);
 void test_config_dir() {
 	using R = UtilsResult;
 
-	char *out = nullptr;
+	char *out	= nullptr;
 	auto result = config_dir(&out);
 
 	assert(result != R::ALLOC_ERR);

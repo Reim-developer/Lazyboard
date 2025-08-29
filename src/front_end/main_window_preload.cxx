@@ -68,7 +68,7 @@ void Self::on_gen_default_cfg_error(ConfigResult status,
 void Self::on_read_exists_cfg_error(ReadConfigResult status,
 									QMainWindow *main_window) {
 	using Status = ReadConfigResult;
-	using E = ErrorTypes;
+	using E		 = ErrorTypes;
 
 	switch (status) {
 		case Status::READ_OK:
@@ -97,8 +97,8 @@ void Self::on_read_exists_cfg_error(ReadConfigResult status,
 }
 
 string Self::application_config() {
-	char *out = nullptr;
-	auto result = config_dir(&out);
+	char *out		   = nullptr;
+	auto result		   = config_dir(&out);
 	string config_path = format("{}/Lazyboard/settings.toml", out);
 
 	free_alloc(out);
@@ -106,7 +106,7 @@ string Self::application_config() {
 }
 
 void Self::create_default_config(QMainWindow *main_window) {
-	auto config_path = this->application_config();
+	auto config_path	  = this->application_config();
 	auto is_config_exists = path_exists(config_path.data());
 
 	if (!is_config_exists) {
@@ -128,7 +128,7 @@ void Self::create_default_config(QMainWindow *main_window) {
 
 void Self::read_if_exists_config(QMainWindow *main_window) {
 	raw_app_config = make_unique<AppConfig>();
-	theme_manager = make_unique<ThemeManager>();
+	theme_manager  = make_unique<ThemeManager>();
 
 	auto config_path = this->application_config();
 	auto status = read_exists_config(config_path.data(), raw_app_config.get());

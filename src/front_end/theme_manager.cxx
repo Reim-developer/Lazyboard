@@ -36,16 +36,16 @@ auto Self::gui_settings(AppConfig *raw_app_config) noexcept -> GuiSettings {
 	auto raw_foreground_button_color = raw_app_config->raw_app_gui_settings.foreground_button_color;
 	auto raw_background_header_table_color = raw_app_config->raw_app_gui_settings.background_table_header_color;
 	auto raw_foreground_header_table_color = raw_app_config->raw_app_gui_settings.foreground_table_header_color;
+	// clang-format on
 
-
-	auto settings_gui = GuiSettings {
-		.background_color = raw_background_color,
-		.foreground_color = raw_foreground_color,
-		.background_button_color = raw_background_button_color,
-		.foreground_button_color = raw_foreground_color,
+	auto settings_gui = GuiSettings{
+		.background_color			   = raw_background_color,
+		.foreground_color			   = raw_foreground_color,
+		.background_button_color	   = raw_background_button_color,
+		.foreground_button_color	   = raw_foreground_color,
 		.background_table_header_color = raw_background_header_table_color,
 		.foreground_table_header_color = raw_foreground_header_table_color,
-	};	// clang-format on
+	};
 
 	return settings_gui;
 }
@@ -69,10 +69,10 @@ void Self::set_main_window_theme(QMainWindow *main_window,
 	auto fg_header_table_color = data(settings_gui.foreground_table_header_color);
 	// clang-format on
 
-	auto bg_hex = QColor(bg_color);
-	auto fg_hex = QColor(fg_color);
-	auto bg_btn_hex = QColor(bg_button_color);
-	auto fg_btn_hex = QColor(fg_button_color);
+	auto bg_hex				 = QColor(bg_color);
+	auto fg_hex				 = QColor(fg_color);
+	auto bg_btn_hex			 = QColor(bg_button_color);
+	auto fg_btn_hex			 = QColor(fg_button_color);
 	auto bg_header_table_hex = QColor(bg_header_table_color);
 	auto fg_header_table_hex = QColor(fg_header_table_color);
 	free_app_config(app_config);

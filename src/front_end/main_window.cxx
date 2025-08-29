@@ -21,17 +21,17 @@ using std::make_unique;
 using Self = MainWindow;
 
 Self::MainWindow() {
-	main_window = make_unique<QMainWindow>();
+	main_window			= make_unique<QMainWindow>();
 	main_window_preload = make_unique<MainWindowPreload>();
-	sqlite_manager = make_unique<SQLiteManager>();
+	sqlite_manager		= make_unique<SQLiteManager>();
 
 	auto central_w = make_unique<QWidget>();
-	auto layout_w = make_unique<QGridLayout>(central_w.get());
+	auto layout_w  = make_unique<QGridLayout>(central_w.get());
 
 	main_window->setCentralWidget(central_w.get());
 
 	central_widget = central_w.release();
-	grid_layout = layout_w.release();
+	grid_layout	   = layout_w.release();
 }
 
 Self *Self::init_main_window() {
@@ -49,9 +49,9 @@ Self *Self::init_main_window() {
 	return this;
 }
 void Self::front_end_show() {
-	table_widget = make_unique<TableWidget>();
+	table_widget   = make_unique<TableWidget>();
 	setting_widget = make_unique<SettingWidget>();
-	about_widget = make_unique<AboutWidget>();
+	about_widget   = make_unique<AboutWidget>();
 
 	table_widget->setup_widget(this->grid_layout);
 	setting_widget->setup_widget(this->grid_layout);

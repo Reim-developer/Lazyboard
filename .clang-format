@@ -7,3 +7,4 @@ UseTab: Always
 TabWidth: 4
 IndentPPDirectives: BeforeHash
 PPIndentWidth: 4
+AlignConsecutiveAssignments: true

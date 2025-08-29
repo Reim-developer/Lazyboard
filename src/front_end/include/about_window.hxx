@@ -20,7 +20,7 @@ class AboutWindow : public QDialog {
 	unique_ptr<QPushButton> github_pull_button;
 
    private:
-	static constexpr int MIN_WIDTH = 600;
+	static constexpr int MIN_WIDTH	= 600;
 	static constexpr int MIN_HEIGHT = 600;
 	const char *GITHUB_URL = "https://github.com/reim-developer/zClipboard";
 	const char *GITHUB_ISSUE_URL =

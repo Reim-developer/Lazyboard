@@ -26,8 +26,8 @@ void null_deference_test() {
 void time_now_test() {
 	using R = AllocResult;
 
-	char *out = nullptr;
-	auto result = time_now(&out);
+	char *out			 = nullptr;
+	auto result			 = time_now(&out);
 	auto time_now_string = string(out);
 	free_alloc(out);
 

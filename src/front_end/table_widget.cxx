@@ -17,9 +17,9 @@ using std::make_unique;
 using Self = TableWidget;
 
 Self::TableWidget() noexcept {
-	table_view_widget = make_unique<QTableView>();
+	table_view_widget	 = make_unique<QTableView>();
 	abstract_table_model = make_unique<AbstractTableModel>();
-	header_labels = {"Time", "Content", "Type", "Pinned"};
+	header_labels		 = {"Time", "Content", "Type", "Pinned"};
 }
 
 void Self::set_resize_mode(QHeaderView *header) {

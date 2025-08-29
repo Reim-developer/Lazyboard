@@ -21,12 +21,12 @@ using std::unique_ptr;
 namespace Lazyboard::front_end {
 class MainWindow {
    private:
-	using Self = MainWindow;
+	using Self	 = MainWindow;
 	using Window = QMainWindow;
 	using Layout = QGridLayout;
 
    private:
-	static constexpr int MIN_WIDTH = 600;
+	static constexpr int MIN_WIDTH	= 600;
 	static constexpr int MIN_HEIGHT = 400;
 
    public:

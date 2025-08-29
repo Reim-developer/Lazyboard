@@ -28,11 +28,11 @@ int main(int argc, char *argv[]) {
 		abort();
 	}
 
-	const char *file_name = this_file_span[0];
+	const char *file_name  = this_file_span[0];
 	const char *wrong_path = "../abcxyzw1133";
 
-	char *out = nullptr;
-	auto result = cache_dir(&out);
+	char *out			   = nullptr;
+	auto result			   = cache_dir(&out);
 	const string cache_dir = string(out);
 	free_alloc(out);
 

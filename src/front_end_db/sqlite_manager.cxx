@@ -60,11 +60,11 @@ void Self::on_create_folder_error(const ResultContext& result) noexcept {
 void Self::create_clipboard_cache(QMainWindow* main_window) {
 	this->_main_window = main_window;
 
-	char* out = nullptr;
+	char* out	= nullptr;
 	auto result = cache_dir(&out);
 
 	string cache_dir_string = format("{}/Lazyboard", out);
-	auto database_path = format("{}/clipboard_cache.db", cache_dir_string);
+	auto database_path		= format("{}/clipboard_cache.db", cache_dir_string);
 	free_alloc(out);
 
 	const auto create_dir_result = new_folder(cache_dir_string.data());

@@ -30,13 +30,13 @@ int main() {
 	remove(test_path);
 
 	auto text_clipboard = TextClipboard{
-		.content = "test",
+		.content	  = "test",
 		.content_hash = "test_hash",
 		.content_type = "text",
-		.is_pinned = true,
+		.is_pinned	  = true,
 	};
 
-	auto init_result = init_clipboard_cache(test_path);
+	auto init_result	 = init_clipboard_cache(test_path);
 	auto add_text_result = add_text_clipboard(test_path, text_clipboard);
 
 	assert(init_result != R::OPEN_DATABASE_ERR);

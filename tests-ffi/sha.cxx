@@ -23,7 +23,7 @@ void test_success() {
 		"185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969";
 	char* out = nullptr;
 
-	auto result = text_sha256(my_text, &out);
+	auto result		   = text_sha256(my_text, &out);
 	string hash_result = string(out);
 	free_alloc(out);
 
@@ -39,7 +39,7 @@ void test_deference_err() {
 	using R = AllocResult;
 
 	const char* my_text = nullptr;
-	char* out = nullptr;
+	char* out			= nullptr;
 
 	auto result = text_sha256(my_text, nullptr);
 	free_alloc(out);
@@ -52,11 +52,11 @@ void test_deference_err() {
 void test_sha_mismatch_err() {
 	using R = AllocResult;
 
-	const char* my_text = "Hello but my SHA will mismatch, to sad...";
+	const char* my_text		= "Hello but my SHA will mismatch, to sad...";
 	const char* real_result = "185f8db32271fe25f561a6...";
-	char* out = nullptr;
+	char* out				= nullptr;
 
-	auto result = text_sha256(my_text, &out);
+	auto result		   = text_sha256(my_text, &out);
 	string hash_result = string(out);
 	free_alloc(out);
 
